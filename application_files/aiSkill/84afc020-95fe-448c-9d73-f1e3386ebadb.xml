@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aiSkillRemoteHaul xmlns:a="http://www.appian.com/ae/types/2009">
+  <versionUuid>76a5cce2-5f6e-4588-a96d-0792fcb2f054</versionUuid>
+  <remoteDesignObject>
+    <uuid>84afc020-95fe-448c-9d73-f1e3386ebadb</uuid>
+    <name>D_referalDocument</name>
+    <content><![CDATA[{"id":"84afc020-95fe-448c-9d73-f1e3386ebadb","ai_skill_type":"generative_ai","models":[{"type":"genAI","id":"6295a4d3-9888-4f3e-be9a-5da402cf9c8b","model":"anthropic.claude-3-haiku-20240307-v1:0","multimodal_model":"anthropic.claude-3-sonnet-20240229-v1:0","operation_mode":"TEXT","prompt":"Write a formal referral letter based on the following referral comment. The letter should be professional, supportive, and tailored to the role or opportunity being referred for. Maintain a warm yet concise tone. Include an introduction of the referee, a summary of the candidate's strengths, and a closing endorsement.\n\nReferral Comment:\n\"[Paste the referral comment here]\"\n\nAdditional Context (Optional):\n\nName of candidate: [Insert Name]\n\nName of referee: [Insert Name]\n\nRelationship (e.g., Manager, Professor): [Insert Relationship]\n\nPurpose of referral (e.g., Job, Scholarship, Program): [Insert Purpose]\n\nTarget organisation or role: [Insert if known]","temperature":10,"examples":[{"input":"I had the pleasure of working with Priya during her internship at our design consultancy. She consistently demonstrated strong UX research skills, a collaborative attitude, and an ability to quickly understand user needs. Her work on the accessibility audit helped improve our app's inclusivity significantly. I highly recommend her for any junior design role","output":"To Whom It May Concern,\n\nI am writing to wholeheartedly recommend Priya Sharma for any junior-level design opportunity you may be considering her for. During her internship at our design consultancy, I had the pleasure of supervising her directly and was continually impressed by her dedication and capability.\n\nPriya brought a thoughtful and user-first approach to every task. Her UX research skills stood out early on, especially during an accessibility audit project where she identified key gaps and proposed actionable improvements. Her insights directly contributed to enhancing the inclusivity of one of our core applications. Beyond her technical abilities, Priya showed strong collaboration and a proactive attitude that made her a valuable team member.\n\nI am confident that Priya will be a strong addition to any design team. Please do not hesitate to reach out if you require any further details.\n\nSincerely,\nAnkit Verma\nSenior UX Consultant"}],"metadata":{"multimodal_anthropic_version":"bedrock-2023-05-31","anthropic_version":"bedrock-2023-05-31"}}],"featuresEnabled":["CUSTOM_ENTITY_EXTRACTION"]}]]></content>
+    <parameterizedProperties></parameterizedProperties>
+    <exportVersion>1.0.0</exportVersion>
+    </remoteDesignObject>
+  <roleMap>
+    <role name="VIEWER">
+      <users></users>
+      <groups>
+        <groupUuid>2098bb81-dfb1-40c5-9e8c-c49e89ac75da</groupUuid>
+        </groups>
+      </role>
+    <role name="ADMINISTRATOR">
+      <users></users>
+      <groups>
+        <groupUuid>49eee6a8-b05c-4c7f-a597-6ad85c120c54</groupUuid>
+        </groups>
+      </role>
+    </roleMap>
+  <history>
+    <historyInfo versionUuid="76a5cce2-5f6e-4588-a96d-0792fcb2f054"></historyInfo>
+    </history>
+  </aiSkillRemoteHaul>

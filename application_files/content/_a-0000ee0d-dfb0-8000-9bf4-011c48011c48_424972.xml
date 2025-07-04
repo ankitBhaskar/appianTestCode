@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_427069</versionUuid>
+    <rule>
+        <name>D_getUserWithEmpoyeeId</name>
+        <uuid>_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424972</uuid>
+        <description>get User With Empoyee Id</description>
+        <parentUuid>815bf82e-8a83-4558-9b22-57018d7a1c33</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>a!localVariables(
+  local!manager: getusersby(
+  recordValue: "4",
+  recordType: 6,
+  operator: 0
+),
+local!manager
+)</definition>
+        <namedTypedValue>
+            <name>employeeId</name>
+            <type>
+                <name>string</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+            <value/>
+        </namedTypedValue>
+        <preferredEditor>legacy</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424999"/>
+        <historyInfo versionUuid="_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_427069"/>
+    </history>
+</contentHaul>

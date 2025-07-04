@@ -1,0 +1,1026 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424649</versionUuid>
+    <interface>
+        <name>D_demoInterface_insurance</name>
+        <uuid>_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424638</uuid>
+        <description></description>
+        <parentUuid>815bf82e-8a83-4558-9b22-57018d7a1c33</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>#"SYSTEM_SYSRULES_headerContentLayout"(
+  header: {
+    #"SYSTEM_SYSRULES_cardLayout"(
+      contents: {
+        #"SYSTEM_SYSRULES_cardLayout"(
+          contents: {
+            #"SYSTEM_SYSRULES_richTextDisplayField"(
+              labelPosition: "COLLAPSED",
+              value: {
+                #"SYSTEM_SYSRULES_richTextItem_v1"(
+                  text: {
+                    #"SYSTEM_SYSRULES_richTextItem_v1"(
+                      text: {
+                        #"SYSTEM_SYSRULES_richTextIcon"(icon: "arrow-circle-right"),
+                        " What's next? "
+                      },
+                      style: { "STRONG" }
+                    ),
+                    "Your insurance adjuster has inspected your vehicle and will soon issue an itemized estimate of repair costs. "
+                  },
+                  size: "MEDIUM"
+                )
+              }
+            )
+          },
+          height: "AUTO",
+          style: "#cfe2f3",
+          padding: "STANDARD",
+          marginBelow: "NONE",
+          showBorder: false
+        )
+      },
+      height: "AUTO",
+      style: "NONE",
+      padding: "NONE",
+      marginBelow: "STANDARD"
+    ),
+    #"SYSTEM_SYSRULES_cardLayout"(
+      contents: {},
+      height: "AUTO",
+      style: "#fff",
+      padding: "NONE",
+      marginBelow: "MORE",
+      showBorder: false
+    )
+  },
+  contents: {
+    #"SYSTEM_SYSRULES_columnsLayout"(
+      columns: {
+        #"SYSTEM_SYSRULES_columnLayout"(
+          contents: {
+            #"SYSTEM_SYSRULES_sectionLayout_v1"(
+              label: "Claim Progress",
+              labelSize: "MEDIUM",
+              labelColor: "STANDARD",
+              contents: {
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_stampField"(
+                          labelPosition: "COLLAPSED",
+                          icon: "car-crash",
+                          backgroundColor: "POSITIVE",
+                          contentColor: "STANDARD",
+                          size: "TINY",
+                          align: "CENTER",
+                          marginBelow: "NONE",
+                          accessibilityText: "Completed Step"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(
+                              text: { "Loss Occurred" },
+                              size: "STANDARD",
+                              style: { "STRONG" }
+                            )
+                          },
+                          preventWrapping: true,
+                          align: if(
+                            #"SYSTEM_SYSRULES_isPageWidth"({ "PHONE" }),
+                            "CENTER",
+                            "LEFT"
+                          ),
+                          marginAbove: "NONE",
+                          marginBelow: "NONE"
+                        ),
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "September 13" }, size: "SMALL")
+                          },
+                          preventWrapping: true,
+                          align: if(
+                            #"SYSTEM_SYSRULES_isPageWidth"({ "PHONE" }),
+                            "CENTER",
+                            "LEFT"
+                          ),
+                          marginAbove: "NONE",
+                          marginBelow: "NONE"
+                        )
+                      }
+                    )
+                  },
+                  alignVertical: "MIDDLE",
+                  marginAbove: "STANDARD",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                ),
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_imageField_v1"(
+                          label: "",
+                          labelPosition: "COLLAPSED",
+                          images: {
+                            #"SYSTEM_SYSRULES_documentImage"(
+                              document: #"SYSTEM_SYSRULES_EXAMPLE_VERTICAL_CONNECTOR_IMAGE"()
+                            )
+                          },
+                          size: "TINY",
+                          isThumbnail: false,
+                          style: "STANDARD",
+                          align: "CENTER"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(contents: {})
+                  },
+                  alignVertical: "MIDDLE",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                ),
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_stampField"(
+                          labelPosition: "COLLAPSED",
+                          icon: "check-circle-o",
+                          backgroundColor: "POSITIVE",
+                          contentColor: "STANDARD",
+                          size: "TINY",
+                          align: "CENTER",
+                          marginBelow: "NONE",
+                          accessibilityText: "Completed Step"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(
+                              text: { "Claim Filed" },
+                              size: "STANDARD",
+                              style: { "STRONG" }
+                            )
+                          },
+                          preventWrapping: true,
+                          align: if(
+                            #"SYSTEM_SYSRULES_isPageWidth"({ "PHONE" }),
+                            "CENTER",
+                            "LEFT"
+                          ),
+                          marginAbove: "NONE",
+                          marginBelow: "NONE"
+                        ),
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "September 13" }, size: "SMALL")
+                          },
+                          preventWrapping: true,
+                          align: if(
+                            #"SYSTEM_SYSRULES_isPageWidth"({ "PHONE" }),
+                            "CENTER",
+                            "LEFT"
+                          ),
+                          marginAbove: "NONE",
+                          marginBelow: "NONE"
+                        )
+                      }
+                    )
+                  },
+                  alignVertical: "MIDDLE",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                ),
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_imageField_v1"(
+                          label: "",
+                          labelPosition: "COLLAPSED",
+                          images: {
+                            #"SYSTEM_SYSRULES_documentImage"(
+                              document: #"SYSTEM_SYSRULES_EXAMPLE_VERTICAL_CONNECTOR_IMAGE"()
+                            )
+                          },
+                          size: "TINY",
+                          isThumbnail: false,
+                          style: "STANDARD",
+                          align: "CENTER"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(contents: {})
+                  },
+                  alignVertical: "MIDDLE",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                ),
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_stampField"(
+                          labelPosition: "COLLAPSED",
+                          icon: "check-circle-o",
+                          backgroundColor: "POSITIVE",
+                          contentColor: "STANDARD",
+                          size: "TINY",
+                          align: "CENTER",
+                          marginBelow: "NONE",
+                          accessibilityText: "Completed Step"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(
+                              text: { "Vehicle Inspected" },
+                              size: "STANDARD",
+                              style: { "STRONG" }
+                            )
+                          },
+                          preventWrapping: true,
+                          align: if(
+                            #"SYSTEM_SYSRULES_isPageWidth"({ "PHONE" }),
+                            "CENTER",
+                            "LEFT"
+                          ),
+                          marginAbove: "NONE",
+                          marginBelow: "NONE"
+                        ),
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "September 15" }, size: "SMALL")
+                          },
+                          preventWrapping: true,
+                          align: if(
+                            #"SYSTEM_SYSRULES_isPageWidth"({ "PHONE" }),
+                            "CENTER",
+                            "LEFT"
+                          ),
+                          marginAbove: "NONE",
+                          marginBelow: "NONE"
+                        )
+                      }
+                    )
+                  },
+                  alignVertical: "MIDDLE",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                ),
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_imageField_v1"(
+                          label: "",
+                          labelPosition: "COLLAPSED",
+                          images: {
+                            #"SYSTEM_SYSRULES_documentImage"(
+                              document: #"SYSTEM_SYSRULES_EXAMPLE_VERTICAL_CONNECTOR_IMAGE"()
+                            )
+                          },
+                          size: "TINY",
+                          isThumbnail: false,
+                          style: "STANDARD",
+                          align: "CENTER"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(contents: {})
+                  },
+                  alignVertical: "MIDDLE",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                ),
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_stampField"(
+                          labelPosition: "COLLAPSED",
+                          icon: "file-text-o",
+                          backgroundColor: "#d9d9d9",
+                          contentColor: "#666666",
+                          size: "TINY",
+                          align: "CENTER",
+                          marginBelow: "NONE",
+                          accessibilityText: "Future Step"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(
+                              text: { "Estimate Issued" },
+                              size: "STANDARD"
+                            )
+                          },
+                          preventWrapping: true,
+                          align: if(
+                            #"SYSTEM_SYSRULES_isPageWidth"({ "PHONE" }),
+                            "CENTER",
+                            "LEFT"
+                          ),
+                          marginAbove: "NONE",
+                          marginBelow: "NONE"
+                        )
+                      }
+                    )
+                  },
+                  alignVertical: "MIDDLE",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                ),
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_imageField_v1"(
+                          label: "",
+                          labelPosition: "COLLAPSED",
+                          images: {
+                            #"SYSTEM_SYSRULES_documentImage"(
+                              document: #"SYSTEM_SYSRULES_EXAMPLE_VERTICAL_CONNECTOR_IMAGE"()
+                            )
+                          },
+                          size: "TINY",
+                          isThumbnail: false,
+                          style: "STANDARD",
+                          align: "CENTER"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(contents: {})
+                  },
+                  alignVertical: "MIDDLE",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                ),
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_stampField"(
+                          labelPosition: "COLLAPSED",
+                          icon: "money",
+                          backgroundColor: "#d9d9d9",
+                          contentColor: "#666666",
+                          size: "TINY",
+                          align: "CENTER",
+                          marginBelow: "NONE",
+                          accessibilityText: "Future Step"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "Payment Sent" }, size: "STANDARD")
+                          },
+                          preventWrapping: true,
+                          align: if(
+                            #"SYSTEM_SYSRULES_isPageWidth"({ "PHONE" }),
+                            "CENTER",
+                            "LEFT"
+                          ),
+                          marginAbove: "NONE",
+                          marginBelow: "NONE"
+                        )
+                      }
+                    )
+                  },
+                  alignVertical: "MIDDLE",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                ),
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_imageField_v1"(
+                          label: "",
+                          labelPosition: "COLLAPSED",
+                          images: {
+                            #"SYSTEM_SYSRULES_documentImage"(
+                              document: #"SYSTEM_SYSRULES_EXAMPLE_VERTICAL_CONNECTOR_IMAGE"()
+                            )
+                          },
+                          size: "TINY",
+                          isThumbnail: false,
+                          style: "STANDARD",
+                          align: "CENTER"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(contents: {})
+                  },
+                  alignVertical: "MIDDLE",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                ),
+                #"SYSTEM_SYSRULES_columnsLayout"(
+                  columns: {
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_stampField"(
+                          labelPosition: "COLLAPSED",
+                          icon: "stamp",
+                          backgroundColor: "#d9d9d9",
+                          contentColor: "#666666",
+                          size: "TINY",
+                          align: "CENTER",
+                          marginBelow: "NONE",
+                          accessibilityText: "Future Step"
+                        )
+                      },
+                      width: "EXTRA_NARROW"
+                    ),
+                    #"SYSTEM_SYSRULES_columnLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "Claim Closed" }, size: "STANDARD")
+                          },
+                          preventWrapping: true,
+                          align: if(
+                            #"SYSTEM_SYSRULES_isPageWidth"({ "PHONE" }),
+                            "CENTER",
+                            "LEFT"
+                          ),
+                          marginAbove: "NONE",
+                          marginBelow: "NONE"
+                        )
+                      }
+                    )
+                  },
+                  alignVertical: "MIDDLE",
+                  marginBelow: "NONE",
+                  spacing: "NONE"
+                )
+              }
+            )
+          },
+          width: "NARROW_PLUS"
+        ),
+        #"SYSTEM_SYSRULES_columnLayout"(
+          contents: {
+            #"SYSTEM_SYSRULES_sectionLayout_v1"(
+              label: "Insured Driver",
+              labelSize: "MEDIUM",
+              labelHeadingTag: "H2",
+              labelColor: "STANDARD",
+              contents: {
+                #"SYSTEM_SYSRULES_cardLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_sectionLayout_v1"(
+                      label: "",
+                      labelSize: "SMALL",
+                      labelHeadingTag: "H3",
+                      labelColor: "SECONDARY",
+                      contents: {
+                        #"SYSTEM_SYSRULES_sideBySideLayout"(
+                          items: {
+                            #"SYSTEM_SYSRULES_sideBySideItem"(
+                              item: #"SYSTEM_SYSRULES_stampField"(
+                                labelPosition: "COLLAPSED",
+                                text: "S",
+                                backgroundColor: "#118bf1",
+                                contentColor: "STANDARD",
+                                size: "SMALL"
+                              ),
+                              width: "MINIMIZE"
+                            ),
+                            #"SYSTEM_SYSRULES_sideBySideItem"(
+                              item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                labelPosition: "COLLAPSED",
+                                value: {
+                                  #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                    text: { "Sharif" },
+                                    size: "MEDIUM_PLUS",
+                                    style: { "STRONG" }
+                                  )
+                                }
+                              )
+                            ),
+                            #"SYSTEM_SYSRULES_sideBySideItem"(
+                              item: #"SYSTEM_SYSRULES_tagField"(
+                                labelPosition: "COLLAPSED",
+                                tags: {
+                                  #"SYSTEM_SYSRULES_tagItem_v1"(
+                                    text: "GOOD DRIVER DISCOUNT",
+                                    backgroundColor: "#45818e"
+                                  )
+                                }
+                              ),
+                              width: "MINIMIZE"
+                            )
+                          },
+                          alignVertical: "MIDDLE"
+                        )
+                      },
+                      divider: "NONE",
+                      marginBelow: "NONE"
+                    )
+                  },
+                  height: "AUTO",
+                  style: "NONE",
+                  padding: "STANDARD",
+                  marginBelow: "STANDARD",
+                  showBorder: false,
+                  showShadow: true
+                )
+              },
+              marginBelow: "MORE"
+            ),
+            #"SYSTEM_SYSRULES_sectionLayout_v1"(
+              label: "Details of Loss",
+              labelSize: "MEDIUM",
+              labelHeadingTag: "H2",
+              labelColor: "STANDARD",
+              contents: {
+                #"SYSTEM_SYSRULES_cardLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_sectionLayout_v1"(
+                      label: "LOCATION",
+                      labelSize: "SMALL",
+                      labelHeadingTag: "H3",
+                      labelColor: "SECONDARY",
+                      contents: {
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(
+                              text: { "Beverly Hills, CA 90210" },
+                              size: "MEDIUM_PLUS"
+                            )
+                          }
+                        ),
+                        #"SYSTEM_SYSRULES_webContentField_v1"(
+                          label: "Map",
+                          labelPosition: "COLLAPSED",
+                          source: "https://maps.google.com/maps?q=rodeo%20drive%20and%20wilshire&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=&amp;output=embed",
+                          height: "SHORT",
+                          showBorder: true
+                        ),
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(
+                              text: {
+                                #"SYSTEM_SYSRULES_richTextIcon"(icon: "map-pin"),
+                                " Rodeo Dr and Wilshire Blvd"
+                              },
+                              size: "STANDARD"
+                            )
+                          }
+                        )
+                      },
+                      divider: "BELOW",
+                      marginBelow: "STANDARD"
+                    ),
+                    #"SYSTEM_SYSRULES_sectionLayout_v1"(
+                      label: "DATE &amp; TIME",
+                      labelSize: "SMALL",
+                      labelHeadingTag: "H3",
+                      labelColor: "SECONDARY",
+                      contents: {
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(
+                              text: { "Sep 13, 2021 3:00PM" },
+                              size: "MEDIUM_PLUS"
+                            )
+                          }
+                        )
+                      },
+                      divider: "BELOW"
+                    ),
+                    #"SYSTEM_SYSRULES_sectionLayout_v1"(
+                      label: "TYPE OF LOSS",
+                      labelSize: "SMALL",
+                      labelHeadingTag: "H3",
+                      labelColor: "SECONDARY",
+                      contents: {
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "Collision" }, size: "MEDIUM_PLUS")
+                          }
+                        )
+                      }
+                    )
+                  },
+                  height: "AUTO",
+                  style: "NONE",
+                  padding: "STANDARD",
+                  marginBelow: "STANDARD",
+                  showBorder: false,
+                  showShadow: true
+                )
+              },
+              marginBelow: "MORE"
+            )
+          },
+          width: "MEDIUM_PLUS"
+        ),
+        #"SYSTEM_SYSRULES_columnLayout"(
+          contents: {
+            #"SYSTEM_SYSRULES_sectionLayout_v1"(
+              label: "Insured Vehicle &amp; Damage",
+              labelSize: "MEDIUM",
+              labelHeadingTag: "H2",
+              labelColor: "STANDARD",
+              contents: {
+                #"SYSTEM_SYSRULES_cardLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_sideBySideLayout"(
+                      items: {
+                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                          item: #"SYSTEM_SYSRULES_stampField"(
+                            labelPosition: "COLLAPSED",
+                            icon: "car",
+                            text: "",
+                            backgroundColor: "#a64d79",
+                            contentColor: "STANDARD",
+                            size: "SMALL"
+                          ),
+                          width: "MINIMIZE"
+                        ),
+                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                            labelPosition: "COLLAPSED",
+                            value: {
+                              #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                text: { "2009 Saab 9-5" },
+                                size: "MEDIUM_PLUS",
+                                style: { "STRONG" }
+                              )
+                            }
+                          )
+                        ),
+                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                            labelPosition: "COLLAPSED",
+                            value: {
+                              #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                text: { "YS3EH58GX13004109" },
+                                color: "SECONDARY",
+                                size: "MEDIUM"
+                              )
+                            }
+                          ),
+                          width: "MINIMIZE"
+                        )
+                      },
+                      alignVertical: "MIDDLE"
+                    ),
+                    #"SYSTEM_SYSRULES_sectionLayout_v1"(
+                      label: "INSPECTION PHOTOS",
+                      labelSize: "SMALL",
+                      labelHeadingTag: "H3",
+                      labelColor: "SECONDARY",
+                      contents: {
+                        #"SYSTEM_SYSRULES_columnsLayout"(
+                          columns: {
+                            #"SYSTEM_SYSRULES_columnLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_imageField_v1"(
+                                  labelPosition: "COLLAPSED",
+                                  /* This is a placeholder image; replace as needed */
+                                  images: {
+                                    #"SYSTEM_SYSRULES_documentImage"(document: #"SYSTEM_SYSRULES_EXAMPLE_DOCUMENT_IMAGE"())
+                                  },
+                                  size: "FIT",
+                                  isThumbnail: true,
+                                  style: "STANDARD"
+                                )
+                              }
+                            ),
+                            #"SYSTEM_SYSRULES_columnLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_imageField_v1"(
+                                  labelPosition: "COLLAPSED",
+                                  /* This is a placeholder image; replace as needed */
+                                  images: {
+                                    #"SYSTEM_SYSRULES_documentImage"(document: #"SYSTEM_SYSRULES_EXAMPLE_DOCUMENT_IMAGE"())
+                                  },
+                                  size: "FIT",
+                                  isThumbnail: true,
+                                  style: "STANDARD"
+                                )
+                              }
+                            ),
+                            #"SYSTEM_SYSRULES_columnLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_imageField_v1"(
+                                  labelPosition: "COLLAPSED",
+                                  /* This is a placeholder image; replace as needed */
+                                  images: {
+                                    #"SYSTEM_SYSRULES_documentImage"(document: #"SYSTEM_SYSRULES_EXAMPLE_DOCUMENT_IMAGE"())
+                                  },
+                                  size: "FIT",
+                                  isThumbnail: true,
+                                  style: "STANDARD"
+                                )
+                              }
+                            ),
+                            #"SYSTEM_SYSRULES_columnLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_imageField_v1"(
+                                  labelPosition: "COLLAPSED",
+                                  /* This is a placeholder image; replace as needed */
+                                  images: {
+                                    #"SYSTEM_SYSRULES_documentImage"(document: #"SYSTEM_SYSRULES_EXAMPLE_DOCUMENT_IMAGE"())
+                                  },
+                                  size: "FIT",
+                                  isThumbnail: true,
+                                  style: "STANDARD"
+                                )
+                              }
+                            )
+                          },
+                          spacing: "DENSE"
+                        )
+                      }
+                    ),
+                    #"SYSTEM_SYSRULES_sectionLayout_v1"(
+                      label: "VEHICLE CONDITION",
+                      labelSize: "SMALL",
+                      labelHeadingTag: "H3",
+                      labelColor: "SECONDARY",
+                      contents: {
+                        #"SYSTEM_SYSRULES_richTextDisplayField"(
+                          labelPosition: "COLLAPSED",
+                          value: {
+                            #"SYSTEM_SYSRULES_richTextItem_v1"(
+                              text: { "Not Drivable - Towed" },
+                              size: "MEDIUM_PLUS"
+                            )
+                          }
+                        )
+                      },
+                      divider: "BELOW"
+                    ),
+                    #"SYSTEM_SYSRULES_sectionLayout_v1"(
+                      label: "DAMAGE SUMMARY",
+                      labelSize: "SMALL",
+                      labelHeadingTag: "H3",
+                      labelColor: "SECONDARY",
+                      contents: {
+                        #"SYSTEM_SYSRULES_columnsLayout"(
+                          columns: {
+                            #"SYSTEM_SYSRULES_columnLayout"(contents: {}),
+                            #"SYSTEM_SYSRULES_columnLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_columnsLayout"(
+                                  columns: {
+                                    #"SYSTEM_SYSRULES_columnLayout"(
+                                      contents: {
+                                        #"SYSTEM_SYSRULES_tagField"(
+                                          labelPosition: "COLLAPSED",
+                                          tags: {
+                                            #"SYSTEM_SYSRULES_tagItem_v1"(
+                                              text: "R FRONT",
+                                              backgroundColor: "NEGATIVE"
+                                            )
+                                          },
+                                          size: "SMALL",
+                                          align: "CENTER"
+                                        )
+                                      }
+                                    ),
+                                    #"SYSTEM_SYSRULES_columnLayout"(contents: {})
+                                  },
+                                  alignVertical: "BOTTOM"
+                                )
+                              },
+                              width: "NARROW_PLUS"
+                            ),
+                            #"SYSTEM_SYSRULES_columnLayout"(contents: {})
+                          },
+                          alignVertical: "MIDDLE"
+                        ),
+                        #"SYSTEM_SYSRULES_columnsLayout"(
+                          columns: {
+                            #"SYSTEM_SYSRULES_columnLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_tagField"(
+                                  labelPosition: "COLLAPSED",
+                                  tags: {
+                                    #"SYSTEM_SYSRULES_tagItem_v1"(
+                                      text: "FRONT",
+                                      backgroundColor: "NEGATIVE"
+                                    )
+                                  },
+                                  size: "SMALL",
+                                  align: "END"
+                                )
+                              }
+                            ),
+                            #"SYSTEM_SYSRULES_columnLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_imageField_v1"(
+                                  label: "",
+                                  labelPosition: "COLLAPSED",
+                                  /* This is a placeholder image; replace as needed */
+                                  images: {
+                                    #"SYSTEM_SYSRULES_documentImage"(document: #"SYSTEM_SYSRULES_EXAMPLE_DOCUMENT_IMAGE"())
+                                  },
+                                  size: "FIT",
+                                  isThumbnail: false,
+                                  style: "STANDARD"
+                                )
+                              },
+                              width: "NARROW_PLUS"
+                            ),
+                            #"SYSTEM_SYSRULES_columnLayout"(contents: {})
+                          },
+                          alignVertical: "MIDDLE"
+                        ),
+                        #"SYSTEM_SYSRULES_columnsLayout"(
+                          columns: {
+                            #"SYSTEM_SYSRULES_columnLayout"(contents: {}),
+                            #"SYSTEM_SYSRULES_columnLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_columnsLayout"(
+                                  columns: {
+                                    #"SYSTEM_SYSRULES_columnLayout"(
+                                      contents: {
+                                        #"SYSTEM_SYSRULES_tagField"(
+                                          labelPosition: "COLLAPSED",
+                                          tags: {
+                                            #"SYSTEM_SYSRULES_tagItem_v1"(
+                                              text: "L FRONT",
+                                              backgroundColor: "NEGATIVE"
+                                            )
+                                          },
+                                          size: "SMALL",
+                                          align: "CENTER"
+                                        )
+                                      }
+                                    ),
+                                    #"SYSTEM_SYSRULES_columnLayout"(
+                                      contents: {
+                                        #"SYSTEM_SYSRULES_tagField"(
+                                          labelPosition: "COLLAPSED",
+                                          tags: {
+                                            #"SYSTEM_SYSRULES_tagItem_v1"(
+                                              text: "L REAR",
+                                              backgroundColor: "NEGATIVE"
+                                            )
+                                          },
+                                          size: "SMALL",
+                                          align: "END"
+                                        )
+                                      }
+                                    )
+                                  }
+                                )
+                              },
+                              width: "NARROW_PLUS"
+                            ),
+                            #"SYSTEM_SYSRULES_columnLayout"(contents: {})
+                          },
+                          alignVertical: "MIDDLE"
+                        )
+                      }
+                    )
+                  },
+                  height: "AUTO",
+                  style: "NONE",
+                  padding: "STANDARD",
+                  marginBelow: "STANDARD",
+                  showBorder: false,
+                  showShadow: true
+                )
+              },
+              marginBelow: "MORE"
+            ),
+            #"SYSTEM_SYSRULES_sectionLayout_v1"(
+              label: "Repair Status",
+              labelSize: "MEDIUM",
+              labelHeadingTag: "H2",
+              labelColor: "STANDARD",
+              contents: {
+                #"SYSTEM_SYSRULES_cardLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_richTextDisplayField"(
+                      labelPosition: "COLLAPSED",
+                      value: {
+                        #"SYSTEM_SYSRULES_richTextIcon"(
+                          icon: "clock-o",
+                          color: "#a4c2f4",
+                          size: "EXTRA_LARGE"
+                        ),
+                        char(10),
+                        char(10),
+                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                          text: { "Waiting for Estimate" },
+                          color: "SECONDARY",
+                          size: "MEDIUM_PLUS"
+                        )
+                      },
+                      align: "CENTER"
+                    )
+                  },
+                  height: "AUTO",
+                  style: "NONE",
+                  padding: "EVEN_MORE",
+                  marginBelow: "STANDARD",
+                  showBorder: false,
+                  showShadow: true
+                )
+              },
+              marginBelow: "MORE"
+            )
+          },
+          width: "AUTO"
+        )
+      },
+      stackWhen: {
+        "PHONE",
+        "TABLET_PORTRAIT",
+        "TABLET_LANDSCAPE"
+      }
+    )
+  },
+  backgroundColor: "TRANSPARENT"
+)
+</definition>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+        <isCustom>false</isCustom>
+    </interface>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424649"/>
+    </history>
+</contentHaul>

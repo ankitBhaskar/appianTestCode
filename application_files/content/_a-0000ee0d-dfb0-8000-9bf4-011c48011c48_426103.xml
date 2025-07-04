@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_426403</versionUuid>
+    <interface>
+        <name>D_Applyleave</name>
+        <uuid>_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_426103</uuid>
+        <description></description>
+        <parentUuid>815bf82e-8a83-4558-9b22-57018d7a1c33</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>a!localVariables(
+  local!employeeId: 3,
+  local!employeeDetails: #"_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_426122"(employee: local!employeeId),
+  local!leaveDetails: #"_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_426232"(employeeId: local!employeeId),
+  
+  {
+  #"SYSTEM_SYSRULES_boxLayout"(
+    label: "Employee Details",
+    contents: {
+      #"SYSTEM_SYSRULES_columnsLayout"(
+        columns: {
+          #"SYSTEM_SYSRULES_columnLayout"(
+            contents: {
+              #"SYSTEM_SYSRULES_textField"(
+                label: "Name",
+                labelPosition: "ABOVE",
+                value:  local!employeeDetails[#"urn:appian:record-field:v1:b84c9207-6712-4958-bd95-04f4ac959615/581d51ae-816f-498a-b57e-9d4af604d3c7"],
+                saveInto: {},
+                refreshAfter: "UNFOCUS",
+                readOnly: true(),
+                validations: {}
+              )
+            }
+          ),
+          #"SYSTEM_SYSRULES_columnLayout"(
+            contents: {}
+          ),
+          #"SYSTEM_SYSRULES_columnLayout"(
+            contents: {}
+          )
+        }
+      )
+    },
+    style: "STANDARD",
+    marginBelow: "STANDARD"
+  ),
+    #"SYSTEM_SYSRULES_gridField_v3"(
+      label: "Leave Balance",
+      labelPosition: "ABOVE",
+      data: #"SYSTEM_SYSRULES_recordData"(
+        recordType: #"urn:appian:record-type:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43",
+        filters: #"SYSTEM_SYSRULES_queryFilter"(
+          field:  #"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/be9c4bf4-46c2-4517-a78c-d1bb8131c02e",
+          operator: "=",
+          value: 3
+        ),
+        relatedRecordData: {
+          #"SYSTEM_SYSRULES_relatedRecordData"()
+        }
+      ),
+      columns: {
+        #"SYSTEM_SYSRULES_gridColumn"(
+          label: "Leave Type",
+          sortField: #"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/4fded2fa-0a53-4b12-a876-42f271916a01",
+          value: a!defaultValue(fv!row[#"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/4fded2fa-0a53-4b12-a876-42f271916a01"], "–")
+        ),
+        #"SYSTEM_SYSRULES_gridColumn"(
+          label: "Year",
+          sortField: #"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/f55dd506-6030-42f6-b877-331d113310ad",
+          value: a!defaultValue(fv!row[#"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/f55dd506-6030-42f6-b877-331d113310ad"], "–"),
+          align: "END"
+        ),
+        #"SYSTEM_SYSRULES_gridColumn"(
+          label: "Opening Balance",
+          sortField: #"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/604339d7-e4c1-4555-9602-bbee08c82d23",
+          value: if(
+            isnull(fv!row[#"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/604339d7-e4c1-4555-9602-bbee08c82d23"]),
+            "–",
+            fixed(fv!row[#"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/604339d7-e4c1-4555-9602-bbee08c82d23"], 2)
+          ),
+          align: "END"
+        ),
+        #"SYSTEM_SYSRULES_gridColumn"(
+          label: "Used Days",
+          sortField: #"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/a7abaeb7-7d71-45a0-82e0-e009279a3329",
+          value: if(
+            isnull(fv!row[#"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/a7abaeb7-7d71-45a0-82e0-e009279a3329"]),
+            "–",
+            fixed(fv!row[#"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/a7abaeb7-7d71-45a0-82e0-e009279a3329"], 2)
+          ),
+          align: "END"
+        ),
+        #"SYSTEM_SYSRULES_gridColumn"(
+          label: "Remaining Days",
+          sortField: #"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/5d22f0f3-f058-48c8-a765-2167419d7927",
+          value: if(
+            isnull(fv!row[#"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/5d22f0f3-f058-48c8-a765-2167419d7927"]),
+            "–",
+            fixed(fv!row[#"urn:appian:record-field:v1:15518943-ecd1-48ee-9d67-33eb79ecdf43/5d22f0f3-f058-48c8-a765-2167419d7927"], 2)
+          ),
+          align: "END"
+        )
+      },
+      validations: {},
+      refreshAfter: "RECORD_ACTION",
+      showSearchBox: true,
+      showRefreshButton: true,
+      similarityScoreThreshold: 1.0
+    ),
+    #"SYSTEM_SYSRULES_boxLayout"(
+      label: "Apply Leave",
+      contents: {
+        #"SYSTEM_SYSRULES_columnsLayout"(
+          columns: {
+            #"SYSTEM_SYSRULES_columnLayout"(
+              contents: {
+                #"SYSTEM_SYSRULES_dropdownField_v1"(
+                  choiceLabels: #"_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_426194",
+                  choiceValues:  #"_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_426194",
+                  label: "Leave Type",
+                  labelPosition: "ABOVE",
+                  placeholder: "--- Select a Value ---",
+                  value: local!leaveDetails[ #"urn:appian:record-field:v1:fdecdc3e-4e73-4d76-9327-e47bc005f690/7164157d-8767-4683-9c92-293ca5b67952"],
+                  saveInto:local!leaveDetails[ #"urn:appian:record-field:v1:fdecdc3e-4e73-4d76-9327-e47bc005f690/7164157d-8767-4683-9c92-293ca5b67952"],
+                  searchDisplay: "AUTO",
+                  validations: {}
+                ),
+                #"SYSTEM_SYSRULES_dateField"(
+                  label: "Start Date",
+                  labelPosition: "ABOVE",
+                  value: local!leaveDetails[ #"urn:appian:record-field:v1:fdecdc3e-4e73-4d76-9327-e47bc005f690/dd9f3952-1a5d-4d8a-8626-a92f6e4adc6d"],
+                  saveInto: local!leaveDetails[ #"urn:appian:record-field:v1:fdecdc3e-4e73-4d76-9327-e47bc005f690/dd9f3952-1a5d-4d8a-8626-a92f6e4adc6d"],
+                  validations: {}
+                ),
+                #"SYSTEM_SYSRULES_dateField"(
+                  label: "End Date",
+                  labelPosition: "ABOVE",
+                  value: local!leaveDetails[ #"urn:appian:record-field:v1:fdecdc3e-4e73-4d76-9327-e47bc005f690/8b3f9101-69e7-439f-83de-bcefd862b312"],
+                  saveInto: local!leaveDetails[ #"urn:appian:record-field:v1:fdecdc3e-4e73-4d76-9327-e47bc005f690/8b3f9101-69e7-439f-83de-bcefd862b312"],
+                
+                  validations: {}
+                )
+              }
+            ),
+            #"SYSTEM_SYSRULES_columnLayout"(
+              contents: {
+                #"SYSTEM_SYSRULES_paragraphField"(
+                  label: "Reason ",
+                  labelPosition: "ABOVE",
+                  value: local!leaveDetails[ #"urn:appian:record-field:v1:fdecdc3e-4e73-4d76-9327-e47bc005f690/2674853c-78e2-4abb-91f0-31a487225b52"],
+                  saveInto: local!leaveDetails[ #"urn:appian:record-field:v1:fdecdc3e-4e73-4d76-9327-e47bc005f690/2674853c-78e2-4abb-91f0-31a487225b52"],
+            
+                  refreshAfter: "UNFOCUS",
+                  height: "MEDIUM",
+                  validations: {}
+                )
+              }
+            )
+          }
+        )
+      },
+      style: "STANDARD",
+      marginBelow: "STANDARD"
+    ),
+    #"SYSTEM_SYSRULES_ButtonArrayLayout"(
+      buttons: {
+        #"SYSTEM_SYSRULES_buttonWidget_v1"(
+          label: "Submit",
+          iconPosition: "END",
+          submit: true,
+          style: "OUTLINE",
+          saveInto : a!save( ri!leaveDetails, local!leaveDetails)
+        )
+      },
+      align: "END",
+      marginBelow: "NONE"
+    )
+}
+)</definition>
+        <namedTypedValue>
+            <name>leaveDetails</name>
+            <type>
+                <name>fdecdc3e-4e73-4d76-9327-e47bc005f690</name>
+                <namespace>urn:com:appian:recordtype:datatype</namespace>
+            </type>
+        </namedTypedValue>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+        <isCustom>false</isCustom>
+    </interface>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_426403"/>
+    </history>
+</contentHaul>

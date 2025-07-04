@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>d9a563df-6277-48e9-99e0-fcf52f0ab17d</versionUuid>
+    <interface>
+        <name>D_DeletePublicHoliday</name>
+        <uuid>2eb3af7e-57c5-4f5d-8f22-bbbde6ce31be</uuid>
+        <description>Form interface for confirming the deletion of a record</description>
+        <parentUuid>815bf82e-8a83-4558-9b22-57018d7a1c33</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>#"SYSTEM_SYSRULES_formLayout_v2"(
+  titleBar: #"SYSTEM_SYSRULES_headerTemplateFull"(
+    title: "Delete Public Holiday?",
+    stampIcon: "exclamation-triangle",
+    stampColor: "NEGATIVE",
+    backgroundColor: "#ffefef"
+  ),
+  isTitleBarFixed: true,
+  showTitleBarDivider: false,
+  showButtonDivider: false,
+  contents: #"SYSTEM_SYSRULES_richTextDisplayField"(
+    labelPosition: "COLLAPSED",
+    value: {
+      "The public holiday will be permanently deleted and cannot be recovered"
+    },
+    marginAbove: "STANDARD",
+    marginBelow: "NONE",
+    align: "LEFT"
+  ),
+  buttons: #"SYSTEM_SYSRULES_ButtonLayout"(
+    primaryButtons: {
+      #"SYSTEM_SYSRULES_buttonWidget_v1"(
+        label: "Delete",
+        submit: true,
+        style: "SOLID",
+        color: "NEGATIVE"
+      )
+    },
+    secondaryButtons: {
+      #"SYSTEM_SYSRULES_buttonWidget_v1"(
+        label: "Cancel",
+        submit: true,
+        validate: false,
+        saveInto: ri!cancel,
+        style: "OUTLINE",
+        color: "SECONDARY",
+        value: true
+      )
+    }
+  ),
+  backgroundColor: "#fbfbfb"
+)</definition>
+        <namedTypedValue>
+            <name>cancel</name>
+            <type>
+                <name>boolean</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+        <isCustom>false</isCustom>
+    </interface>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="d9a563df-6277-48e9-99e0-fcf52f0ab17d"/>
+    </history>
+</contentHaul>

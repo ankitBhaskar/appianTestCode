@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424673</versionUuid>
+    <interface>
+        <name>D_interfaceWithSidebar</name>
+        <uuid>_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424662</uuid>
+        <description></description>
+        <parentUuid>815bf82e-8a83-4558-9b22-57018d7a1c33</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>#"SYSTEM_SYSRULES_headerContentLayout"(
+  header: {
+    #"SYSTEM_SYSRULES_cardLayout"(
+      contents: {
+        #"SYSTEM_SYSRULES_columnsLayout"(
+          columns: {
+            /* Add empty columns on each side for better responsive behavior *
+             * when a column in the layout has a fixed width                 */
+            #"SYSTEM_SYSRULES_columnLayout"(),
+            #"SYSTEM_SYSRULES_columnLayout"(
+              contents: {
+                #"SYSTEM_SYSRULES_cardLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_richTextDisplayField"(
+                      labelPosition: "COLLAPSED",
+                      value: {
+                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                          text: "Find your new home",
+                          color: "ACCENT",
+                          size: "LARGE"
+                        ),
+                        char(10),
+                        char(10),
+                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                          text: "Your search is over. This neighborhood has everything you need. Located near downtown, you will have access to public transportation and local parks. Plenty to do and see.",
+                          size: "MEDIUM"
+                        )
+                      }
+                    ),
+                    #"SYSTEM_SYSRULES_ButtonArrayLayout"(
+                      buttons: {
+                        #"SYSTEM_SYSRULES_buttonWidget_v1"(
+                          label: "Check Availability",
+                          icon: "calendar",
+                          size: "LARGE",
+                          style: "SOLID"
+                        )
+                      },
+                      align: "START"
+                    )
+                  },
+                  style: "#d9f0ff",
+                  marginBelow: "STANDARD",
+                  showBorder: false
+                )
+              },
+              width: "WIDE"
+            ),
+            #"SYSTEM_SYSRULES_columnLayout"(),
+            #"SYSTEM_SYSRULES_columnLayout"(
+              contents: {
+                #"SYSTEM_SYSRULES_imageField_v1"(
+                  label: "Apartment Building Image",
+                  labelPosition: "COLLAPSED",
+                  images: {
+                    #"SYSTEM_SYSRULES_documentImage"(
+                      document: #"SYSTEM_SYSRULES_EXAMPLE_APARTMENT_BUILDING_IMAGE"()
+                    )
+                  },
+                  size: "FIT"
+                )
+              },
+              width: "WIDE"
+            ),
+            #"SYSTEM_SYSRULES_columnLayout"()
+          },
+          alignVertical: "MIDDLE",
+          stackWhen: {"TABLET_PORTRAIT", "PHONE"}
+        )
+      },
+      style: "#d9f0ff",
+      marginBelow: "NONE",
+      showBorder: false
+    )
+  },
+  contents: {
+    #"SYSTEM_SYSRULES_columnsLayout"(
+      columns: {
+        #"SYSTEM_SYSRULES_columnLayout"(
+          contents: {
+            #"SYSTEM_SYSRULES_columnsLayout"(
+              columns: {
+                #"SYSTEM_SYSRULES_columnLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_imageField_v1"(
+                      label: "Floor Plans Image",
+                      labelPosition: "COLLAPSED",
+                      images: {
+                        #"SYSTEM_SYSRULES_documentImage"(
+                          document: #"SYSTEM_SYSRULES_EXAMPLE_FLOOR_PLANS_IMAGE"()
+                        )
+                      },
+                      size: "FIT"
+                    )
+                  }
+                ),
+                #"SYSTEM_SYSRULES_columnLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_richTextDisplayField"(
+                      labelPosition: "COLLAPSED",
+                      value: {
+                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                          text: "Floor Plans",
+                          color: "ACCENT",
+                          size: "MEDIUM_PLUS"
+                        ),
+                        char(10),
+                        char(10),
+                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                          text: "Studio, 1 bedroom, and 2 bedroom options available. Each designed with your needs in mind.",
+                          size: "MEDIUM"
+                        )
+                      }
+                    ),
+                    #"SYSTEM_SYSRULES_ButtonArrayLayout"(
+                      buttons: {
+                        #"SYSTEM_SYSRULES_buttonWidget_v1"(
+                          label: "Browse",
+                          style: "OUTLINE"
+                        )
+                      },
+                      align: "START"
+                    )
+                  }
+                )
+              },
+              alignVertical: "MIDDLE"
+            )
+          }
+        ),
+        #"SYSTEM_SYSRULES_columnLayout"(
+          contents: {
+            #"SYSTEM_SYSRULES_columnsLayout"(
+              columns: {
+                #"SYSTEM_SYSRULES_columnLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_imageField_v1"(
+                      label: "Amenities Image",
+                      labelPosition: "COLLAPSED",
+                      images: {
+                        #"SYSTEM_SYSRULES_documentImage"(
+                          document: #"SYSTEM_SYSRULES_EXAMPLE_AMENITIES_IMAGE"()
+                        )
+                      },
+                      size: "FIT"
+                    )
+                  }
+                ),
+                #"SYSTEM_SYSRULES_columnLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_richTextDisplayField"(
+                      labelPosition: "COLLAPSED",
+                      value: {
+                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                          text: "Amenities",
+                          color: "ACCENT",
+                          size: "MEDIUM_PLUS"
+                        ),
+                        char(10),
+                        char(10),
+                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                          text: "Whether you want to workout or relax by the pool, we've got you covered.",
+                          color: "STANDARD",
+                          size: "MEDIUM"
+                        )
+                      }
+                    ),
+                    #"SYSTEM_SYSRULES_ButtonArrayLayout"(
+                      buttons: {
+                        #"SYSTEM_SYSRULES_buttonWidget_v1"(
+                          label: "Learn More",
+                          style: "OUTLINE"
+                        )
+                      },
+                      align: "START"
+                    )
+                  }
+                )
+              },
+              alignVertical: "MIDDLE"
+            )
+          }
+        )
+      },
+      stackWhen: {"TABLET_PORTRAIT", "PHONE"}
+    )
+  }
+)</definition>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+        <isCustom>false</isCustom>
+    </interface>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424673"/>
+    </history>
+</contentHaul>

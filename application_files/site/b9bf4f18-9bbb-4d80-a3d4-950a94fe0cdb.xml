@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<siteHaul xmlns:a="http://www.appian.com/ae/types/2009" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <versionUuid>c2668422-7380-4203-aba6-d778e12db0e7</versionUuid>
+  <site a:uuid="b9bf4f18-9bbb-4d80-a3d4-950a94fe0cdb" name="D Demo Site">
+    <description/>
+    <urlStub>demo-site</urlStub>
+    <page a:uuid="63f41a4e-11c5-4e0c-a014-8bc09e94b067">
+      <staticName>Home</staticName>
+      <description/>
+      <urlStub>home</urlStub>
+      <uiObject a:uuid="_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424662" xsi:type="a:ContentFreeformRule"/>
+      <iconId>f016</iconId>
+      <visibilityExpr>fn!true()</visibilityExpr>
+      <pageWidth>WIDE</pageWidth>
+      <areUrlParamsEncrypted>true</areUrlParamsEncrypted>
+      <autoContextUpdateEnabled>true</autoContextUpdateEnabled>
+    </page>
+    <page a:uuid="51239b47-11e8-4340-bc77-80fb8573784e">
+      <staticName>Public Holiday</staticName>
+      <description/>
+      <urlStub>public-holiday</urlStub>
+      <uiObject a:uuid="c226c65b-4024-4e38-8256-62a0c480f3b1" xsi:type="a:RecordType"/>
+      <iconId>f016</iconId>
+      <visibilityExpr>fn!true()</visibilityExpr>
+      <pageWidth>WIDE</pageWidth>
+      <areUrlParamsEncrypted>true</areUrlParamsEncrypted>
+      <autoContextUpdateEnabled>true</autoContextUpdateEnabled>
+    </page>
+    <page a:uuid="6641f12c-fdbb-4455-9586-d818ee96172b">
+      <staticName>Apply Leave</staticName>
+      <description/>
+      <urlStub>apply-leave</urlStub>
+      <uiObject a:uuid="0002ee21-9e99-8000-0ba8-7f0000014e7a" xsi:type="a:ProcessModel"/>
+      <iconId>f016</iconId>
+      <visibilityExpr>fn!true()</visibilityExpr>
+      <pageWidth>WIDE</pageWidth>
+      <areUrlParamsEncrypted>true</areUrlParamsEncrypted>
+      <autoContextUpdateEnabled>true</autoContextUpdateEnabled>
+    </page>
+    <visibility>268435456</visibility>
+    <headerBackgroundColor>#1a1e21</headerBackgroundColor>
+    <selectedTabBackgroundColor>#242a2d</selectedTabBackgroundColor>
+    <faviconRef a:uuid="SYSTEM_CONTENT_SITES_DEFAULT_FAVICON" xsi:type="a:CollaborationDocument"/>
+    <logoRef a:uuid="SYSTEM_CONTENT_SITES_DEFAULT_LOGO" xsi:type="a:CollaborationDocument"/>
+    <accentColor>#69afdc</accentColor>
+    <showName>false</showName>
+    <tempoLinkVisibility>HIDDEN</tempoLinkVisibility>
+    <showRecordNews>true</showRecordNews>
+    <tasksInSitesVisibility>HIDDEN</tasksInSitesVisibility>
+    <buttonShape>SQUARED</buttonShape>
+    <navigationBarStyle>SIDEBAR</navigationBarStyle>
+    <inputShape>SQUARED</inputShape>
+    <isSystem>false</isSystem>
+    <displayName>Demo Site</displayName>
+    <isStaticDisplayName>true</isStaticDisplayName>
+    <nameExprIsEvaluable>true</nameExprIsEvaluable>
+    <primaryNavLayoutType>SIDEBAR</primaryNavLayoutType>
+    <buttonLabelCase>UPPERCASE</buttonLabelCase>
+    <dialogShape>SQUARED</dialogShape>
+  </site>
+  <roleMap>
+    <role name="site_administrator">
+      <users/>
+      <groups>
+        <groupUuid>49eee6a8-b05c-4c7f-a597-6ad85c120c54</groupUuid>
+      </groups>
+    </role>
+    <role name="site_viewer">
+      <users/>
+      <groups>
+        <groupUuid>2098bb81-dfb1-40c5-9e8c-c49e89ac75da</groupUuid>
+      </groups>
+    </role>
+  </roleMap>
+  <history>
+    <historyInfo versionUuid="8b56140d-2067-4a21-aa78-578a7394e5c6"/>
+    <historyInfo versionUuid="c2668422-7380-4203-aba6-d778e12db0e7"/>
+  </history>
+</siteHaul>

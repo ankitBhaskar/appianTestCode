@@ -1,0 +1,948 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424661</versionUuid>
+    <interface>
+        <name>D_demoInterface_card</name>
+        <uuid>_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424650</uuid>
+        <description></description>
+        <parentUuid>815bf82e-8a83-4558-9b22-57018d7a1c33</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>#"SYSTEM_SYSRULES_headerContentLayout"(
+  header: {},
+  contents: {
+    #"SYSTEM_SYSRULES_columnsLayout"(
+      columns: {
+        #"SYSTEM_SYSRULES_columnLayout"(
+          contents: {
+            #"SYSTEM_SYSRULES_cardLayout"(
+              height: "AUTO",
+              style: "#232020",
+              marginBelow: "NONE",
+              showBorder: false
+            ),
+            #"SYSTEM_SYSRULES_cardLayout"(
+              contents: {
+                #"SYSTEM_SYSRULES_richTextDisplayField"(
+                  labelPosition: "COLLAPSED",
+                  value: {
+                    #"SYSTEM_SYSRULES_richTextIcon"(icon: "tachometer", size: "MEDIUM_PLUS")
+                  },
+                  align: "CENTER"
+                )
+              },
+              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+              tooltip: "My Dashboard",
+              height: "AUTO",
+              style: "#232020",
+              marginBelow: "NONE",
+              showBorder: false
+            ),
+            #"SYSTEM_SYSRULES_cardLayout"(
+              contents: {
+                #"SYSTEM_SYSRULES_richTextDisplayField"(
+                  labelPosition: "COLLAPSED",
+                  value: {
+                    #"SYSTEM_SYSRULES_richTextIcon"(icon: "home", size: "MEDIUM_PLUS")
+                  },
+                  align: "CENTER"
+                )
+              },
+              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+              tooltip: "Properties",
+              height: "AUTO",
+              style: "#990000",
+              marginBelow: "NONE",
+              showBorder: false
+            ),
+            #"SYSTEM_SYSRULES_cardLayout"(
+              contents: {
+                #"SYSTEM_SYSRULES_richTextDisplayField"(
+                  labelPosition: "COLLAPSED",
+                  value: {
+                    #"SYSTEM_SYSRULES_richTextIcon"(icon: "street-view", size: "MEDIUM_PLUS")
+                  },
+                  align: "CENTER"
+                )
+              },
+              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+              tooltip: "Customers",
+              height: "AUTO",
+              style: "#232020",
+              marginBelow: "NONE",
+              showBorder: false
+            ),
+            #"SYSTEM_SYSRULES_cardLayout"(
+              contents: {
+                #"SYSTEM_SYSRULES_richTextDisplayField"(
+                  labelPosition: "COLLAPSED",
+                  value: {
+                    #"SYSTEM_SYSRULES_richTextIcon"(icon: "university", size: "MEDIUM_PLUS")
+                  },
+                  align: "CENTER"
+                )
+              },
+              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+              tooltip: "Lending",
+              height: "AUTO",
+              style: "#232020",
+              marginBelow: "NONE",
+              showBorder: false
+            ),
+            #"SYSTEM_SYSRULES_cardLayout"(
+              contents: {
+                #"SYSTEM_SYSRULES_richTextDisplayField"(
+                  labelPosition: "COLLAPSED",
+                  value: {
+                    #"SYSTEM_SYSRULES_richTextIcon"(icon: "line-chart", size: "MEDIUM_PLUS")
+                  },
+                  align: "CENTER"
+                )
+              },
+              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+              tooltip: "Performance",
+              height: "AUTO",
+              style: "#232020",
+              marginBelow: "NONE",
+              showBorder: false
+            ),
+            #"SYSTEM_SYSRULES_cardLayout"(
+              contents: {
+                #"SYSTEM_SYSRULES_richTextDisplayField"(
+                  labelPosition: "COLLAPSED",
+                  value: {
+                    #"SYSTEM_SYSRULES_richTextIcon"(icon: "users", size: "MEDIUM_PLUS")
+                  },
+                  align: "CENTER"
+                )
+              },
+              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+              tooltip: "Team",
+              height: "AUTO",
+              style: "#232020",
+              marginBelow: "NONE",
+              showBorder: false
+            ),
+            #"SYSTEM_SYSRULES_cardLayout"(
+              height: "EXTRA_TALL",
+              style: "#232020",
+              marginBelow: "NONE",
+              showBorder: false
+            ),
+            #"SYSTEM_SYSRULES_cardLayout"(
+              height: "EXTRA_TALL",
+              style: "#232020",
+              marginBelow: "NONE",
+              showBorder: false
+            )
+          },
+          width: "EXTRA_NARROW",
+          showWhen: not(
+            #"SYSTEM_SYSRULES_isPageWidth"({ "PHONE", "TABLET_PORTRAIT" })
+          )
+        ),
+        #"SYSTEM_SYSRULES_columnLayout"(
+          contents: {
+            #"SYSTEM_SYSRULES_columnsLayout"(
+              columns: {
+                #"SYSTEM_SYSRULES_columnLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_cardLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_cardLayout"(
+                          contents: {
+                            #"SYSTEM_SYSRULES_sectionLayout_v1"(
+                              label: "Properties",
+                              labelSize: "MEDIUM",
+                              labelColor: "STANDARD",
+                              contents: {
+                                #"SYSTEM_SYSRULES_ButtonArrayLayout"(
+                                  buttons: {
+                                    #"SYSTEM_SYSRULES_buttonWidget_v1"(
+                                      label: "New Listing",
+                                      icon: "plus-circle",
+                                      size: "LARGE",
+                                      width: "FILL",
+                                      style: "SOLID"
+                                    )
+                                  },
+                                  align: "START"
+                                )
+                              },
+                              divider: "NONE",
+                              marginBelow: "NONE"
+                            )
+                          },
+                          height: "AUTO",
+                          style: "NONE",
+                          padding: "STANDARD",
+                          marginBelow: "NONE",
+                          showBorder: false
+                        ),
+                        #"SYSTEM_SYSRULES_cardLayout"(
+                          contents: {
+                            #"SYSTEM_SYSRULES_sideBySideLayout"(
+                              items: {
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: { "   " },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: {
+                                      #"SYSTEM_SYSRULES_richTextIcon"(
+                                        icon: "user-circle-o",
+                                        color: "ACCENT",
+                                        size: "MEDIUM_PLUS"
+                                      )
+                                    },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: { "  " },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: {
+                                      #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                        text: { "My Listings" },
+                                        color: "ACCENT",
+                                        size: "MEDIUM",
+                                        style: { "STRONG" }
+                                      )
+                                    },
+                                    preventWrapping: true
+                                  ),
+                                  width: "AUTO"
+                                )
+                              },
+                              alignVertical: "MIDDLE",
+                              spacing: "DENSE",
+                              marginBelow: "NONE"
+                            )
+                          },
+                          link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+                          height: "AUTO",
+                          style: "NONE",
+                          padding: "LESS",
+                          marginBelow: "NONE",
+                          showBorder: false
+                        ),
+                        #"SYSTEM_SYSRULES_cardLayout"(
+                          contents: {
+                            #"SYSTEM_SYSRULES_sideBySideLayout"(
+                              items: {
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: { "   " },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: {
+                                      #"SYSTEM_SYSRULES_richTextIcon"(
+                                        icon: "sun-o",
+                                        color: "SECONDARY",
+                                        size: "MEDIUM_PLUS"
+                                      )
+                                    },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: { "  " },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: {
+                                      #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                        text: { "New Listings" },
+                                        color: "#666666",
+                                        size: "MEDIUM"
+                                      )
+                                    },
+                                    preventWrapping: true
+                                  ),
+                                  width: "AUTO"
+                                )
+                              },
+                              alignVertical: "MIDDLE",
+                              spacing: "DENSE",
+                              marginBelow: "NONE"
+                            )
+                          },
+                          link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+                          height: "AUTO",
+                          style: "NONE",
+                          padding: "LESS",
+                          marginBelow: "NONE",
+                          showBorder: false
+                        ),
+                        #"SYSTEM_SYSRULES_cardLayout"(
+                          contents: {
+                            #"SYSTEM_SYSRULES_sideBySideLayout"(
+                              items: {
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: { "   " },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: {
+                                      #"SYSTEM_SYSRULES_richTextIcon"(
+                                        icon: "search",
+                                        color: "SECONDARY",
+                                        size: "MEDIUM_PLUS"
+                                      )
+                                    },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: { "  " },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: {
+                                      #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                        text: { "Search Listings" },
+                                        color: "#666666",
+                                        size: "MEDIUM"
+                                      )
+                                    },
+                                    preventWrapping: true
+                                  ),
+                                  width: "AUTO"
+                                )
+                              },
+                              alignVertical: "MIDDLE",
+                              spacing: "DENSE",
+                              marginBelow: "NONE"
+                            )
+                          },
+                          link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+                          height: "AUTO",
+                          style: "NONE",
+                          padding: "LESS",
+                          marginBelow: "NONE",
+                          showBorder: false
+                        ),
+                        #"SYSTEM_SYSRULES_cardLayout"(
+                          contents: {
+                            #"SYSTEM_SYSRULES_sideBySideLayout"(
+                              items: {
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: { "   " },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: {
+                                      #"SYSTEM_SYSRULES_richTextIcon"(
+                                        icon: "handshake-o",
+                                        color: "SECONDARY",
+                                        size: "MEDIUM_PLUS"
+                                      )
+                                    },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: { "  " },
+                                    align: "CENTER"
+                                  ),
+                                  width: "MINIMIZE"
+                                ),
+                                #"SYSTEM_SYSRULES_sideBySideItem"(
+                                  item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                    labelPosition: "COLLAPSED",
+                                    value: {
+                                      #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                        text: { "Sold Properties" },
+                                        color: "#666666",
+                                        size: "MEDIUM"
+                                      )
+                                    },
+                                    preventWrapping: true
+                                  ),
+                                  width: "AUTO"
+                                )
+                              },
+                              alignVertical: "MIDDLE",
+                              spacing: "DENSE",
+                              marginBelow: "NONE"
+                            )
+                          },
+                          link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+                          height: "AUTO",
+                          style: "NONE",
+                          padding: "LESS",
+                          marginBelow: "NONE",
+                          showBorder: false
+                        ),
+                        #"SYSTEM_SYSRULES_cardLayout"(
+                          contents: {},
+                          height: "EXTRA_TALL",
+                          style: "NONE",
+                          marginBelow: "NONE",
+                          showBorder: false
+                        ),
+                        #"SYSTEM_SYSRULES_cardLayout"(
+                          contents: {},
+                          height: "EXTRA_TALL",
+                          style: "NONE",
+                          marginBelow: "NONE",
+                          showBorder: false
+                        )
+                      },
+                      height: "AUTO",
+                      style: "NONE",
+                      padding: "NONE",
+                      marginBelow: "NONE",
+                      showBorder: false
+                    )
+                  },
+                  width: "NARROW_PLUS",
+                  showWhen: not(#"SYSTEM_SYSRULES_isPageWidth"({ "PHONE" }))
+                ),
+                #"SYSTEM_SYSRULES_columnLayout"(
+                  contents: {
+                    #"SYSTEM_SYSRULES_cardLayout"(
+                      contents: {
+                        #"SYSTEM_SYSRULES_cardGroupLayout"(
+                          labelPosition: "COLLAPSED",
+                          cards: {
+                            #"SYSTEM_SYSRULES_cardLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_billboardLayout_v1"(
+                                  backgroundMedia: #"SYSTEM_SYSRULES_webImage"(
+                                    source: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=2550&amp;q=80"
+                                  ),
+                                  backgroundColor: "#f0f0f0",
+                                  height: "SHORT_PLUS",
+                                  marginBelow: "NONE",
+                                  overlay: #"SYSTEM_SYSRULES_fullOverlay"(
+                                    alignVertical: "TOP",
+                                    contents: {
+                                      #"SYSTEM_SYSRULES_tagField"(
+                                        labelPosition: "COLLAPSED",
+                                        tags: {
+                                          #"SYSTEM_SYSRULES_tagItem_v1"(
+                                            text: "NEW LISTING",
+                                            backgroundColor: "#ff9900"
+                                          )
+                                        }
+                                      )
+                                    },
+                                    style: "NONE"
+                                  )
+                                ),
+                                #"SYSTEM_SYSRULES_cardLayout"(
+                                  contents: {
+                                    #"SYSTEM_SYSRULES_sideBySideLayout"(
+                                      items: {
+                                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                            labelPosition: "COLLAPSED",
+                                            value: {
+                                              #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "$1,695,000" }, size: "MEDIUM_PLUS")
+                                            }
+                                          )
+                                        ),
+                                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                            labelPosition: "COLLAPSED",
+                                            value: {
+                                              #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                                text: { #"SYSTEM_SYSRULES_richTextIcon"(icon: "calendar"), " 2d" },
+                                                color: "SECONDARY",
+                                                size: "MEDIUM"
+                                              )
+                                            }
+                                          ),
+                                          width: "MINIMIZE"
+                                        )
+                                      },
+                                      alignVertical: "MIDDLE",
+                                      marginBelow: "STANDARD"
+                                    ),
+                                    #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                      labelPosition: "COLLAPSED",
+                                      value: {
+                                        #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "3 Beds  " }, size: "STANDARD"),
+                                        "•  2.5 Baths  •  2,403 Sq. Ft.",
+                                        char(10),
+                                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                          text: {
+                                            "12345 Maple Ave, Palm Springs, CA 92262"
+                                          },
+                                          size: "SMALL"
+                                        )
+                                      },
+                                      preventWrapping: false
+                                    )
+                                  },
+                                  height: "AUTO",
+                                  style: "NONE",
+                                  padding: "STANDARD",
+                                  marginBelow: "NONE",
+                                  showBorder: false
+                                )
+                              },
+                              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+                              height: "AUTO",
+                              style: "NONE",
+                              shape: "ROUNDED",
+                              padding: "NONE",
+                              marginBelow: "STANDARD"
+                            ),
+                            #"SYSTEM_SYSRULES_cardLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_billboardLayout_v1"(
+                                  backgroundMedia: #"SYSTEM_SYSRULES_webImage"(
+                                    source: "https://images.unsplash.com/photo-1575517111478-7f6afd0973db?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=2550&amp;q=80"
+                                  ),
+                                  backgroundColor: "#f0f0f0",
+                                  height: "SHORT_PLUS",
+                                  marginBelow: "NONE",
+                                  overlay: #"SYSTEM_SYSRULES_fullOverlay"(
+                                    alignVertical: "TOP",
+                                    contents: {
+                                      #"SYSTEM_SYSRULES_tagField"(
+                                        labelPosition: "COLLAPSED",
+                                        tags: {
+                                          #"SYSTEM_SYSRULES_tagItem_v1"(
+                                            text: "OPEN HOUSE SCHEDULED",
+                                            backgroundColor: "#38761d"
+                                          )
+                                        }
+                                      )
+                                    },
+                                    style: "NONE"
+                                  )
+                                ),
+                                #"SYSTEM_SYSRULES_cardLayout"(
+                                  contents: {
+                                    #"SYSTEM_SYSRULES_sideBySideLayout"(
+                                      items: {
+                                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                            labelPosition: "COLLAPSED",
+                                            value: {
+                                              #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "$2,150,000" }, size: "MEDIUM_PLUS")
+                                            }
+                                          )
+                                        ),
+                                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                            labelPosition: "COLLAPSED",
+                                            value: {
+                                              #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                                text: { #"SYSTEM_SYSRULES_richTextIcon"(icon: "calendar"), " 15d" },
+                                                color: "SECONDARY",
+                                                size: "MEDIUM"
+                                              )
+                                            }
+                                          ),
+                                          width: "MINIMIZE"
+                                        )
+                                      },
+                                      alignVertical: "MIDDLE",
+                                      marginBelow: "STANDARD"
+                                    ),
+                                    #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                      labelPosition: "COLLAPSED",
+                                      value: {
+                                        #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "4 Beds  " }, size: "STANDARD"),
+                                        "•  3.5 Baths  •  2,942 Sq. Ft.",
+                                        char(10),
+                                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                          text: {
+                                            "2345 Mesa Blvd, Palm Springs, CA 92264"
+                                          },
+                                          size: "SMALL"
+                                        )
+                                      },
+                                      preventWrapping: false
+                                    )
+                                  },
+                                  height: "AUTO",
+                                  style: "NONE",
+                                  padding: "STANDARD",
+                                  marginBelow: "NONE",
+                                  showBorder: false
+                                )
+                              },
+                              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+                              height: "AUTO",
+                              style: "NONE",
+                              shape: "ROUNDED",
+                              padding: "NONE",
+                              marginBelow: "STANDARD"
+                            ),
+                            #"SYSTEM_SYSRULES_cardLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_billboardLayout_v1"(
+                                  backgroundMedia: #"SYSTEM_SYSRULES_webImage"(
+                                    source: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=2550&amp;q=80"
+                                  ),
+                                  backgroundColor: "#f0f0f0",
+                                  height: "SHORT_PLUS",
+                                  marginBelow: "NONE",
+                                  overlay: #"SYSTEM_SYSRULES_fullOverlay"(
+                                    alignVertical: "TOP",
+                                    contents: {
+                                      #"SYSTEM_SYSRULES_tagField"(
+                                        labelPosition: "COLLAPSED",
+                                        tags: {
+                                          #"SYSTEM_SYSRULES_tagItem_v1"(
+                                            text: "OPEN HOUSE SCHEDULED",
+                                            backgroundColor: "#38761d"
+                                          )
+                                        }
+                                      )
+                                    },
+                                    style: "NONE"
+                                  )
+                                ),
+                                #"SYSTEM_SYSRULES_cardLayout"(
+                                  contents: {
+                                    #"SYSTEM_SYSRULES_sideBySideLayout"(
+                                      items: {
+                                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                            labelPosition: "COLLAPSED",
+                                            value: {
+                                              #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "$1,945,000" }, size: "MEDIUM_PLUS")
+                                            }
+                                          )
+                                        ),
+                                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                            labelPosition: "COLLAPSED",
+                                            value: {
+                                              #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                                text: { #"SYSTEM_SYSRULES_richTextIcon"(icon: "calendar"), " 26d" },
+                                                color: "SECONDARY",
+                                                size: "MEDIUM"
+                                              )
+                                            }
+                                          ),
+                                          width: "MINIMIZE"
+                                        )
+                                      },
+                                      alignVertical: "MIDDLE",
+                                      marginBelow: "STANDARD"
+                                    ),
+                                    #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                      labelPosition: "COLLAPSED",
+                                      value: {
+                                        #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "3 Beds  " }, size: "STANDARD"),
+                                        "•  2.5 Baths  •  2,178 Sq. Ft.",
+                                        char(10),
+                                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                          text: {
+                                            "345 Main St, Cathedral City, CA 92234"
+                                          },
+                                          size: "SMALL"
+                                        )
+                                      },
+                                      preventWrapping: false
+                                    )
+                                  },
+                                  height: "AUTO",
+                                  style: "NONE",
+                                  padding: "STANDARD",
+                                  marginBelow: "NONE",
+                                  showBorder: false
+                                )
+                              },
+                              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+                              height: "AUTO",
+                              style: "NONE",
+                              shape: "ROUNDED",
+                              padding: "NONE",
+                              marginBelow: "STANDARD"
+                            ),
+                            #"SYSTEM_SYSRULES_cardLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_billboardLayout_v1"(
+                                  backgroundMedia: #"SYSTEM_SYSRULES_webImage"(
+                                    source: "https://images.unsplash.com/photo-1538963732282-4b2b48c7a4b8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=2555&amp;q=80"
+                                  ),
+                                  backgroundColor: "#f0f0f0",
+                                  height: "SHORT_PLUS",
+                                  marginBelow: "NONE",
+                                  overlay: #"SYSTEM_SYSRULES_fullOverlay"(
+                                    alignVertical: "TOP",
+                                    contents: {
+                                      #"SYSTEM_SYSRULES_tagField"(
+                                        labelPosition: "COLLAPSED",
+                                        tags: {
+                                          #"SYSTEM_SYSRULES_tagItem_v1"(
+                                            text: "NO OFFERS RECEIVED",
+                                            backgroundColor: "#cc0000"
+                                          )
+                                        }
+                                      )
+                                    },
+                                    style: "NONE"
+                                  )
+                                ),
+                                #"SYSTEM_SYSRULES_cardLayout"(
+                                  contents: {
+                                    #"SYSTEM_SYSRULES_sideBySideLayout"(
+                                      items: {
+                                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                            labelPosition: "COLLAPSED",
+                                            value: {
+                                              #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "$1,723,000" }, size: "MEDIUM_PLUS")
+                                            }
+                                          )
+                                        ),
+                                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                            labelPosition: "COLLAPSED",
+                                            value: {
+                                              #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                                text: { #"SYSTEM_SYSRULES_richTextIcon"(icon: "calendar"), " 42d" },
+                                                color: "SECONDARY",
+                                                size: "MEDIUM"
+                                              )
+                                            }
+                                          ),
+                                          width: "MINIMIZE"
+                                        )
+                                      },
+                                      alignVertical: "MIDDLE",
+                                      marginBelow: "STANDARD"
+                                    ),
+                                    #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                      labelPosition: "COLLAPSED",
+                                      value: {
+                                        #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "3 Beds  " }, size: "STANDARD"),
+                                        "•  3 Baths  •  2,230 Sq. Ft.",
+                                        char(10),
+                                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                          text: {
+                                            "567 Fountain St, Hot Springs, CA 92241"
+                                          },
+                                          size: "SMALL"
+                                        )
+                                      },
+                                      preventWrapping: false
+                                    )
+                                  },
+                                  height: "AUTO",
+                                  style: "NONE",
+                                  padding: "STANDARD",
+                                  marginBelow: "NONE",
+                                  showBorder: false
+                                )
+                              },
+                              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+                              height: "AUTO",
+                              style: "NONE",
+                              shape: "ROUNDED",
+                              padding: "NONE",
+                              marginBelow: "STANDARD"
+                            ),
+                            #"SYSTEM_SYSRULES_cardLayout"(
+                              contents: {
+                                #"SYSTEM_SYSRULES_billboardLayout_v1"(
+                                  backgroundMedia: #"SYSTEM_SYSRULES_webImage"(
+                                    source: "https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzR8fGhvdXNlfGVufDB8fDB8fA%3D%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=900&amp;q=60"
+                                  ),
+                                  backgroundColor: "#f0f0f0",
+                                  height: "SHORT_PLUS",
+                                  marginBelow: "NONE",
+                                  overlay: #"SYSTEM_SYSRULES_fullOverlay"(
+                                    alignVertical: "TOP",
+                                    contents: {
+                                      #"SYSTEM_SYSRULES_tagField"(
+                                        labelPosition: "COLLAPSED",
+                                        tags: {
+                                          #"SYSTEM_SYSRULES_tagItem_v1"(
+                                            text: "PRICE REDUCED",
+                                            backgroundColor: "#3c78d8"
+                                          )
+                                        }
+                                      )
+                                    },
+                                    style: "NONE"
+                                  )
+                                ),
+                                #"SYSTEM_SYSRULES_cardLayout"(
+                                  contents: {
+                                    #"SYSTEM_SYSRULES_sideBySideLayout"(
+                                      items: {
+                                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                            labelPosition: "COLLAPSED",
+                                            value: {
+                                              #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "$2,092,000" }, size: "MEDIUM_PLUS")
+                                            }
+                                          )
+                                        ),
+                                        #"SYSTEM_SYSRULES_sideBySideItem"(
+                                          item: #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                            labelPosition: "COLLAPSED",
+                                            value: {
+                                              #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                                text: { #"SYSTEM_SYSRULES_richTextIcon"(icon: "calendar"), " 33d" },
+                                                color: "SECONDARY",
+                                                size: "MEDIUM"
+                                              )
+                                            }
+                                          ),
+                                          width: "MINIMIZE"
+                                        )
+                                      },
+                                      alignVertical: "MIDDLE",
+                                      marginBelow: "STANDARD"
+                                    ),
+                                    #"SYSTEM_SYSRULES_richTextDisplayField"(
+                                      labelPosition: "COLLAPSED",
+                                      value: {
+                                        #"SYSTEM_SYSRULES_richTextItem_v1"(text: { "5 Beds  " }, size: "STANDARD"),
+                                        "•  4.5 Baths  •  3,219 Sq. Ft.",
+                                        char(10),
+                                        #"SYSTEM_SYSRULES_richTextItem_v1"(
+                                          text: {
+                                            "45678 Desert Ln, Palm Desert, CA 92260"
+                                          },
+                                          size: "SMALL"
+                                        )
+                                      },
+                                      preventWrapping: false
+                                    )
+                                  },
+                                  height: "AUTO",
+                                  style: "NONE",
+                                  padding: "STANDARD",
+                                  marginBelow: "NONE",
+                                  showBorder: false
+                                )
+                              },
+                              link: #"SYSTEM_SYSRULES_dynamicLink"(label: "Dynamic Link", saveInto: {}),
+                              height: "AUTO",
+                              style: "NONE",
+                              shape: "ROUNDED",
+                              padding: "NONE",
+                              marginBelow: "STANDARD"
+                            )
+                          },
+                          cardWidth: "NARROW_PLUS"
+                        )
+                      },
+                      height: "AUTO",
+                      style: "#f0f0f0",
+                      padding: "MORE",
+                      marginBelow: "STANDARD",
+                      showBorder: false
+                    )
+                  }
+                )
+              },
+              spacing: "NONE",
+              stackWhen: { "NEVER" },
+              showDividers: true
+            )
+          }
+        )
+      },
+      spacing: "NONE",
+      stackWhen: { "NEVER" }
+    )
+  },
+  backgroundColor: "TRANSPARENT",
+  showWhen: true,
+  contentsPadding: "NONE"
+)
+</definition>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+        <isCustom>false</isCustom>
+    </interface>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="_a-0000ee0d-dfb0-8000-9bf4-011c48011c48_424661"/>
+    </history>
+</contentHaul>

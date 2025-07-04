@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>048a3dd0-6af3-4130-b9a7-5e9efdc05dc7</versionUuid>
+    <interface>
+        <name>D_CreateOrUpdatePublicHoliday</name>
+        <uuid>bc452533-52a6-4048-adb9-5767b0b62513</uuid>
+        <description>Form interface for creating or updating Public Holidays as an action</description>
+        <parentUuid>815bf82e-8a83-4558-9b22-57018d7a1c33</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>#"SYSTEM_SYSRULES_formLayout_v2"(
+  titleBar: #"SYSTEM_SYSRULES_headerTemplateFull"(
+    title: if(
+      ri!isUpdate,
+      "Update Public Holiday",
+      "Create Public Holiday"
+    ),
+    secondaryText: if(
+      ri!isUpdate,
+      "Update details for the public holiday",
+      "Enter details for the public holiday"
+    )
+  ),
+  isTitleBarFixed: true,
+  contents: #"SYSTEM_SYSRULES_columnsLayout"(
+    columns: {
+      #"SYSTEM_SYSRULES_columnLayout"(
+        showWhen: #"SYSTEM_SYSRULES_isPageWidth"(
+          {
+            "DESKTOP_WIDE",
+            "DESKTOP",
+            "DESKTOP_NARROW",
+            "TABLET_LANDSCAPE"
+          }
+        )
+      ),
+      #"SYSTEM_SYSRULES_columnLayout"(
+        width: "WIDE",
+        contents: {
+          #"SYSTEM_SYSRULES_sectionLayout_v1"(
+            contents: {
+              #"SYSTEM_SYSRULES_cardLayout"(
+                contents: {
+                  #"SYSTEM_SYSRULES_dateField"(
+                    label: "Date",
+                    labelPosition: "ABOVE",
+                    required: true,
+                    value: ri!record[#"urn:appian:record-field:v1:c226c65b-4024-4e38-8256-62a0c480f3b1/9266b8a7-1733-4bb1-ba62-dd24273f051a"],
+                    saveInto: ri!record[#"urn:appian:record-field:v1:c226c65b-4024-4e38-8256-62a0c480f3b1/9266b8a7-1733-4bb1-ba62-dd24273f051a"]
+                  ),
+                  #"SYSTEM_SYSRULES_textField"(
+                    label: "Description",
+                    labelPosition: "ABOVE",
+                    required: true,
+                    value: ri!record[#"urn:appian:record-field:v1:c226c65b-4024-4e38-8256-62a0c480f3b1/9ea80481-7391-4192-8fbf-6bebd64a8803"],
+                    saveInto: ri!record[#"urn:appian:record-field:v1:c226c65b-4024-4e38-8256-62a0c480f3b1/9ea80481-7391-4192-8fbf-6bebd64a8803"],
+                    marginAbove: "LESS",
+                    characterLimit: 255,
+                    showCharacterCount: false
+                  ),
+                  #"SYSTEM_SYSRULES_textField"(
+                    label: "Region",
+                    labelPosition: "ABOVE",
+                    required: true,
+                    value: ri!record[#"urn:appian:record-field:v1:c226c65b-4024-4e38-8256-62a0c480f3b1/cca9ae15-037f-4695-ae16-1ae4e6bc9745"],
+                    saveInto: ri!record[#"urn:appian:record-field:v1:c226c65b-4024-4e38-8256-62a0c480f3b1/cca9ae15-037f-4695-ae16-1ae4e6bc9745"],
+                    marginAbove: "LESS",
+                    characterLimit: 255,
+                    showCharacterCount: false
+                  )
+                },
+                shape: "SEMI_ROUNDED",
+                padding: "MORE",
+                style: "NONE"
+              )
+            },
+            marginBelow: "MORE"
+          )
+        }
+      ),
+      #"SYSTEM_SYSRULES_columnLayout"(
+        showWhen: #"SYSTEM_SYSRULES_isPageWidth"(
+          {
+            "DESKTOP_WIDE",
+            "DESKTOP",
+            "DESKTOP_NARROW",
+            "TABLET_LANDSCAPE"
+          }
+        )
+      )
+    }
+  ),
+  buttons: #"SYSTEM_SYSRULES_ButtonLayout"(
+    primaryButtons: {
+      #"SYSTEM_SYSRULES_buttonWidget_v1"(
+        label: if(
+          ri!isUpdate,
+          "Save",
+          "Create"
+        ),
+        submit: true,
+        validate: true,
+        saveInto: {
+          if(
+            ri!isUpdate,
+            {
+              a!save(
+                target: ri!record[#"urn:appian:record-field:v1:c226c65b-4024-4e38-8256-62a0c480f3b1/db9d6d6d-96f2-4b4c-be6b-5adaf87610d7"],
+                value: loggedInUser()
+              ),
+              a!save(
+                target: ri!record[#"urn:appian:record-field:v1:c226c65b-4024-4e38-8256-62a0c480f3b1/aaffd0e0-9284-4083-903a-e215b99d6174"],
+                value: now()
+              )
+            },
+            {
+              a!save(
+                target: ri!record[#"urn:appian:record-field:v1:c226c65b-4024-4e38-8256-62a0c480f3b1/629e8ce6-b57a-466b-9539-77b94b9e0e15"],
+                value: loggedInUser()
+              ),
+              a!save(
+                target: ri!record[#"urn:appian:record-field:v1:c226c65b-4024-4e38-8256-62a0c480f3b1/e8cd90f1-294c-4378-ad1b-ae83e554f8b8"],
+                value: now()
+              )
+            }
+          )
+        },
+        style: "SOLID"
+      )
+    },
+    secondaryButtons: {
+      #"SYSTEM_SYSRULES_buttonWidget_v1"(
+        label: "Cancel",
+        submit: true,
+        validate: false,
+        saveInto: ri!cancel,
+        style: "OUTLINE",
+        value: true
+      )
+    }
+  ),
+  backgroundColor: "#fbfbfb"
+)</definition>
+        <namedTypedValue>
+            <name>record</name>
+            <type>
+                <name>c226c65b-4024-4e38-8256-62a0c480f3b1</name>
+                <namespace>urn:com:appian:recordtype:datatype</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>cancel</name>
+            <type>
+                <name>boolean</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>isUpdate</name>
+            <description>Tracks whether this form is being used to create a new record or update an existing one</description>
+            <type>
+                <name>boolean</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+        <isCustom>false</isCustom>
+    </interface>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="048a3dd0-6af3-4130-b9a7-5e9efdc05dc7"/>
+    </history>
+</contentHaul>
