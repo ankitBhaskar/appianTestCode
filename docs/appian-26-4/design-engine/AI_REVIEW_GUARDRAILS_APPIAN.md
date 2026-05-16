@@ -3,30 +3,52 @@
 ## Table of contents
 
 1. [Purpose](#purpose)
-2. [How to use this file](#how-to-use-this-file)
-3. [Core AI review principles](#core-ai-review-principles)
-4. [Pre-generation checks](#pre-generation-checks)
-5. [Appian documentation verification](#appian-documentation-verification)
-6. [SAIL safety guardrails](#sail-safety-guardrails)
-7. [Function safety guardrails](#function-safety-guardrails)
-8. [Record type and query guardrails](#record-type-and-query-guardrails)
-9. [Database and data model guardrails](#database-and-data-model-guardrails)
-10. [Process model guardrails](#process-model-guardrails)
-11. [Integration guardrails](#integration-guardrails)
-12. [Security guardrails](#security-guardrails)
-13. [Testing guardrails](#testing-guardrails)
-14. [Prompt patterns](#prompt-patterns)
-15. [Review checklist](#review-checklist)
-16. [Common AI-generated mistakes](#common-ai-generated-mistakes)
-17. [References](#references)
+2. [Critical rule: Appian only](#critical-rule-appian-only)
+3. [How to use this file](#how-to-use-this-file)
+4. [Core AI review principles](#core-ai-review-principles)
+5. [Pre-generation checks](#pre-generation-checks)
+6. [Appian documentation verification](#appian-documentation-verification)
+7. [Language contamination guardrails](#language-contamination-guardrails)
+8. [SAIL syntax contract](#sail-syntax-contract)
+9. [Component and parameter guardrails](#component-and-parameter-guardrails)
+10. [Allowed-value guardrails](#allowed-value-guardrails)
+11. [SAIL safety guardrails](#sail-safety-guardrails)
+12. [Function safety guardrails](#function-safety-guardrails)
+13. [Record type and query guardrails](#record-type-and-query-guardrails)
+14. [Database and data model guardrails](#database-and-data-model-guardrails)
+15. [Process model guardrails](#process-model-guardrails)
+16. [Integration guardrails](#integration-guardrails)
+17. [Security guardrails](#security-guardrails)
+18. [Testing guardrails](#testing-guardrails)
+19. [Prompt patterns](#prompt-patterns)
+20. [Mandatory AI self-check before returning code](#mandatory-ai-self-check-before-returning-code)
+21. [Review checklist](#review-checklist)
+22. [Common AI-generated mistakes](#common-ai-generated-mistakes)
+23. [Rejected substitution table](#rejected-substitution-table)
+24. [References](#references)
 
 ## Purpose
 
 This document defines APN guardrails for reviewing AI-generated Appian specifications, SAIL interfaces, expression rules, process model designs, database scripts and integration patterns.
 
-The aim is to stop common AI-generated issues before they reach build, including invented functions, unsupported component parameters, unsafe save patterns, missing security, weak data modelling and incomplete test coverage.
+The aim is to stop common AI-generated issues before they reach build, including invented functions, unsupported component parameters, unsafe save patterns, non-Appian syntax, missing security, weak data modelling and incomplete test coverage.
 
 This is a recommended house standard. Official Appian documentation remains the source of truth.
+
+## Critical rule: Appian only
+
+AI-generated Appian code must use Appian Expression Language and SAIL only.
+
+Do not mix in syntax from Java, JavaScript, TypeScript, React, Angular, HTML, CSS, SQL procedural logic, Python, JSONPath or pseudo-code unless the output section is explicitly a database script, Mermaid diagram, JSON example, HTTP payload or explanatory text.
+
+For SAIL and expression rules:
+
+```text
+Only use Appian-supported functions, SAIL components, named parameters,
+allowed values, rule input syntax, local variable syntax and record references.
+```
+
+If a value, function, parameter or component cannot be confirmed as Appian-supported, it must not be included in build-ready code.
 
 ## How to use this file
 
@@ -42,9 +64,10 @@ Use this file in three situations:
 
 | Principle | Standard |
 |---|---|
+| Appian only | SAIL code must not contain Java, JavaScript, React, CSS or made-up pseudo syntax. |
 | Verify, do not assume | Check exact Appian syntax, parameters and compatibility against official documentation. |
 | Use the project kit | AI must use the current project prefix, groups, record types and data model. |
-| No invented Appian syntax | Reject any function, component or parameter that cannot be confirmed. |
+| No invented Appian syntax | Reject any function, component, parameter or allowed value that cannot be confirmed. |
 | Prefer simple Appian patterns | Avoid over-engineered SAIL, process models and expression rules. |
 | Keep data model first | Do not let AI start with UI before the records, tables and relationships are clear. |
 | Make security explicit | UI hiding is not enough. Record, object, process and API security must be documented. |
@@ -69,10 +92,12 @@ Before asking AI to generate a technical specification, provide this context.
 Recommended instruction:
 
 ```text
-Use the APN Appian design engine. Do not invent Appian functions,
-component parameters, record fields, groups or database columns.
-Where official Appian behaviour matters, state the documentation source
-or mark the item as requiring verification.
+Use the APN Appian design engine. Generate Appian Expression Language
+and SAIL only. Do not use Java, JavaScript, React, CSS, HTML-style UI,
+Python or pseudo-code inside SAIL examples. Do not invent Appian functions,
+component parameters, allowed values, record fields, groups or database
+columns. Where official Appian behaviour matters, state the documentation
+source or mark the item as requiring verification.
 ```
 
 ## Appian documentation verification
@@ -83,6 +108,7 @@ AI-generated Appian content must be checked against official documentation when 
 - Appian functions
 - component parameters
 - function parameters
+- allowed values for parameters
 - compatibility flags
 - record type capabilities
 - process model capabilities
@@ -95,6 +121,161 @@ Verification rule:
 ```text
 If the reviewer cannot confirm the Appian object, function, component,
 parameter or allowed value, it must not be treated as build-ready.
+```
+
+## Language contamination guardrails
+
+AI often borrows patterns from other languages. In Appian, that creates immediate evaluation errors.
+
+### Forbidden inside SAIL code
+
+Do not use these patterns inside SAIL or expression rules.
+
+| Foreign pattern | Why it is wrong in SAIL | Appian approach |
+|---|---|---|
+| JavaScript object syntax, such as `{ key: value }` for arbitrary UI state | Appian has its own expression syntax and map handling. | Use Appian-supported maps, lists and named parameters. |
+| React-style components, such as `<Button>` or `<div>` | SAIL is not JSX or HTML. | Use Appian SAIL components such as `a!buttonWidget()` and layout functions. |
+| CSS properties, such as `fontWeight: "bold"` | SAIL does not accept arbitrary CSS. | Use Appian component parameters and documented style values. |
+| Java methods, such as `.getName()` or `.size()` | Appian expressions do not use Java method calls. | Use Appian functions and record field references. |
+| JavaScript operators, such as `===`, `&&`, `||`, `!` | Appian uses its own operators and logical functions. | Use Appian-supported comparison and logical functions such as `and()`, `or()`, `not()`. |
+| Python keywords, such as `None`, `True`, `False` | Appian has its own literal values and functions. | Use Appian expression syntax. |
+| HTML tags, such as `<b>`, `<strong>`, `<span>` | SAIL rich text is component-based, not HTML. | Use `a!richTextDisplayField()` with `a!richTextItem()`. |
+| CSS colour classes, such as `text-red-500` | SAIL does not use Tailwind or CSS classes. | Use Appian-supported colour inputs where available. |
+| JSONPath, such as `response.body.data[0].name` | Integration responses should be handled safely as dictionaries. | Use `index()` with safe defaults. |
+
+### Contamination review rule
+
+```text
+If SAIL code looks like JavaScript, React, HTML, CSS, Java or Python,
+it is not ready for Appian Designer.
+```
+
+## SAIL syntax contract
+
+AI-generated SAIL must follow these syntax rules.
+
+| Area | Required Appian pattern |
+|---|---|
+| Components | Use `a!componentName(parameter: value)` style. |
+| Named parameters | Use exact Appian parameter names. |
+| Rule inputs | Use `ri!inputName`. |
+| Local variables | Use `local!variableName`. |
+| Function variables | Use documented function variables such as `fv!item` only in supported contexts. |
+| Process variables | Use `pv!` only in process model descriptions, not interface code. |
+| Constants | Use `cons!APN_CONS_Name`. |
+| Rules | Use `rule!APN_RULE_Name()`. |
+| Record types | Use Appian record type references, not strings or made-up paths. |
+| Comments | Use Appian expression comments where appropriate. |
+
+### Mandatory syntax exclusions
+
+Reject code containing these in SAIL blocks unless they are inside quoted display text:
+
+```text
+function()
+const
+let
+var
+return
+class
+new
+this.
+=>
+===
+!==
+&&
+||
+<div
+<span
+<Button
+style={{
+fontWeight
+className
+nullish coalescing
+```
+
+## Component and parameter guardrails
+
+AI must only use components and parameters documented for Appian 26.4.
+
+### Component rule
+
+```text
+A component is allowed only if it exists in the official Appian SAIL component reference for the target version.
+```
+
+### Parameter rule
+
+```text
+A parameter is allowed only if that exact component supports that exact parameter name.
+```
+
+A parameter that exists on one Appian component must not be copied to another component unless the official documentation confirms it is supported there.
+
+Example review concern:
+
+```text
+showBorder may be valid for some layout components but must not be assumed valid for every grid or display component.
+```
+
+### Component specification template
+
+When AI introduces a component, it should be able to justify it like this:
+
+```text
+Component:        a!richTextItem()
+Purpose:          Display styled rich text in a supported rich text field.
+Parameters used:  text, style, colour or other documented parameters only.
+Official source:  Appian 26.4 SAIL Components documentation.
+Risk:             Reject if style uses unsupported values such as "bold".
+```
+
+## Allowed-value guardrails
+
+AI must not translate Appian allowed values into natural language, CSS language or another framework's wording.
+
+If Appian expects an allowed value, use the exact Appian value.
+
+### Common value substitution risks
+
+| AI may write | Why this is risky | Appian-safe review action |
+|---|---|---|
+| `bold` | Appian rich text style values may use documented uppercase values such as `STRONG`, not arbitrary natural language. | Verify the exact allowed value in Appian docs and use only documented values. |
+| `primary` | Button style values are Appian-specific. | Use only documented Appian button styles. |
+| `secondary` | Often copied from web UI frameworks. | Replace with a documented Appian value only if applicable. |
+| `danger` or `destructive` | Common in design systems, not automatically Appian-supported. | Use documented Appian style and validation patterns. |
+| `horizontal` | Some components use specific layout values. | Use only documented values for that component. |
+| `auto`, `fit-content`, `100%`, `px` widths | CSS sizing is not Appian parameter syntax. | Use documented Appian width values for that component. |
+| `className` | React pattern. | Not valid SAIL. Remove. |
+| `fontWeight` | CSS/React pattern. | Use documented rich text style values. |
+| `onClick` | JavaScript/React event pattern. | Use Appian `saveInto`, `submit`, dynamic links or record actions as documented. |
+| `disabledWhen` | Sounds plausible but may not exist on the component. | Verify exact Appian parameter name. |
+| `visibleWhen` | Sounds plausible but Appian commonly uses different patterns. | Verify exact Appian parameter and use conditional logic correctly. |
+
+### Strong example: rich text styling
+
+Incorrect AI-style output:
+
+```appian
+a!richTextItem(
+  text: "Important",
+  style: "bold"
+)
+```
+
+Correct Appian-style output, subject to official value verification:
+
+```appian
+a!richTextItem(
+  text: "Important",
+  style: "STRONG"
+)
+```
+
+Review rule:
+
+```text
+Do not allow natural-language style values such as "bold" unless the official Appian component documentation lists that exact value.
 ```
 
 ## SAIL safety guardrails
@@ -176,6 +357,37 @@ AI must not invent functions or parameters.
 | People functions | Confirm they are not used as the only security control. |
 | Integration functions | Confirm response shape before indexing. |
 
+### Function allowability test
+
+Before accepting any function, ask:
+
+```text
+1. Does this exact function exist in Appian 26.4?
+2. Is the function being used in a supported context?
+3. Are all named parameters valid for this function?
+4. Are the input types correct?
+5. Is the return type handled correctly?
+6. Is null or empty input handled safely?
+```
+
+### Reject invented function names
+
+Reject functions that sound plausible but are not confirmed in the official Appian function reference.
+
+Examples of high-risk AI patterns:
+
+```text
+a!stackedLayout()
+a!showWhen()
+a!formLayoutTitleBar()
+a!recordActionTriggerLink()
+a!onClick()
+a!style()
+a!cssClass()
+```
+
+Do not use these unless official Appian documentation confirms the function exists in the target version.
+
 Function review prompt:
 
 ```text
@@ -230,6 +442,19 @@ a!localVariables(
   )
 )
 ```
+
+### Record reference safety
+
+Reject these patterns in SAIL:
+
+```text
+"recordType!APN_REC_Claim.fields.claimId"
+recordType.APnClaim.fields.claimId
+APN_REC_Claim.claimId
+record.fields.claimId
+```
+
+Use Appian record references inserted by Designer autocomplete or clearly marked placeholders for the developer to resolve.
 
 ### Record type review
 
@@ -381,19 +606,23 @@ Every AI-generated specification must include tests by layer.
 ```text
 Create an Appian technical specification using the APN design engine.
 Use the supplied project kit, data model and user stories only.
-Do not invent record fields, groups, Appian functions or SAIL parameters.
-Include DDL, record types, expression rules, interfaces, process models,
-actions, security, tests, deployment notes and rollback considerations.
-Mark anything that requires official Appian documentation verification.
+Generate Appian Expression Language and SAIL only.
+Do not use Java, JavaScript, React, HTML, CSS or pseudo-code inside SAIL.
+Do not invent record fields, groups, Appian functions, SAIL components,
+component parameters or allowed values. Include DDL, record types,
+expression rules, interfaces, process models, actions, security, tests,
+deployment notes and rollback considerations. Mark anything that requires
+official Appian documentation verification.
 ```
 
 ### Review SAIL code
 
 ```text
 Review this SAIL code for Appian 26.4 compatibility. Check for invented
-components, unsupported parameters, unsafe saveInto patterns, null handling,
+components, unsupported parameters, wrong allowed values, JavaScript/React/
+CSS/HTML contamination, unsafe saveInto patterns, null handling,
 query-in-loop patterns, refresh behaviour, accessibility and mobile usability.
-Return a table with severity, issue, reason and corrected pattern.
+Return a table with severity, issue, reason and corrected Appian pattern.
 ```
 
 ### Review database design
@@ -408,10 +637,29 @@ reference data, record type relationships and migration safety.
 
 ```text
 Review this specification against the APN Appian design engine. Identify
-unsupported Appian syntax, missing build detail, unclear assumptions,
-security gaps, testing gaps, deployment gaps and places where official
-Appian documentation verification is required.
+unsupported Appian syntax, non-Appian language contamination, missing build
+detail, unclear assumptions, security gaps, testing gaps, deployment gaps
+and places where official Appian documentation verification is required.
 ```
+
+## Mandatory AI self-check before returning code
+
+Before returning Appian code, AI must answer these checks internally and fix any failures.
+
+```text
+1. Does every function exist in Appian 26.4?
+2. Does every component exist in Appian 26.4?
+3. Does every named parameter belong to that exact component or function?
+4. Does every allowed value match Appian wording and casing?
+5. Is there any Java, JavaScript, React, HTML, CSS, Python or pseudo-code inside SAIL?
+6. Are all query inputs null-safe?
+7. Are all date formatting calls null-safe?
+8. Are record references Appian-style, not strings or object paths from another language?
+9. Does saveInto use Appian patterns rather than onClick or event handlers?
+10. Is the code ready to paste into Appian Designer without unsupported syntax?
+```
+
+If any answer is uncertain, the code must be labelled as requiring verification, not build-ready.
 
 ## Review checklist
 
@@ -419,6 +667,8 @@ Appian documentation verification is required.
 |---|---|
 | Uses current project prefix. |  |
 | Does not invent Appian objects, functions or parameters. |  |
+| Does not use non-Appian syntax inside SAIL. |  |
+| Allowed values use Appian wording and casing. |  |
 | Links unusual or important Appian features to official documentation. |  |
 | Data model is clear before UI design. |  |
 | Record types include relationships and security. |  |
@@ -438,6 +688,12 @@ Appian documentation verification is required.
 |---|---|
 | Inventing SAIL parameters | Verify against official component reference. |
 | Inventing Appian functions | Verify against official function reference. |
+| Using `style: "bold"` | Use only documented rich text style values, such as `STRONG` where supported. |
+| Using `style: "primary"` | Use only documented Appian button styles for the target component. |
+| Using CSS properties such as `fontWeight` | Remove CSS syntax and use Appian component parameters. |
+| Using React/HTML tags | Replace with SAIL components. |
+| Using `onClick` | Use `saveInto`, `submit`, dynamic links or record actions as supported. |
+| Using `&&`, `||` or `!` | Use Appian logical functions and supported operators. |
 | Using `pv!` in interfaces | Use `ri!` in interfaces. |
 | Using `ri!` in process model notes | Use `pv!` in process models. |
 | Missing `fields` in record queries | Specify every field the caller reads. |
@@ -449,6 +705,33 @@ Appian documentation verification is required.
 | Treating UI hiding as security | Add object, record, process or API security. |
 | Missing integration response sample | Request actual or representative response payload first. |
 | No tests | Add unit and end-to-end tests by layer. |
+
+## Rejected substitution table
+
+This table captures high-risk substitutions that AI often makes when it imports habits from other UI frameworks.
+
+| Reject | Why | Safer Appian review position |
+|---|---|---|
+| `bold` | Natural language/CSS-style value, not automatically a valid Appian value. | Use documented Appian rich text style value only. |
+| `italic` | May not match exact Appian allowed value or casing. | Verify exact Appian value before use. |
+| `primary` | Common web framework value. | Use documented Appian button style value only. |
+| `secondary` | Common web framework value. | Use documented Appian button style value only. |
+| `danger` | Common design-system value. | Use documented Appian style, colour or validation pattern only. |
+| `destructive` | Common design-system value. | Verify Appian support before use. |
+| `horizontal` | May be wrong for Appian component parameters. | Use exact documented layout value. |
+| `vertical` | May be wrong for Appian component parameters. | Use exact documented layout value. |
+| `AUTO` everywhere | Width values differ by component. | Verify allowed width values per component. |
+| `MINIMIZE` everywhere | May be valid for some components and invalid for others. | Verify per component. |
+| `className` | React only. | Not valid SAIL. |
+| `fontWeight` | CSS only. | Not valid SAIL. |
+| `display: flex` | CSS only. | Use Appian layout components. |
+| `onClick` | JavaScript/React event handler. | Use Appian `saveInto`, dynamic links or actions. |
+| `return` | JavaScript/Java syntax. | Appian expression returns the evaluated expression. |
+| `const`, `let`, `var` | JavaScript declarations. | Use `local!` inside `a!localVariables()`. |
+| `.map()` | JavaScript array method. | Use `a!forEach()`. |
+| `.filter()` | JavaScript array method. | Use Appian query filters or Appian list functions. |
+| `.length` | JavaScript property. | Use Appian-supported length/count function. |
+| `null` as a JavaScript assumption | Appian null handling must be explicit. | Use Appian null checks and defaults. |
 
 ## References
 
