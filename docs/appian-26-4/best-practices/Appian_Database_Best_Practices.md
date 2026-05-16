@@ -1,613 +1,916 @@
-# Appian Database Design and Table Mapping Standards
+# Appian Database Design Technical Specification Standard
 
 ## Table of contents
 
 1. [Purpose](#purpose)
-2. [Scope and source of truth](#scope-and-source-of-truth)
-3. [Core design principles](#core-design-principles)
-4. [Recommended schema structure](#recommended-schema-structure)
-5. [Table naming standards](#table-naming-standards)
-6. [Column naming standards](#column-naming-standards)
-7. [Primary key strategy](#primary-key-strategy)
-8. [Foreign key and relationship strategy](#foreign-key-and-relationship-strategy)
-9. [Lookup and reference table standards](#lookup-and-reference-table-standards)
-10. [Audit column standards](#audit-column-standards)
-11. [Soft delete standards](#soft-delete-standards)
-12. [Version and optimistic locking standards](#version-and-optimistic-locking-standards)
-13. [Indexing standards](#indexing-standards)
-14. [Views versus tables](#views-versus-tables)
-15. [Appian record type mapping standards](#appian-record-type-mapping-standards)
-16. [CDT and data store entity mapping standards](#cdt-and-data-store-entity-mapping-standards)
-17. [Table relationship patterns](#table-relationship-patterns)
-18. [Appian object mapping standards](#appian-object-mapping-standards)
-19. [Database migration standards](#database-migration-standards)
-20. [SQL examples](#sql-examples)
-21. [Review checklist](#review-checklist)
-22. [Common mistakes](#common-mistakes)
-23. [References](#references)
+2. [How to use this standard](#how-to-use-this-standard)
+3. [Technical specification header standard](#technical-specification-header-standard)
+4. [Section 1: Design decisions](#section-1-design-decisions)
+5. [Section 2: Object inventory](#section-2-object-inventory)
+6. [Section 3: DDL standards](#section-3-ddl-standards)
+7. [Section 4: Relationship standards](#section-4-relationship-standards)
+8. [Section 5: Record type mapping standards](#section-5-record-type-mapping-standards)
+9. [Section 6: CDT and data store mapping standards](#section-6-cdt-and-data-store-mapping-standards)
+10. [Section 7: Expression rule standards](#section-7-expression-rule-standards)
+11. [Section 8: Process and write pattern standards](#section-8-process-and-write-pattern-standards)
+12. [Section 9: Migration and release standards](#section-9-migration-and-release-standards)
+13. [Section 10: Build checklist standard](#section-10-build-checklist-standard)
+14. [Section 11: End-to-end database test script standard](#section-11-end-to-end-database-test-script-standard)
+15. [Common mistakes](#common-mistakes)
+16. [References](#references)
 
 ## Purpose
 
-This document defines recommended database design, table mapping and relationship standards for Appian applications.
+This document defines the recommended technical specification style and engineering standard for Appian database design, table relationships, table-to-record mapping, CDT mapping and database release governance.
 
-The objective is to create database tables that are easy to map to Appian record types, CDTs, data store entities, process models, reports and integrations.
+This is a recommended house standard. It is not an Appian-enforced platform rule.
 
-## Scope and source of truth
+## How to use this standard
 
-This document is a recommended house standard. It is not an Appian-enforced platform rule.
+Use this document when creating a database design specification for a new Appian feature or domain module.
 
-Use official Appian 26.4 documentation as the source of truth for exact platform behaviour, supported object features and implementation steps.
+The standard is intentionally structured like a build-ready technical specification. Each project should replace the example prefix, table names, record type names and business terminology with the current project details.
 
-## Core design principles
+Do not copy the example objects directly into a project unless they genuinely match the current domain.
 
-Recommendation:
+## Technical specification header standard
 
-| Principle | Standard |
-|---|---|
-| Clear ownership | Each table should have one clear business owner and purpose. |
-| Record-first design | Prefer table structures that map cleanly to Appian record types. |
-| Explicit relationships | Use clear foreign keys between parent and child tables. |
-| Auditability | Include standard audit columns on business tables. |
-| Performance by design | Add indexes for common filters, joins and search conditions. |
-| Safe change management | Manage schema changes through version-controlled migration scripts. |
-| Simple mapping | Avoid database designs that require complex transformation before Appian can use the data. |
-
-## Recommended schema structure
-
-Recommendation: separate application tables, reference tables and integration staging tables.
-
-```text
-appian_apn
-  apn_claim
-  apn_claim_status_history
-  apn_claim_document
-  apn_payment
-
-appian_apn_ref
-  apn_ref_claim_status
-  apn_ref_payment_status
-  apn_ref_document_type
-
-appian_apn_int
-  apn_int_inbound_event
-  apn_int_outbound_request
-  apn_int_error_log
-```
-
-Use schema separation only where it is supported by the project database standards and operational model.
-
-## Table naming standards
-
-Recommendation: use lowercase snake case for physical database table names.
-
-Pattern:
-
-```text
-<app_prefix>_<entity_name>
-```
-
-Examples:
-
-| Table purpose | Recommended table name |
-|---|---|
-| Claim | `apn_claim` |
-| Customer | `apn_customer` |
-| Payment | `apn_payment` |
-| Claim document | `apn_claim_document` |
-| Claim status history | `apn_claim_status_history` |
-| Reference claim status | `apn_ref_claim_status` |
-| Integration error log | `apn_int_error_log` |
-
-Avoid:
-
-```text
-ClaimTable
-TBL_CLAIM
-claimData
-NewTable1
-```
-
-## Column naming standards
-
-Recommendation: use lowercase snake case for physical database columns.
-
-| Column type | Pattern | Example |
-|---|---|---|
-| Primary key | `<entity>_id` | `claim_id` |
-| Foreign key | `<parent_entity>_id` | `customer_id` |
-| Status | `<entity>_status_code` or `status_code` | `claim_status_code` |
-| Date and time | `<event>_on` | `created_on` |
-| User | `<event>_by` | `created_by` |
-| Boolean flag | `is_<meaning>` | `is_active` |
-| Amount | `<purpose>_amount` | `approved_amount` |
-| Code | `<purpose>_code` | `payment_status_code` |
-
-Avoid vague names:
-
-```text
-id
-name1
-value
-flag
-status
-created
-```
-
-Prefer meaningful names:
-
-```text
-claim_id
-claim_reference
-claim_status_code
-is_deleted
-created_on
-created_by
-```
-
-## Primary key strategy
-
-Recommendation: each business table should have a single surrogate primary key.
-
-Preferred pattern:
-
-```text
-<entity>_id BIGINT primary key
-```
-
-Example:
+Every database technical specification should start with a clear header block.
 
 ```sql
-claim_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+/*
+ * ============================================================================
+ * APPIAN DATABASE TECHNICAL SPECIFICATION
+ * <Feature or Domain Name>
+ * ============================================================================
+ *
+ * WHAT THIS FILE IS:
+ *   A build-ready database and Appian mapping specification for one feature,
+ *   module or domain area. It defines tables, relationships, record type
+ *   mapping, CDT mapping where required, query rules, write patterns,
+ *   release sequencing and test coverage.
+ *
+ * WHAT THIS FILE IS NOT:
+ *   - A generic SQL dump without Appian context.
+ *   - A replacement for official Appian documentation.
+ *   - A place to invent unsupported Appian object features.
+ *
+ * APPLICATION PREFIX:
+ *   APN
+ *
+ * NAMING STANDARD:
+ *   Database tables:        apn_<entity>
+ *   Reference tables:       apn_ref_<reference_name>
+ *   Integration tables:     apn_int_<purpose>
+ *   Record types:           APN_REC_<Entity>
+ *   CDTs:                   APN_CDT_<Entity>
+ *   Query rules:            APN_QRY_<Verb><Entity>
+ *   Process models:         APN_PM_<BusinessProcess>
+ *   Interfaces:             APN_UI_<Purpose>
+ *
+ * DESIGN STATUS:
+ *   Draft / Review / Approved / Implemented
+ *
+ * LAST UPDATED:
+ *   <DD Month YYYY>
+ *
+ * OWNER:
+ *   <Technical owner>
+ *
+ * ============================================================================
+ */
 ```
 
-Standards:
+## Section 1: Design decisions
 
-| Area | Recommendation |
-|---|---|
-| Key type | Use numeric surrogate keys for internal relational joins. |
-| Business identifier | Store business identifiers in separate unique columns. |
-| Naming | Name the primary key after the entity, such as `claim_id`. |
-| Immutability | Never update primary key values. |
-| Appian mapping | Map the primary key as the identifier field for record-backed data. |
-
-## Foreign key and relationship strategy
-
-Recommendation: use explicit foreign keys for relational integrity unless the project has a documented operational reason not to enforce them.
-
-Relationship naming pattern:
-
-```text
-fk_<child_table>_<parent_table>
-```
-
-Example:
+Capture decisions before writing DDL. This helps reviewers understand why the data model exists and what trade-offs have been made.
 
 ```sql
-CONSTRAINT fk_apn_claim_apn_customer
-FOREIGN KEY (customer_id)
-REFERENCES apn_customer (customer_id)
+/*
+ * ============================================================================
+ * SECTION 1: DESIGN DECISIONS
+ * ============================================================================
+ *
+ * 1. Record-first design.
+ *    Tables are designed to map cleanly to Appian record types. Each primary
+ *    business entity should normally have one main record type.
+ *
+ * 2. Surrogate primary keys.
+ *    Business tables use numeric surrogate primary keys such as claim_id.
+ *    Business reference numbers are stored in separate unique columns.
+ *
+ * 3. Explicit relationships.
+ *    Parent-child relationships are represented using foreign key columns.
+ *    Foreign key constraints should be created unless the project has a
+ *    documented operational reason not to enforce them.
+ *
+ * 4. Reference data is governed.
+ *    Statuses, types and categories are stored in lookup/reference tables
+ *    where the values are reported on, integrated or controlled by governance.
+ *
+ * 5. Auditability is mandatory for business tables.
+ *    Business tables include created_on, created_by, updated_on and updated_by.
+ *
+ * 6. Soft delete is preferred for business records.
+ *    Use is_deleted, deleted_on and deleted_by where records should remain
+ *    available for operational history, audit or reporting.
+ *
+ * 7. Database changes are release-managed.
+ *    DDL, seed data, index changes and rollback guidance are managed through
+ *    version-controlled migration scripts.
+ * ============================================================================
+ */
 ```
 
-Relationship standards:
+## Section 2: Object inventory
 
-| Relationship | Database pattern | Appian mapping recommendation |
-|---|---|---|
-| One customer to many claims | `apn_claim.customer_id` references `apn_customer.customer_id` | Record relationship from Claim to Customer. |
-| One claim to many documents | `apn_claim_document.claim_id` references `apn_claim.claim_id` | Record relationship from Claim to Claim Document. |
-| One claim to many status history rows | `apn_claim_status_history.claim_id` references `apn_claim.claim_id` | Record relationship or related record list. |
-| Many-to-many | Bridge table with two foreign keys | Use record relationships through the bridge table where suitable. |
-
-## Lookup and reference table standards
-
-Recommendation: use reference tables for controlled values that need to be governed, reported on or integrated with external systems.
-
-Reference table naming pattern:
-
-```text
-apn_ref_<reference_name>
-```
-
-Recommended columns:
-
-| Column | Purpose |
-|---|---|
-| `<reference>_code` | Stable code used by Appian and integrations. |
-| `display_name` | User-facing label. |
-| `description` | Optional explanation. |
-| `sort_order` | Display order. |
-| `is_active` | Whether the value can be selected. |
-| `effective_from` | Optional start date. |
-| `effective_to` | Optional end date. |
-| `created_on`, `created_by`, `updated_on`, `updated_by` | Audit fields. |
-
-Use reference tables for values such as claim status, payment status, document type, case priority and assessment outcome.
-
-## Audit column standards
-
-Recommendation: include audit columns on all business tables.
-
-| Column | Data type example | Required | Description |
-|---|---|---|---|
-| `created_on` | `TIMESTAMP` | Yes | Row creation timestamp. |
-| `created_by` | `VARCHAR(255)` | Yes | Appian username, service account or integration user. |
-| `updated_on` | `TIMESTAMP` | Yes | Last update timestamp. |
-| `updated_by` | `VARCHAR(255)` | Yes | Last user or system to update the row. |
-
-Optional operational audit columns:
-
-| Column | Purpose |
-|---|---|
-| `source_system` | Identifies the upstream source. |
-| `source_reference` | Stores external reference number. |
-| `correlation_id` | Connects database row to process or integration logs. |
-| `request_id` | Supports API traceability. |
-
-## Soft delete standards
-
-Recommendation: use soft delete for business data where users should not physically remove records from operational history.
-
-Recommended columns:
-
-| Column | Data type example | Description |
-|---|---|---|
-| `is_deleted` | `BOOLEAN` | Indicates whether the row is logically deleted. |
-| `deleted_on` | `TIMESTAMP` | When the row was deleted. |
-| `deleted_by` | `VARCHAR(255)` | Who deleted the row. |
-
-Standard query rule behaviour:
-
-```appian
-/* Recommendation: filter out deleted rows by default */
-a!queryFilter(
-  field: "isDeleted",
-  operator: "=",
-  value: false
-)
-```
-
-## Version and optimistic locking standards
-
-Recommendation: include a numeric version column on tables that can be updated by multiple users or processes.
+Include an inventory so the build order is clear.
 
 ```sql
-version_number INTEGER NOT NULL DEFAULT 1
+/*
+ * ============================================================================
+ * SECTION 2: OBJECT INVENTORY
+ * ============================================================================
+ *
+ * DATABASE:
+ *   - apn_ref_claim_status        New reference table
+ *   - apn_customer                New parent business table
+ *   - apn_claim                   New child business table
+ *   - apn_claim_document          New child attachment mapping table
+ *   - apn_claim_status_history    New child history table
+ *
+ * APPIAN RECORD TYPES:
+ *   - APN_REC_ClaimStatus         Maps to apn_ref_claim_status
+ *   - APN_REC_Customer            Maps to apn_customer
+ *   - APN_REC_Claim               Maps to apn_claim
+ *   - APN_REC_ClaimDocument       Maps to apn_claim_document
+ *   - APN_REC_ClaimStatusHistory  Maps to apn_claim_status_history
+ *
+ * EXPRESSION RULES:
+ *   - APN_QRY_GetClaimById
+ *   - APN_QRY_GetClaimsForCustomer
+ *   - APN_QRY_GetClaimDocuments
+ *   - APN_QRY_GetClaimStatusHistory
+ *   - APN_QRY_GetActiveClaimStatuses
+ *
+ * PROCESS MODELS:
+ *   - APN_PM_CreateClaim
+ *   - APN_PM_UpdateClaimStatus
+ *   - APN_PM_AddClaimDocument
+ *
+ * INTERFACES:
+ *   - APN_UI_ClaimSummary
+ *   - APN_UI_CreateClaim
+ *   - APN_UI_ClaimDocumentsGrid
+ *   - APN_UI_ClaimStatusHistoryGrid
+ *
+ * CONSTANTS:
+ *   - APN_CONS_ClaimStatusOpen
+ *   - APN_CONS_ClaimStatusInReview
+ *   - APN_CONS_ClaimStatusApproved
+ *   - APN_CONS_ClaimStatusRejected
+ * ============================================================================
+ */
 ```
 
-Usage pattern:
+## Section 3: DDL standards
 
-1. Appian reads the row and version number.
-2. User updates the record.
-3. Save logic checks that the current database version still matches the version read by the user.
-4. If the version changed, show a controlled conflict message.
-5. If the version matches, update the row and increment `version_number`.
+### 3.1 Table naming standard
 
-## Indexing standards
+Physical table names should use lowercase snake case and start with the application prefix.
 
-Recommendation: create indexes based on real query patterns, not every column.
-
-Index these columns where frequently used:
-
-| Query pattern | Index recommendation |
-|---|---|
-| Search by parent | Foreign key index, such as `customer_id`. |
-| Filter by status | Index status code columns used in grids and reports. |
-| Filter by active rows | Consider index on `is_active` where selective and supported. |
-| Date range search | Index date columns used in date range filters. |
-| Unique business reference | Unique index on business reference. |
-| Integration lookup | Index external reference and correlation identifiers. |
-
-Avoid over-indexing because indexes add storage and write overhead.
-
-## Views versus tables
-
-Recommendation:
-
-| Use table when | Use view when |
-|---|---|
-| Appian must create, update or delete rows. | Appian only needs read-only reporting or search. |
-| The data is transactional. | The data combines multiple tables for reporting. |
-| The record type is the source of truth. | The view simplifies complex joins for read use cases. |
-
-Avoid using views as the primary write target for Appian unless the database and Appian mapping approach are explicitly validated.
-
-## Appian record type mapping standards
-
-Recommendation: design tables so they map cleanly to Appian record types.
-
-| Database object | Appian object |
-|---|---|
-| `apn_claim` | `APN_REC_Claim` |
-| `apn_customer` | `APN_REC_Customer` |
-| `apn_payment` | `APN_REC_Payment` |
-| `apn_ref_claim_status` | `APN_REC_ClaimStatus` or reference data query rule |
-
-Record mapping standards:
-
-1. One primary business table should usually map to one primary record type.
-2. Use clear primary key fields.
-3. Keep field names meaningful and stable.
-4. Map parent and child tables through record relationships.
-5. Avoid storing unrelated entities in a single generic table.
-6. Use synced records where they support the use case and data source.
-7. Confirm Appian-supported relationship and sync behaviour in official documentation for Appian 26.4.
-
-## CDT and data store entity mapping standards
-
-Recommendation: prefer record type patterns for modern Appian design where suitable. Use CDTs and data store entities where required by the application architecture, existing implementation or write patterns.
-
-CDT mapping standards:
-
-| Area | Recommendation |
-|---|---|
-| CDT name | Use application prefix, such as `APN_CDT_Claim`. |
-| Field names | Align CDT fields to Appian naming conventions, normally camel case. |
-| Database columns | Map to lowercase snake case physical columns. |
-| Identifier | Ensure the CDT maps to the table primary key. |
-| Nullability | Align CDT field expectations with database nullability. |
-| Relationships | Avoid overly deep CDT nesting for transactional writes. |
-
-Example mapping:
-
-| Database column | Appian CDT field |
-|---|---|
-| `claim_id` | `claimId` |
-| `claim_reference` | `claimReference` |
-| `claim_status_code` | `claimStatusCode` |
-| `created_on` | `createdOn` |
-| `created_by` | `createdBy` |
-
-## Table relationship patterns
-
-### One-to-many relationship
-
-Example: one customer can have many claims.
-
-```mermaid
-erDiagram
-  APN_CUSTOMER ||--o{ APN_CLAIM : has
-  APN_CUSTOMER {
-    bigint customer_id PK
-    varchar customer_reference
-  }
-  APN_CLAIM {
-    bigint claim_id PK
-    bigint customer_id FK
-    varchar claim_reference
-  }
-```
-
-### Parent-child relationship
-
-Example: one claim can have many documents.
-
-```mermaid
-erDiagram
-  APN_CLAIM ||--o{ APN_CLAIM_DOCUMENT : contains
-  APN_CLAIM {
-    bigint claim_id PK
-    varchar claim_reference
-  }
-  APN_CLAIM_DOCUMENT {
-    bigint claim_document_id PK
-    bigint claim_id FK
-    bigint document_id
-  }
-```
-
-### Status history relationship
-
-Example: one claim can have many status history records.
-
-```mermaid
-erDiagram
-  APN_CLAIM ||--o{ APN_CLAIM_STATUS_HISTORY : tracks
-  APN_REF_CLAIM_STATUS ||--o{ APN_CLAIM_STATUS_HISTORY : describes
-  APN_CLAIM {
-    bigint claim_id PK
-    varchar claim_status_code
-  }
-  APN_CLAIM_STATUS_HISTORY {
-    bigint claim_status_history_id PK
-    bigint claim_id FK
-    varchar claim_status_code FK
-    timestamp changed_on
-  }
-  APN_REF_CLAIM_STATUS {
-    varchar claim_status_code PK
-    varchar display_name
-  }
-```
-
-### Many-to-many relationship
-
-Example: one case can have many tags and one tag can apply to many cases.
-
-```mermaid
-erDiagram
-  APN_CASE ||--o{ APN_CASE_TAG : has
-  APN_TAG ||--o{ APN_CASE_TAG : assigned
-  APN_CASE {
-    bigint case_id PK
-  }
-  APN_TAG {
-    bigint tag_id PK
-  }
-  APN_CASE_TAG {
-    bigint case_tag_id PK
-    bigint case_id FK
-    bigint tag_id FK
-  }
-```
-
-## Appian object mapping standards
-
-Recommended alignment between database and Appian objects:
-
-| Database object | Appian object naming example | Notes |
+| Table type | Pattern | Example |
 |---|---|---|
-| `apn_claim` | `APN_REC_Claim` | Main record type for claim data. |
-| `apn_claim` | `APN_CDT_Claim` | Use where CDT mapping is required. |
-| `apn_claim` | `APN_QRY_GetClaimById` | Query helper rule. |
-| `apn_claim` | `APN_UI_ClaimSummary` | Interface presenting claim data. |
-| `apn_claim` | `APN_PM_CreateClaim` | Process model creating claim data. |
-| `apn_int_error_log` | `APN_REC_IntegrationErrorLog` | Operational monitoring record. |
+| Business table | `apn_<entity>` | `apn_claim` |
+| Reference table | `apn_ref_<reference>` | `apn_ref_claim_status` |
+| Integration table | `apn_int_<purpose>` | `apn_int_error_log` |
+| Junction table | `apn_<entity>_<entity>` | `apn_case_tag` |
+| History table | `apn_<entity>_history` | `apn_claim_status_history` |
 
-## Database migration standards
-
-Recommendation: every database change should be scripted, reviewed and version controlled.
-
-Migration file naming pattern:
-
-```text
-V<version>__<description>.sql
-```
-
-Examples:
-
-```text
-V1.0.0__create_claim_tables.sql
-V1.0.1__add_claim_status_index.sql
-V1.1.0__create_payment_tables.sql
-```
-
-Migration standards:
-
-1. Scripts must be repeatable only where intentionally designed as repeatable scripts.
-2. Scripts must include rollback guidance where practical.
-3. Destructive changes must be reviewed and approved.
-4. Production scripts must be tested in a lower environment first.
-5. Appian object deployment and database migration sequencing must be documented in the release plan.
-
-## SQL examples
-
-### Customer table
+### 3.2 Reference table example
 
 ```sql
+/* --------------------------------------------------------------------------
+ * 3.2  apn_ref_claim_status
+ * --------------------------------------------------------------------------
+ * Purpose:
+ *   Governed lookup table for claim status values used by Appian interfaces,
+ *   record filters, process decisions and reporting.
+ *
+ * Appian mapping:
+ *   Record Type: APN_REC_ClaimStatus
+ *   Display field: display_name
+ *   Primary key: claim_status_code
+ * --------------------------------------------------------------------------
+ */
+
+CREATE TABLE apn_ref_claim_status (
+  claim_status_code VARCHAR(50)  NOT NULL,
+  display_name      VARCHAR(100) NOT NULL,
+  description       VARCHAR(500) NULL,
+  sort_order        INTEGER      NOT NULL DEFAULT 0,
+  is_active         BOOLEAN      NOT NULL DEFAULT TRUE,
+  created_on        TIMESTAMP    NOT NULL,
+  created_by        VARCHAR(255) NOT NULL,
+  updated_on        TIMESTAMP    NOT NULL,
+  updated_by        VARCHAR(255) NOT NULL,
+  CONSTRAINT pk_apn_ref_claim_status PRIMARY KEY (claim_status_code)
+);
+```
+
+### 3.3 Parent business table example
+
+```sql
+/* --------------------------------------------------------------------------
+ * 3.3  apn_customer
+ * --------------------------------------------------------------------------
+ * Purpose:
+ *   Parent business table for customer or stakeholder records.
+ *
+ * Appian mapping:
+ *   Record Type: APN_REC_Customer
+ *   Primary key field: customerId
+ *   Display field: customerReference
+ * --------------------------------------------------------------------------
+ */
+
 CREATE TABLE apn_customer (
-  customer_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  customer_reference VARCHAR(50) NOT NULL,
-  full_name VARCHAR(255) NOT NULL,
-  email_address VARCHAR(255),
-  is_active BOOLEAN NOT NULL DEFAULT TRUE,
-  is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
-  created_on TIMESTAMP NOT NULL,
-  created_by VARCHAR(255) NOT NULL,
-  updated_on TIMESTAMP NOT NULL,
-  updated_by VARCHAR(255) NOT NULL,
-  version_number INTEGER NOT NULL DEFAULT 1,
+  customer_id        BIGINT       GENERATED ALWAYS AS IDENTITY,
+  customer_reference VARCHAR(50)  NOT NULL,
+  full_name          VARCHAR(255) NOT NULL,
+  email_address      VARCHAR(255) NULL,
+  phone_number       VARCHAR(50)  NULL,
+  is_active          BOOLEAN      NOT NULL DEFAULT TRUE,
+  is_deleted         BOOLEAN      NOT NULL DEFAULT FALSE,
+  deleted_on         TIMESTAMP    NULL,
+  deleted_by         VARCHAR(255) NULL,
+  created_on         TIMESTAMP    NOT NULL,
+  created_by         VARCHAR(255) NOT NULL,
+  updated_on         TIMESTAMP    NOT NULL,
+  updated_by         VARCHAR(255) NOT NULL,
+  version_number     INTEGER      NOT NULL DEFAULT 1,
+  CONSTRAINT pk_apn_customer PRIMARY KEY (customer_id),
   CONSTRAINT uq_apn_customer_reference UNIQUE (customer_reference)
 );
 ```
 
-### Claim table
+### 3.4 Child business table example
 
 ```sql
+/* --------------------------------------------------------------------------
+ * 3.4  apn_claim
+ * --------------------------------------------------------------------------
+ * Purpose:
+ *   Child business table for claim records. Each claim belongs to one customer.
+ *
+ * Appian mapping:
+ *   Record Type: APN_REC_Claim
+ *   Primary key field: claimId
+ *   Display field: claimReference
+ *
+ * Relationships:
+ *   APN_REC_Claim.customer -> APN_REC_Customer
+ *   APN_REC_Claim.claimStatus -> APN_REC_ClaimStatus
+ * --------------------------------------------------------------------------
+ */
+
 CREATE TABLE apn_claim (
-  claim_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  claim_reference VARCHAR(50) NOT NULL,
-  customer_id BIGINT NOT NULL,
-  claim_status_code VARCHAR(50) NOT NULL,
-  lodged_on TIMESTAMP,
-  approved_amount DECIMAL(18,2),
-  is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
-  created_on TIMESTAMP NOT NULL,
-  created_by VARCHAR(255) NOT NULL,
-  updated_on TIMESTAMP NOT NULL,
-  updated_by VARCHAR(255) NOT NULL,
-  version_number INTEGER NOT NULL DEFAULT 1,
+  claim_id          BIGINT        GENERATED ALWAYS AS IDENTITY,
+  claim_reference   VARCHAR(50)   NOT NULL,
+  customer_id       BIGINT        NOT NULL,
+  claim_status_code VARCHAR(50)   NOT NULL,
+  lodged_on         TIMESTAMP     NULL,
+  approved_amount   DECIMAL(18,2) NULL,
+  is_deleted        BOOLEAN       NOT NULL DEFAULT FALSE,
+  deleted_on        TIMESTAMP     NULL,
+  deleted_by        VARCHAR(255)  NULL,
+  created_on        TIMESTAMP     NOT NULL,
+  created_by        VARCHAR(255)  NOT NULL,
+  updated_on        TIMESTAMP     NOT NULL,
+  updated_by        VARCHAR(255)  NOT NULL,
+  version_number    INTEGER       NOT NULL DEFAULT 1,
+  CONSTRAINT pk_apn_claim PRIMARY KEY (claim_id),
   CONSTRAINT uq_apn_claim_reference UNIQUE (claim_reference),
-  CONSTRAINT fk_apn_claim_apn_customer
+  CONSTRAINT fk_apn_claim_customer
     FOREIGN KEY (customer_id)
-    REFERENCES apn_customer (customer_id)
+    REFERENCES apn_customer (customer_id),
+  CONSTRAINT fk_apn_claim_status
+    FOREIGN KEY (claim_status_code)
+    REFERENCES apn_ref_claim_status (claim_status_code)
 );
 ```
 
-### Reference status table
+### 3.5 Document mapping table example
 
 ```sql
-CREATE TABLE apn_ref_claim_status (
-  claim_status_code VARCHAR(50) PRIMARY KEY,
-  display_name VARCHAR(100) NOT NULL,
-  description VARCHAR(500),
-  sort_order INTEGER NOT NULL,
-  is_active BOOLEAN NOT NULL DEFAULT TRUE,
-  created_on TIMESTAMP NOT NULL,
-  created_by VARCHAR(255) NOT NULL,
-  updated_on TIMESTAMP NOT NULL,
-  updated_by VARCHAR(255) NOT NULL
-);
-```
+/* --------------------------------------------------------------------------
+ * 3.5  apn_claim_document
+ * --------------------------------------------------------------------------
+ * Purpose:
+ *   Links Appian document IDs to claim records.
+ *
+ * Note:
+ *   document_id stores the Appian document identifier. File security and
+ *   folder security must be governed in Appian as well as in the data model.
+ * --------------------------------------------------------------------------
+ */
 
-### Claim document table
-
-```sql
 CREATE TABLE apn_claim_document (
-  claim_document_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  claim_id BIGINT NOT NULL,
-  document_id BIGINT NOT NULL,
-  document_type_code VARCHAR(50) NOT NULL,
-  uploaded_on TIMESTAMP NOT NULL,
-  uploaded_by VARCHAR(255) NOT NULL,
-  is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
-  created_on TIMESTAMP NOT NULL,
-  created_by VARCHAR(255) NOT NULL,
-  updated_on TIMESTAMP NOT NULL,
-  updated_by VARCHAR(255) NOT NULL,
-  version_number INTEGER NOT NULL DEFAULT 1,
-  CONSTRAINT fk_apn_claim_document_apn_claim
+  claim_document_id BIGINT       GENERATED ALWAYS AS IDENTITY,
+  claim_id          BIGINT       NOT NULL,
+  document_id       BIGINT       NOT NULL,
+  document_name     VARCHAR(255) NOT NULL,
+  document_type_code VARCHAR(50) NULL,
+  uploaded_on       TIMESTAMP    NOT NULL,
+  uploaded_by       VARCHAR(255) NOT NULL,
+  is_deleted        BOOLEAN      NOT NULL DEFAULT FALSE,
+  created_on        TIMESTAMP    NOT NULL,
+  created_by        VARCHAR(255) NOT NULL,
+  updated_on        TIMESTAMP    NOT NULL,
+  updated_by        VARCHAR(255) NOT NULL,
+  version_number    INTEGER      NOT NULL DEFAULT 1,
+  CONSTRAINT pk_apn_claim_document PRIMARY KEY (claim_document_id),
+  CONSTRAINT fk_apn_claim_document_claim
     FOREIGN KEY (claim_id)
     REFERENCES apn_claim (claim_id)
 );
 ```
 
-### Recommended indexes
+### 3.6 History table example
 
 ```sql
-CREATE INDEX idx_apn_claim_customer_id
-  ON apn_claim (customer_id);
+/* --------------------------------------------------------------------------
+ * 3.6  apn_claim_status_history
+ * --------------------------------------------------------------------------
+ * Purpose:
+ *   Stores claim status changes for audit, reporting and user visibility.
+ *
+ * Design decision:
+ *   Status history is append-only. Do not update historical rows except for
+ *   approved data correction scenarios.
+ * --------------------------------------------------------------------------
+ */
 
-CREATE INDEX idx_apn_claim_status_code
-  ON apn_claim (claim_status_code);
-
-CREATE INDEX idx_apn_claim_created_on
-  ON apn_claim (created_on);
-
-CREATE INDEX idx_apn_claim_document_claim_id
-  ON apn_claim_document (claim_id);
+CREATE TABLE apn_claim_status_history (
+  claim_status_history_id BIGINT       GENERATED ALWAYS AS IDENTITY,
+  claim_id                BIGINT       NOT NULL,
+  from_status_code         VARCHAR(50)  NULL,
+  to_status_code           VARCHAR(50)  NOT NULL,
+  change_reason            VARCHAR(500) NULL,
+  changed_on               TIMESTAMP    NOT NULL,
+  changed_by               VARCHAR(255) NOT NULL,
+  CONSTRAINT pk_apn_claim_status_history PRIMARY KEY (claim_status_history_id),
+  CONSTRAINT fk_apn_claim_status_history_claim
+    FOREIGN KEY (claim_id)
+    REFERENCES apn_claim (claim_id),
+  CONSTRAINT fk_apn_claim_status_history_to_status
+    FOREIGN KEY (to_status_code)
+    REFERENCES apn_ref_claim_status (claim_status_code)
+);
 ```
 
-## Review checklist
+### 3.7 Seed data example
 
-Use this checklist before approving a new table or schema change.
+```sql
+/* --------------------------------------------------------------------------
+ * 3.7  Seed data: apn_ref_claim_status
+ * --------------------------------------------------------------------------
+ * Seed reference values should be stable and repeatable across environments.
+ * Do not use environment-specific IDs for reference data where code values
+ * are sufficient.
+ * --------------------------------------------------------------------------
+ */
 
-| Check | Yes or No |
-|---|---|
-| Table name uses the approved application prefix. |  |
-| Primary key is clearly defined. |  |
-| Foreign keys are clear and documented. |  |
-| Audit columns are present. |  |
-| Soft delete approach is defined where required. |  |
-| Version column is present where concurrent updates are possible. |  |
-| Indexes support expected Appian query patterns. |  |
-| Record type mapping is documented. |  |
-| CDT or data store mapping is documented where required. |  |
-| Migration script is version controlled. |  |
-| Rollback or remediation approach is documented. |  |
-| Security and data sensitivity have been reviewed. |  |
+INSERT INTO apn_ref_claim_status
+  (claim_status_code, display_name, description, sort_order, is_active, created_on, created_by, updated_on, updated_by)
+VALUES
+  ('OPEN', 'Open', 'Claim has been created and is awaiting review.', 10, TRUE, CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 'system'),
+  ('IN_REVIEW', 'In Review', 'Claim is under active assessment.', 20, TRUE, CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 'system'),
+  ('APPROVED', 'Approved', 'Claim has been approved.', 30, TRUE, CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 'system'),
+  ('REJECTED', 'Rejected', 'Claim has been rejected.', 40, TRUE, CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 'system');
+```
+
+## Section 4: Relationship standards
+
+### 4.1 Relationship diagram
+
+```mermaid
+erDiagram
+  APN_CUSTOMER ||--o{ APN_CLAIM : owns
+  APN_REF_CLAIM_STATUS ||--o{ APN_CLAIM : classifies
+  APN_CLAIM ||--o{ APN_CLAIM_DOCUMENT : has
+  APN_CLAIM ||--o{ APN_CLAIM_STATUS_HISTORY : tracks
+
+  APN_CUSTOMER {
+    bigint customer_id PK
+    varchar customer_reference UK
+    varchar full_name
+  }
+
+  APN_CLAIM {
+    bigint claim_id PK
+    varchar claim_reference UK
+    bigint customer_id FK
+    varchar claim_status_code FK
+  }
+
+  APN_REF_CLAIM_STATUS {
+    varchar claim_status_code PK
+    varchar display_name
+    boolean is_active
+  }
+
+  APN_CLAIM_DOCUMENT {
+    bigint claim_document_id PK
+    bigint claim_id FK
+    bigint document_id
+  }
+
+  APN_CLAIM_STATUS_HISTORY {
+    bigint claim_status_history_id PK
+    bigint claim_id FK
+    varchar to_status_code FK
+  }
+```
+
+### 4.2 Relationship rules
+
+| Relationship type | Database standard | Appian standard |
+|---|---|---|
+| One-to-many | Child table stores parent primary key as a foreign key. | Configure record relationship from child to parent. |
+| Reference lookup | Business table stores reference code. | Configure relationship to reference record type where useful. |
+| Document mapping | Junction table stores Appian document ID and parent ID. | Use child record type or query rule to show documents. |
+| History | Append-only child table. | Use related record grid or query rule sorted by changed date. |
+| Many-to-many | Use a bridge table with two foreign keys. | Use a record relationship through the bridge where suitable. |
+
+## Section 5: Record type mapping standards
+
+Document every record type mapping in the spec.
+
+```sql
+/* --------------------------------------------------------------------------
+ * 5.1  APN_REC_Claim
+ * --------------------------------------------------------------------------
+ * Record Type Name:    APN_REC_Claim
+ * Description:         Main record type for claim records.
+ * Source Table:        apn_claim
+ * Primary Key Field:   claimId
+ * Display Name Field:  claimReference
+ *
+ * Field Mapping:
+ *   claim_id           -> claimId
+ *   claim_reference    -> claimReference
+ *   customer_id        -> customerId
+ *   claim_status_code  -> claimStatusCode
+ *   lodged_on          -> lodgedOn
+ *   approved_amount    -> approvedAmount
+ *   is_deleted         -> isDeleted
+ *   created_on         -> createdOn
+ *   created_by         -> createdBy
+ *   updated_on         -> updatedOn
+ *   updated_by         -> updatedBy
+ *   version_number     -> versionNumber
+ *
+ * Relationships:
+ *   customer:
+ *     APN_REC_Claim.customerId -> APN_REC_Customer.customerId
+ *
+ *   claimStatus:
+ *     APN_REC_Claim.claimStatusCode -> APN_REC_ClaimStatus.claimStatusCode
+ *
+ *   documents:
+ *     APN_REC_Claim.claimId -> APN_REC_ClaimDocument.claimId
+ *
+ *   statusHistory:
+ *     APN_REC_Claim.claimId -> APN_REC_ClaimStatusHistory.claimId
+ *
+ * Security:
+ *   View:   APN_GRP_ReadOnlyUsers, APN_GRP_CaseManagers, APN_GRP_Admins
+ *   Create: APN_GRP_CaseManagers, APN_GRP_Admins
+ *   Edit:   APN_GRP_CaseManagers, APN_GRP_Admins
+ * --------------------------------------------------------------------------
+ */
+```
+
+### 5.2 Record type unit tests
+
+```sql
+/*
+ * RECORD TYPE UNIT TESTS:
+ *
+ * RT-TEST-1: APN_REC_Claim syncs successfully from apn_claim.
+ *   Expected:
+ *     - Primary key maps to claimId.
+ *     - Display field maps to claimReference.
+ *     - Audit fields are visible in the record data model.
+ *
+ * RT-TEST-2: APN_REC_Claim customer relationship resolves.
+ *   Expected:
+ *     - Claim record can navigate to its customer record.
+ *     - Invalid customer_id values are not present due to FK constraint.
+ *
+ * RT-TEST-3: APN_REC_Claim claimStatus relationship resolves.
+ *   Expected:
+ *     - Claim status display name is available through the relationship.
+ *
+ * RT-TEST-4: APN_REC_ClaimDocument relationship resolves.
+ *   Expected:
+ *     - Documents linked to the claim are returned correctly.
+ *
+ * RT-TEST-5: Security rules are validated.
+ *   Expected:
+ *     - Read-only users cannot create or update claim records.
+ */
+```
+
+## Section 6: CDT and data store mapping standards
+
+Use CDTs and data stores where required by the architecture, legacy application design or write pattern. Prefer record type patterns for modern Appian design where they fit the use case.
+
+```sql
+/* --------------------------------------------------------------------------
+ * 6.1  APN_CDT_Claim
+ * --------------------------------------------------------------------------
+ * CDT Name:           APN_CDT_Claim
+ * Source Table:       apn_claim
+ * Primary Key Field:  claimId
+ *
+ * Mapping:
+ *   claim_id           -> claimId           Number Integer
+ *   claim_reference    -> claimReference    Text
+ *   customer_id        -> customerId        Number Integer
+ *   claim_status_code  -> claimStatusCode   Text
+ *   lodged_on          -> lodgedOn          Date and Time
+ *   approved_amount    -> approvedAmount    Decimal
+ *   is_deleted         -> isDeleted         Boolean
+ *   created_on         -> createdOn         Date and Time
+ *   created_by         -> createdBy         Text
+ *   updated_on         -> updatedOn         Date and Time
+ *   updated_by         -> updatedBy         Text
+ *   version_number     -> versionNumber     Number Integer
+ *
+ * Data Store Entity:
+ *   APN_DSE_Claim
+ *
+ * Guidance:
+ *   Keep CDT write structures shallow and explicit. Avoid deep nested writes
+ *   unless the behaviour is intentionally designed and tested.
+ * --------------------------------------------------------------------------
+ */
+```
+
+## Section 7: Expression rule standards
+
+Query rules should be null-safe, explicitly paged and aligned to the database indexes.
+
+```appian
+/* --------------------------------------------------------------------------
+ * 7.1  APN_QRY_GetClaimsForCustomer
+ * --------------------------------------------------------------------------
+ * Description:
+ *   Returns active, non-deleted claims for a customer.
+ *
+ * Inputs:
+ *   customerId  Number Integer  Required
+ *
+ * Output:
+ *   List of APN_REC_Claim records
+ *
+ * Index dependency:
+ *   idx_apn_claim_customer_id
+ * --------------------------------------------------------------------------
+ */
+
+a!localVariables(
+  local!customerId: ri!customerId,
+  if(
+    isnull(local!customerId),
+    {},
+    a!queryRecordType(
+      recordType: recordType!APN_REC_Claim,
+      fields: {
+        recordType!APN_REC_Claim.fields.claimId,
+        recordType!APN_REC_Claim.fields.claimReference,
+        recordType!APN_REC_Claim.fields.claimStatusCode,
+        recordType!APN_REC_Claim.fields.lodgedOn,
+        recordType!APN_REC_Claim.fields.createdOn
+      },
+      filters: {
+        a!queryFilter(
+          field: recordType!APN_REC_Claim.fields.customerId,
+          operator: "=",
+          value: local!customerId
+        ),
+        a!queryFilter(
+          field: recordType!APN_REC_Claim.fields.isDeleted,
+          operator: "=",
+          value: false
+        )
+      },
+      pagingInfo: a!pagingInfo(
+        startIndex: 1,
+        batchSize: 50,
+        sort: a!sortInfo(
+          field: recordType!APN_REC_Claim.fields.createdOn,
+          ascending: false
+        )
+      )
+    ).data
+  )
+)
+```
+
+```sql
+/*
+ * EXPRESSION RULE UNIT TESTS:
+ *
+ * ER-TEST-1: customerId = null.
+ *   Expected: returns empty list and does not throw an error.
+ *
+ * ER-TEST-2: customer has three active claims.
+ *   Expected: returns three claim records ordered by createdOn descending.
+ *
+ * ER-TEST-3: customer has deleted claim rows.
+ *   Expected: deleted rows are excluded.
+ *
+ * ER-TEST-4: customer has no claims.
+ *   Expected: returns empty list.
+ */
+```
+
+## Section 8: Process and write pattern standards
+
+Document how Appian writes to the tables. Do not leave write behaviour implicit.
+
+```sql
+/* --------------------------------------------------------------------------
+ * 8.1  APN_PM_CreateClaim
+ * --------------------------------------------------------------------------
+ * Description:
+ *   Creates a claim for a customer and writes the initial status history row.
+ *
+ * Process Variables:
+ *   Name            Type                  Parameter  Default
+ *   --------------- --------------------- ---------- -----------------
+ *   customerRecord  APN_REC_Customer      Yes        -
+ *   claimRecord     APN_REC_Claim         No         blank
+ *   statusHistory   APN_REC_StatusHistory No         blank
+ *   isCancelled     Boolean               No         false
+ *
+ * Flow:
+ *   [Start Form: APN_UI_CreateClaim]
+ *      -> [XOR: isCancelled?]
+ *        -> YES -> [End: Cancelled]
+ *        -> NO  -> [Write Records: APN_REC_Claim]
+ *               -> [Write Records: APN_REC_ClaimStatusHistory]
+ *               -> [End: Complete]
+ *
+ * Write standards:
+ *   - created_on and updated_on must be stamped.
+ *   - created_by and updated_by must be stamped with loggedInUser() or system.
+ *   - status history must be written after the claim primary key is available.
+ *   - partial write failure must raise an alert to APN_GRP_Admins.
+ * --------------------------------------------------------------------------
+ */
+```
+
+## Section 9: Migration and release standards
+
+### 9.1 Migration file naming
+
+```text
+V<major>.<minor>.<patch>__<description>.sql
+```
+
+Examples:
+
+```text
+V1.0.0__create_claim_core_tables.sql
+V1.0.1__seed_claim_status_reference_data.sql
+V1.0.2__create_claim_indexes.sql
+V1.1.0__add_claim_status_history.sql
+```
+
+### 9.2 Deployment sequencing
+
+```sql
+/*
+ * DEPLOYMENT ORDER:
+ *
+ * 1. Run database DDL scripts.
+ * 2. Run reference data seed scripts.
+ * 3. Run index scripts.
+ * 4. Import Appian constants, groups and folders.
+ * 5. Import record types and data store entities.
+ * 6. Configure or verify record relationships.
+ * 7. Import expression rules.
+ * 8. Import interfaces.
+ * 9. Import process models and record actions.
+ * 10. Run smoke tests and record sync checks.
+ */
+```
+
+### 9.3 Rollback guidance
+
+```sql
+/*
+ * ROLLBACK STANDARD:
+ *
+ * Every database migration must include one of the following:
+ *   - a tested rollback script; or
+ *   - a documented remediation plan; or
+ *   - an explanation of why rollback is not safe or not applicable.
+ *
+ * Destructive operations, including DROP COLUMN, DROP TABLE and data deletes,
+ * must be reviewed and approved before production deployment.
+ */
+```
+
+## Section 10: Build checklist standard
+
+```sql
+/*
+ * ============================================================================
+ * SECTION 10: END-TO-END IMPLEMENTATION CHECKLIST
+ * ============================================================================
+ *
+ * Build in dependency order:
+ *
+ * #  Object                              Type                  Owner Status
+ * -- ----------------------------------- --------------------- ----- ------
+ * 1  apn_ref_claim_status                Reference table        [ ]   [ ]
+ * 2  apn_customer                        Parent table           [ ]   [ ]
+ * 3  apn_claim                           Child table            [ ]   [ ]
+ * 4  apn_claim_document                  Child table            [ ]   [ ]
+ * 5  apn_claim_status_history            History table          [ ]   [ ]
+ * 6  FK constraints                      Database constraints   [ ]   [ ]
+ * 7  Indexes                             Database indexes       [ ]   [ ]
+ * 8  APN_REC_ClaimStatus                 Record type            [ ]   [ ]
+ * 9  APN_REC_Customer                    Record type            [ ]   [ ]
+ * 10 APN_REC_Claim                       Record type            [ ]   [ ]
+ * 11 APN_REC_ClaimDocument               Record type            [ ]   [ ]
+ * 12 APN_REC_ClaimStatusHistory          Record type            [ ]   [ ]
+ * 13 Record relationships                Appian configuration   [ ]   [ ]
+ * 14 APN_QRY_GetClaimsForCustomer        Expression rule        [ ]   [ ]
+ * 15 APN_QRY_GetClaimById                Expression rule        [ ]   [ ]
+ * 16 APN_PM_CreateClaim                  Process model          [ ]   [ ]
+ * 17 APN_UI_CreateClaim                  Interface              [ ]   [ ]
+ * 18 Record action configuration         Appian configuration   [ ]   [ ]
+ * 19 Record sync validation              Test activity          [ ]   [ ]
+ * 20 End-to-end database test script     Test activity          [ ]   [ ]
+ * ============================================================================
+ */
+```
+
+## Section 11: End-to-end database test script standard
+
+```sql
+/*
+ * ============================================================================
+ * SECTION 11: END-TO-END DATABASE TEST SCRIPT
+ * ============================================================================
+ *
+ * TEST DATA SETUP:
+ *   - Create one test customer.
+ *   - Create at least four claim status reference values.
+ *   - Ensure APN_GRP_CaseManagers test user can create claim records.
+ *   - Ensure APN_GRP_ReadOnlyUsers test user cannot create claim records.
+ *
+ * --------------------------------------------------------------------------
+ * SCENARIO 1: Create customer
+ * --------------------------------------------------------------------------
+ * Actor:
+ *   Case manager
+ *
+ * Steps:
+ *   1. Create a new customer through the Appian interface or test process.
+ *   2. Save the customer.
+ *
+ * Expected results:                                      Pass or Fail
+ *   - Row created in apn_customer                        [ ]
+ *   - customer_id generated                              [ ]
+ *   - customer_reference unique                          [ ]
+ *   - created_on and updated_on populated                [ ]
+ *   - created_by and updated_by populated                [ ]
+ *   - APN_REC_Customer syncs and displays the record      [ ]
+ *
+ * --------------------------------------------------------------------------
+ * SCENARIO 2: Create claim for customer
+ * --------------------------------------------------------------------------
+ * Actor:
+ *   Case manager
+ *
+ * Steps:
+ *   1. Open the customer record.
+ *   2. Start the Create Claim action.
+ *   3. Enter valid claim details.
+ *   4. Submit.
+ *
+ * Expected results:                                      Pass or Fail
+ *   - Row created in apn_claim                           [ ]
+ *   - customer_id matches parent customer                [ ]
+ *   - claim_status_code is valid                         [ ]
+ *   - claim_reference is unique                          [ ]
+ *   - APN_REC_Claim relationship to customer resolves     [ ]
+ *   - APN_REC_Claim relationship to status resolves       [ ]
+ *
+ * --------------------------------------------------------------------------
+ * SCENARIO 3: Add claim document
+ * --------------------------------------------------------------------------
+ * Actor:
+ *   Case manager
+ *
+ * Steps:
+ *   1. Open an existing claim.
+ *   2. Upload a document.
+ *   3. Save.
+ *
+ * Expected results:                                      Pass or Fail
+ *   - Appian document is created in the target folder     [ ]
+ *   - Row created in apn_claim_document                  [ ]
+ *   - document_id stores the Appian document identifier   [ ]
+ *   - claim relationship resolves in APN_REC_Claim        [ ]
+ *
+ * --------------------------------------------------------------------------
+ * SCENARIO 4: Update claim status
+ * --------------------------------------------------------------------------
+ * Actor:
+ *   Case manager
+ *
+ * Steps:
+ *   1. Open a claim.
+ *   2. Change status from OPEN to IN_REVIEW.
+ *   3. Submit.
+ *
+ * Expected results:                                      Pass or Fail
+ *   - apn_claim.claim_status_code updated                [ ]
+ *   - apn_claim.updated_on and updated_by updated         [ ]
+ *   - apn_claim.version_number incremented               [ ]
+ *   - apn_claim_status_history row created               [ ]
+ *   - Status history displays in Appian                   [ ]
+ *
+ * --------------------------------------------------------------------------
+ * SCENARIO 5: Soft delete behaviour
+ * --------------------------------------------------------------------------
+ * Actor:
+ *   Case manager
+ *
+ * Steps:
+ *   1. Soft delete a claim through the approved action.
+ *   2. Refresh claim search and customer claim list.
+ *
+ * Expected results:                                      Pass or Fail
+ *   - apn_claim.is_deleted = true                        [ ]
+ *   - deleted_on and deleted_by populated                [ ]
+ *   - Default query rules exclude deleted claim           [ ]
+ *   - Admin reporting can still locate deleted claim      [ ]
+ *
+ * --------------------------------------------------------------------------
+ * SCENARIO 6: Relationship integrity
+ * --------------------------------------------------------------------------
+ * Actor:
+ *   Database reviewer or automated migration check
+ *
+ * Steps:
+ *   1. Attempt to insert a claim with an invalid customer_id.
+ *   2. Attempt to insert a claim with an invalid claim_status_code.
+ *
+ * Expected results:                                      Pass or Fail
+ *   - Invalid customer_id insert fails                   [ ]
+ *   - Invalid claim_status_code insert fails             [ ]
+ *   - Valid inserts still succeed                        [ ]
+ *
+ * --------------------------------------------------------------------------
+ * SCENARIO 7: Performance smoke test
+ * --------------------------------------------------------------------------
+ * Actor:
+ *   Developer or tester
+ *
+ * Steps:
+ *   1. Load a customer with multiple claims.
+ *   2. Open the related claim grid.
+ *   3. Filter by status and created date.
+ *
+ * Expected results:                                      Pass or Fail
+ *   - Grid loads within agreed project threshold          [ ]
+ *   - Query uses indexed fields where applicable          [ ]
+ *   - No query-in-loop pattern is introduced              [ ]
+ * ============================================================================
+ */
+```
 
 ## Common mistakes
 
 | Mistake | Why it causes issues | Recommended approach |
 |---|---|---|
-| Using generic table names | Hard to understand ownership and purpose. | Use `apn_<entity>`. |
-| Using `id` for every primary key | Causes confusion in joins and mapping. | Use `claim_id`, `customer_id`, etc. |
-| No audit columns | Weak traceability and supportability. | Add standard audit columns. |
-| No indexes on foreign keys | Poor query and grid performance. | Index frequently joined foreign keys. |
-| Storing multiple entities in one table | Leads to complex rules and fragile reporting. | Use clear entity tables. |
-| Overusing free-text status fields | Inconsistent values and poor reporting. | Use governed reference tables. |
-| Querying deleted rows by accident | Users see inactive or deleted business data. | Apply default `is_deleted = false` filters. |
-| Deep CDT nesting for writes | Can be hard to maintain and troubleshoot. | Keep write models simple and explicit. |
-| Database changes outside release control | Causes environment drift. | Use version-controlled migration scripts. |
+| Creating DDL without Appian mapping notes | Developers cannot build records and relationships consistently. | Include record type, field and relationship mapping beside DDL. |
+| Using generic primary key names such as `id` | Joins and Appian mappings become unclear. | Use `claim_id`, `customer_id`, `payment_id`. |
+| Missing audit fields | Weak supportability and governance. | Include standard audit columns on business tables. |
+| Free-text status values | Inconsistent reporting and filtering. | Use governed reference tables. |
+| No index plan | Appian grids and record queries may perform poorly. | Add indexes for joins, filters and date range searches. |
+| Deep nested CDT writes by default | Hard to troubleshoot partial failures. | Keep write models explicit and shallow. |
+| No migration rollback plan | Production releases become high risk. | Include rollback or remediation notes for each migration. |
+| No end-to-end test script | Build may pass unit tests but fail integrated behaviour. | Include database, Appian mapping and user-flow scenarios. |
 
 ## References
 
