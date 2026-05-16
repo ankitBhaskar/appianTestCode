@@ -1,4 +1,4 @@
-# LLM Usage Guide for Appian Documentation Generation
+# LLM Usage Guide for Appian Documentation and Code Review
 
 ## Table of contents
 
@@ -9,24 +9,37 @@
 5. [Recommended file loading order](#recommended-file-loading-order)
 6. [Minimum project context required](#minimum-project-context-required)
 7. [How an LLM should generate Appian documentation](#how-an-llm-should-generate-appian-documentation)
-8. [Expected documentation outputs](#expected-documentation-outputs)
-9. [Mandatory Appian-native generation rules](#mandatory-appian-native-generation-rules)
-10. [Standard prompt for generating Appian application documentation](#standard-prompt-for-generating-appian-application-documentation)
-11. [Standard prompt for generating a feature technical specification](#standard-prompt-for-generating-a-feature-technical-specification)
-12. [Standard prompt for reviewing AI-generated Appian output](#standard-prompt-for-reviewing-ai-generated-appian-output)
-13. [Application documentation structure](#application-documentation-structure)
-14. [Feature specification structure](#feature-specification-structure)
-15. [LLM decision rules](#llm-decision-rules)
-16. [Quality gates before accepting LLM output](#quality-gates-before-accepting-llm-output)
-17. [Common failure modes](#common-failure-modes)
-18. [Final review checklist](#final-review-checklist)
-19. [References](#references)
+8. [How an LLM should review Appian code](#how-an-llm-should-review-appian-code)
+9. [Expected documentation outputs](#expected-documentation-outputs)
+10. [Mandatory Appian-native generation rules](#mandatory-appian-native-generation-rules)
+11. [Mandatory Appian-native code review rules](#mandatory-appian-native-code-review-rules)
+12. [Standard prompt for generating Appian application documentation](#standard-prompt-for-generating-appian-application-documentation)
+13. [Standard prompt for generating a feature technical specification](#standard-prompt-for-generating-a-feature-technical-specification)
+14. [Standard prompt for reviewing AI-generated Appian output](#standard-prompt-for-reviewing-ai-generated-appian-output)
+15. [Standard prompt for Appian code review](#standard-prompt-for-appian-code-review)
+16. [Code review output format](#code-review-output-format)
+17. [SAIL code review checklist](#sail-code-review-checklist)
+18. [Expression rule code review checklist](#expression-rule-code-review-checklist)
+19. [Record query code review checklist](#record-query-code-review-checklist)
+20. [Process model design review checklist](#process-model-design-review-checklist)
+21. [Database script review checklist](#database-script-review-checklist)
+22. [Integration code review checklist](#integration-code-review-checklist)
+23. [Security review checklist](#security-review-checklist)
+24. [Testing review checklist](#testing-review-checklist)
+25. [Application documentation structure](#application-documentation-structure)
+26. [Feature specification structure](#feature-specification-structure)
+27. [LLM decision rules](#llm-decision-rules)
+28. [Quality gates before accepting LLM output](#quality-gates-before-accepting-llm-output)
+29. [Quality gates before accepting Appian code](#quality-gates-before-accepting-appian-code)
+30. [Common failure modes](#common-failure-modes)
+31. [Final review checklist](#final-review-checklist)
+32. [References](#references)
 
 ## Purpose
 
-This document explains how an LLM should use this Git repository as a reference library to generate Appian application documentation, technical specifications, architecture notes, process designs, SAIL interface patterns, database designs, testing plans and delivery artefacts.
+This document explains how an LLM should use this Git repository as a reference library to generate Appian application documentation, technical specifications, architecture notes, process designs, SAIL interface patterns, database designs, testing plans, delivery artefacts and code review findings.
 
-The goal is to make the LLM produce Appian-native, build-ready documentation without inventing Appian functions, SAIL parameters, process model components, database fields, groups or unsupported UI patterns.
+The goal is to make the LLM produce and review Appian-native, build-ready content without inventing Appian functions, SAIL parameters, process model components, database fields, groups or unsupported UI patterns.
 
 ## AI usage note
 
@@ -41,6 +54,7 @@ Use this repository as an Appian engineering reference library for:
 - generating Appian application documentation
 - generating build-ready feature technical specifications
 - reviewing AI-generated Appian code and designs
+- reviewing human-written Appian code before build or merge
 - creating database and record type designs
 - creating process model designs using Appian-native process components
 - creating SAIL interface designs and reusable UI patterns
@@ -104,15 +118,16 @@ Load these after the common design engine:
 18. User stories
 19. Existing data model
 20. Existing Appian object inventory
-21. Existing SAIL or expression rules where modification is required
+21. Existing SAIL or expression rules where modification or review is required
 22. Integration request and response payloads
 23. Security groups and role model
 24. Non-functional requirements
+25. Pull request diff or changed files for code review
 ```
 
 ## Minimum project context required
 
-Before an LLM generates Appian documentation, the following project context should be provided.
+Before an LLM generates Appian documentation or reviews Appian code, the following project context should be provided.
 
 | Context item | Required | Example |
 |---|---:|---|
@@ -120,10 +135,11 @@ Before an LLM generates Appian documentation, the following project context shou
 | Business domain | Yes | Claims, payments, licensing, service requests |
 | User stories | Yes | Story ID, role, action, outcome, acceptance criteria |
 | Target Appian version | Yes | Appian 26.4 |
-| Existing record types | Yes, if modifying an existing app | `APN_REC_Claim` |
-| Existing tables | Yes, if modifying an existing app | `apn_claim` |
+| Existing record types | Yes, if modifying or reviewing an existing app | `APN_REC_Claim` |
+| Existing tables | Yes, if modifying or reviewing an existing app | `apn_claim` |
 | Existing groups | Yes | `APN_GRP_Admins`, `APN_GRP_CaseManagers` |
 | Integration contracts | Required if integrations exist | Request and response sample |
+| Changed files or code diff | Required for code review | SAIL, expression rules, DDL, process spec, integration spec |
 | Deployment environments | Recommended | DEV, TEST, UAT, PROD |
 | Out-of-scope items | Recommended | No payment gateway in phase 1 |
 | UI constraints | Recommended | Mobile-friendly, portal-safe, accessibility AA |
@@ -152,6 +168,35 @@ An LLM should work in this sequence.
 15. Run AI guardrail review before returning output.
 ```
 
+## How an LLM should review Appian code
+
+For code review, the LLM must behave like an Appian reviewer, not a generic software reviewer.
+
+The review sequence is:
+
+```text
+1. Identify the artefact type: SAIL, expression rule, process model design, DDL, integration, Web API, deployment file or documentation.
+2. Confirm the expected Appian version and project prefix.
+3. Check whether the code uses only Appian-native syntax for Appian artefacts.
+4. Check functions, components, parameters and allowed values against the local APN library and official Appian documentation where needed.
+5. Check data model, record type and query safety.
+6. Check saveInto, refresh and null handling.
+7. Check process design, PVs, gateways, Write Records and exception paths where relevant.
+8. Check security beyond UI hiding.
+9. Check performance, mobile usability, accessibility and testing impact.
+10. Return findings as a prioritised review table with corrected Appian patterns.
+```
+
+The LLM must not rewrite the entire solution unless asked. A code review should clearly separate:
+
+- critical defects
+- build-breaking Appian syntax issues
+- security issues
+- performance issues
+- maintainability issues
+- recommendations
+- items requiring official Appian verification
+
 ## Expected documentation outputs
 
 For a full Appian application, the LLM should generate these documents where applicable.
@@ -173,7 +218,7 @@ For a full Appian application, the LLM should generate these documents where app
 
 ## Mandatory Appian-native generation rules
 
-The LLM must follow these rules for all Appian output.
+The LLM must follow these rules for all generated Appian output.
 
 ```text
 1. Generate Appian Expression Language and SAIL only for Appian code.
@@ -186,6 +231,23 @@ The LLM must follow these rules for all Appian output.
 8. Use APN naming standards unless the project kit provides another prefix.
 9. Use Appian process model components for workflow design.
 10. Include tests and review checklists.
+```
+
+## Mandatory Appian-native code review rules
+
+When reviewing code, the LLM must check for Appian-native correctness first.
+
+```text
+1. Reject non-Appian syntax inside SAIL or expression rules.
+2. Reject invented Appian functions, components, parameters and allowed values.
+3. Reject JavaScript-style event handling such as onClick inside SAIL.
+4. Reject CSS-style parameters such as fontWeight, className or display:flex inside SAIL.
+5. Reject React or HTML tags inside SAIL.
+6. Reject process designs that describe Java services instead of Appian process nodes.
+7. Reject record queries that read fields not listed in the fields parameter.
+8. Reject unsafe null handling that can break when inputs are blank.
+9. Reject query-in-loop patterns unless explicitly justified and reviewed.
+10. Reject security patterns that rely only on hiding a button or section.
 ```
 
 ## Standard prompt for generating Appian application documentation
@@ -291,6 +353,181 @@ Check for:
 12. Missing tests, deployment notes or rollback guidance.
 ```
 
+## Standard prompt for Appian code review
+
+Use this prompt for reviewing actual Appian code, pull requests or changed files.
+
+```text
+Perform an Appian 26.4 code review using the APN Appian engineering library.
+Review only the supplied code and project context. Do not invent missing
+objects or assume undocumented fields exist.
+
+Classify each finding as Critical, High, Medium, Low or Recommendation.
+For every issue, provide:
+- artefact or file name
+- location or code snippet
+- issue description
+- why it matters in Appian
+- corrected Appian pattern
+- whether official Appian documentation verification is required
+
+Review these areas:
+1. SAIL syntax and component validity.
+2. Appian function validity.
+3. Named parameter validity.
+4. Allowed value correctness, including values such as STRONG and SOLID.
+5. Non-Appian syntax contamination from Java, JavaScript, React, HTML, CSS or Python.
+6. saveInto, local variable and refresh behaviour.
+7. Query safety, including fields, paging, filters and null guards.
+8. Process model design, including PVs, RIs, gateways, Write Records and exception paths.
+9. Database design, DDL safety, audit fields, keys and migration risk.
+10. Integration request and response handling.
+11. Security controls beyond UI visibility.
+12. Performance, accessibility, mobile compatibility and testing impact.
+```
+
+## Code review output format
+
+Return code review findings in this table format.
+
+| Severity | Artefact | Location | Issue | Why it matters | Correct Appian pattern | Verification needed |
+|---|---|---|---|---|---|---|
+| Critical | `APN_UI_CreateClaim` | Submit button | Uses unsupported `onClick` pattern | Appian SAIL does not use JavaScript event handlers | Use `saveInto` and `submit` on `a!buttonWidget()` | Check component docs |
+
+Severity definitions:
+
+| Severity | Meaning |
+|---|---|
+| Critical | Will break Appian evaluation, cause data corruption or create a serious security issue. |
+| High | Likely runtime failure, incorrect data write, broken security or major performance issue. |
+| Medium | Maintainability, incomplete validation, weak UX, missing tests or avoidable risk. |
+| Low | Minor consistency, readability or documentation issue. |
+| Recommendation | Improvement that is not required for correctness. |
+
+## SAIL code review checklist
+
+| Check | Pass or fail |
+|---|---|
+| Uses Appian SAIL components only. |  |
+| No React, HTML, CSS, JavaScript, Java or Python syntax inside SAIL. |  |
+| Every component exists in Appian 26.4 or is marked for verification. |  |
+| Every named parameter belongs to that exact component. |  |
+| Every allowed value uses Appian-supported wording and casing. |  |
+| Rich text styling does not use unsupported values such as `bold`. |  |
+| Buttons use Appian-supported behaviour, not `onClick`. |  |
+| Editable forms use local working copies where appropriate. |  |
+| Submit buttons write local working values back to rule inputs. |  |
+| Cancel buttons avoid validation where appropriate. |  |
+| Required fields and business validations are clear. |  |
+| Optional values are null-safe. |  |
+| Date formatting is null-safe. |  |
+| Refresh behaviour is intentional. |  |
+| Large queries and slow integrations do not run on every refresh. |  |
+| Mobile layout has been considered. |  |
+| Accessibility labels, instructions and validation messages are clear. |  |
+
+## Expression rule code review checklist
+
+| Check | Pass or fail |
+|---|---|
+| Rule name follows project naming convention. |  |
+| Rule inputs are minimal and correctly typed. |  |
+| Null inputs are handled safely. |  |
+| Return type is clear. |  |
+| The rule does not mix Appian syntax with Java or JavaScript syntax. |  |
+| Complex logic is readable and testable. |  |
+| Repeated code is extracted into reusable rules where useful. |  |
+| The rule has unit tests for null, empty, happy path and boundary cases. |  |
+
+## Record query code review checklist
+
+| Check | Pass or fail |
+|---|---|
+| Uses `a!queryRecordType()` for record-backed queries where suitable. |  |
+| `fields` includes every field the caller reads. |  |
+| Filters use valid field references. |  |
+| Filter values match field types. |  |
+| Equality filters are null-guarded. |  |
+| `a!sortInfo()` is placed inside paging configuration where applicable. |  |
+| `fetchTotalCount` is used only where needed. |  |
+| Soft-deleted records are excluded where required. |  |
+| Query-in-loop patterns are avoided. |  |
+| Paging and batch size are appropriate. |  |
+
+## Process model design review checklist
+
+| Check | Pass or fail |
+|---|---|
+| Process uses Appian-native process components only. |  |
+| Trigger is clearly defined. |  |
+| Process variables are listed with type, parameter flag and purpose. |  |
+| Start form or user input task mapping is documented. |  |
+| Interfaces use `ri!`; process models use `pv!`. |  |
+| Cancel path is explicit where required. |  |
+| Gateway conditions are clear and testable. |  |
+| Write Records nodes identify record type, source PV and output mapping. |  |
+| Child writes occur after parent IDs are available. |  |
+| Integration nodes include success and failure paths. |  |
+| Alerts and data management settings are documented. |  |
+| Process start security aligns with record action visibility. |  |
+| Unit tests cover every branch. |  |
+
+## Database script review checklist
+
+| Check | Pass or fail |
+|---|---|
+| Table names follow project prefix and naming convention. |  |
+| Primary keys are meaningful and not generic `id`. |  |
+| Foreign keys are documented and named clearly. |  |
+| Reference data is separated from free-text workflow values. |  |
+| Audit fields are present where required. |  |
+| Soft delete strategy is defined where required. |  |
+| Version or optimistic locking field is considered where concurrent edits exist. |  |
+| Indexes support expected joins, filters and date ranges. |  |
+| Seed data uses safe fabricated values. |  |
+| Migration and rollback notes are included. |  |
+
+## Integration code review checklist
+
+| Check | Pass or fail |
+|---|---|
+| Connected system and integration object are identified. |  |
+| Authentication and credential handling are documented. |  |
+| Request payload is documented. |  |
+| Response payload is based on real or representative sample. |  |
+| Dictionary access uses `index()` with safe defaults. |  |
+| Response mapping does not assume typed records unless explicitly mapped. |  |
+| Retry and idempotency are considered for state-changing calls. |  |
+| Timeout and error paths are documented. |  |
+| Sensitive data is not logged unsafely. |  |
+
+## Security review checklist
+
+| Check | Pass or fail |
+|---|---|
+| Security is not enforced only by hiding UI components. |  |
+| Record type security is documented. |  |
+| Record action visibility is documented. |  |
+| Process start security is documented. |  |
+| Folder and object security are considered. |  |
+| Web API authentication and authorisation are documented. |  |
+| Connected system credentials are not hardcoded. |  |
+| Support access and audit visibility are controlled. |  |
+| Sensitive fields are masked or restricted where required. |  |
+
+## Testing review checklist
+
+| Check | Pass or fail |
+|---|---|
+| SAIL interface tests include load, validation, submit and cancel paths. |  |
+| Expression rule tests include null, empty, happy path and boundary cases. |  |
+| Process model tests cover all gateways. |  |
+| Integration tests cover success, error, timeout and malformed response. |  |
+| Security tests include authorised and unauthorised users. |  |
+| Performance tests cover large data and grid behaviour where relevant. |  |
+| Accessibility tests cover labels, validation and keyboard/screen reader considerations. |  |
+| End-to-end test script maps to the user story. |  |
+
 ## Application documentation structure
 
 A full Appian application document should follow this structure.
@@ -372,6 +609,23 @@ An LLM output is not ready for build unless it passes these gates.
 | Testing gate | Unit and end-to-end tests are included. |
 | Deployment gate | Release, migration and rollback notes are included. |
 
+## Quality gates before accepting Appian code
+
+Appian code is not ready for merge or build until it passes these code review gates.
+
+| Gate | Requirement |
+|---|---|
+| Build syntax gate | Code is Appian-native and does not contain unsupported language contamination. |
+| Component gate | SAIL components and parameters are verified or marked for verification. |
+| Function gate | Functions are valid and used in supported contexts. |
+| Query gate | Record queries include fields, paging, safe filters and no avoidable query-in-loop. |
+| Save gate | Forms use safe `saveInto` and working-copy patterns. |
+| Process gate | Process designs include PVs, RI mappings, gateways, writes and exception paths. |
+| Data gate | DDL and record mappings are consistent. |
+| Security gate | Access is enforced at Appian security layers, not only UI conditions. |
+| Test gate | Tests cover happy, error, security and edge paths. |
+| Deployment gate | Migration and rollback impact is known. |
+
 ## Common failure modes
 
 | Failure mode | Why it matters | Correction |
@@ -384,6 +638,7 @@ An LLM output is not ready for build unless it passes these gates.
 | LLM hides action only in UI | Security bypass risk. | Configure record action visibility and process start security. |
 | LLM assumes integration response shape | Runtime indexing failures. | Request response sample and use safe `index()` handling. |
 | LLM omits deployment notes | Build may not promote safely. | Add package, database migration and rollback notes. |
+| LLM gives generic code review only | It misses Appian-specific runtime failures. | Apply the Appian code review checklists in this guide. |
 
 ## Final review checklist
 
@@ -403,6 +658,7 @@ An LLM output is not ready for build unless it passes these gates.
 | Security model is documented. |  |
 | Testing strategy is documented. |  |
 | Deployment and rollback are documented. |  |
+| Code review checklist has been applied where code is supplied. |  |
 | Assumptions are clearly marked. |  |
 
 ## References
