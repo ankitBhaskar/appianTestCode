@@ -8,32 +8,33 @@
 4. [What this Git library is not for](#what-this-git-library-is-not-for)
 5. [Recommended file loading order](#recommended-file-loading-order)
 6. [Minimum project context required](#minimum-project-context-required)
-7. [How an LLM should generate Appian documentation](#how-an-llm-should-generate-appian-documentation)
-8. [How an LLM should review Appian code](#how-an-llm-should-review-appian-code)
-9. [Expected documentation outputs](#expected-documentation-outputs)
-10. [Mandatory Appian-native generation rules](#mandatory-appian-native-generation-rules)
-11. [Mandatory Appian-native code review rules](#mandatory-appian-native-code-review-rules)
-12. [Standard prompt for generating Appian application documentation](#standard-prompt-for-generating-appian-application-documentation)
-13. [Standard prompt for generating a feature technical specification](#standard-prompt-for-generating-a-feature-technical-specification)
-14. [Standard prompt for reviewing AI-generated Appian output](#standard-prompt-for-reviewing-ai-generated-appian-output)
-15. [Standard prompt for Appian code review](#standard-prompt-for-appian-code-review)
-16. [Code review output format](#code-review-output-format)
-17. [SAIL code review checklist](#sail-code-review-checklist)
-18. [Expression rule code review checklist](#expression-rule-code-review-checklist)
-19. [Record query code review checklist](#record-query-code-review-checklist)
-20. [Process model design review checklist](#process-model-design-review-checklist)
-21. [Database script review checklist](#database-script-review-checklist)
-22. [Integration code review checklist](#integration-code-review-checklist)
-23. [Security review checklist](#security-review-checklist)
-24. [Testing review checklist](#testing-review-checklist)
-25. [Application documentation structure](#application-documentation-structure)
-26. [Feature specification structure](#feature-specification-structure)
-27. [LLM decision rules](#llm-decision-rules)
-28. [Quality gates before accepting LLM output](#quality-gates-before-accepting-llm-output)
-29. [Quality gates before accepting Appian code](#quality-gates-before-accepting-appian-code)
-30. [Common failure modes](#common-failure-modes)
-31. [Final review checklist](#final-review-checklist)
-32. [References](#references)
+7. [Application prefix resolution rule](#application-prefix-resolution-rule)
+8. [How an LLM should generate Appian documentation](#how-an-llm-should-generate-appian-documentation)
+9. [How an LLM should review Appian code](#how-an-llm-should-review-appian-code)
+10. [Expected documentation outputs](#expected-documentation-outputs)
+11. [Mandatory Appian-native generation rules](#mandatory-appian-native-generation-rules)
+12. [Mandatory Appian-native code review rules](#mandatory-appian-native-code-review-rules)
+13. [Standard prompt for generating Appian application documentation](#standard-prompt-for-generating-appian-application-documentation)
+14. [Standard prompt for generating a feature technical specification](#standard-prompt-for-generating-a-feature-technical-specification)
+15. [Standard prompt for reviewing AI-generated Appian output](#standard-prompt-for-reviewing-ai-generated-appian-output)
+16. [Standard prompt for Appian code review](#standard-prompt-for-appian-code-review)
+17. [Code review output format](#code-review-output-format)
+18. [SAIL code review checklist](#sail-code-review-checklist)
+19. [Expression rule code review checklist](#expression-rule-code-review-checklist)
+20. [Record query code review checklist](#record-query-code-review-checklist)
+21. [Process model design review checklist](#process-model-design-review-checklist)
+22. [Database script review checklist](#database-script-review-checklist)
+23. [Integration code review checklist](#integration-code-review-checklist)
+24. [Security review checklist](#security-review-checklist)
+25. [Testing review checklist](#testing-review-checklist)
+26. [Application documentation structure](#application-documentation-structure)
+27. [Feature specification structure](#feature-specification-structure)
+28. [LLM decision rules](#llm-decision-rules)
+29. [Quality gates before accepting LLM output](#quality-gates-before-accepting-llm-output)
+30. [Quality gates before accepting Appian code](#quality-gates-before-accepting-appian-code)
+31. [Common failure modes](#common-failure-modes)
+32. [Final review checklist](#final-review-checklist)
+33. [References](#references)
 
 ## Purpose
 
@@ -43,9 +44,11 @@ The goal is to make the LLM produce and review Appian-native, build-ready conten
 
 ## AI usage note
 
-This file is designed to be loaded into an LLM together with the other APN Appian design-engine files.
+This file is designed to be loaded into an LLM together with the other Appian design-engine files.
 
 Do not assume the LLM can read external URLs. The important rules, standards and examples must come from the local Markdown files in this repository. Official Appian links are provided for human verification and source traceability only.
+
+`APN` is an example prefix used in this reference library. The LLM must use the application short name supplied in the project prompt or project kit, such as `UMS` for User Management Solution.
 
 ## What this Git library is for
 
@@ -61,7 +64,7 @@ Use this repository as an Appian engineering reference library for:
 - creating integration patterns and Web API designs
 - creating testing plans and end-to-end test scripts
 - creating release and deployment documentation
-- enforcing APN naming, security, performance and governance standards
+- enforcing the supplied application prefix, naming, security, performance and governance standards
 
 ## What this Git library is not for
 
@@ -73,6 +76,7 @@ This repository is not:
 - a place to copy domain-specific examples into unrelated projects
 - a Java, JavaScript, React, HTML or CSS design library
 - a generic BPMN modelling guide detached from Appian process model concepts
+- a mandate to use `APN` for every project
 
 ## Recommended file loading order
 
@@ -115,14 +119,15 @@ Load these after the common design engine:
 
 ```text
 17. Project kit
-18. User stories
-19. Existing data model
-20. Existing Appian object inventory
-21. Existing SAIL or expression rules where modification or review is required
-22. Integration request and response payloads
-23. Security groups and role model
-24. Non-functional requirements
-25. Pull request diff or changed files for code review
+18. Application name and short name / prefix
+19. User stories
+20. Existing data model
+21. Existing Appian object inventory
+22. Existing SAIL or expression rules where modification or review is required
+23. Integration request and response payloads
+24. Security groups and role model
+25. Non-functional requirements
+26. Pull request diff or changed files for code review
 ```
 
 ## Minimum project context required
@@ -131,20 +136,54 @@ Before an LLM generates Appian documentation or reviews Appian code, the followi
 
 | Context item | Required | Example |
 |---|---:|---|
-| Application prefix | Yes | `APN` |
+| Application name | Yes | User Management Solution |
+| Application short name / prefix | Yes | `UMS` |
+| Database prefix | Recommended | `ums` |
 | Business domain | Yes | Claims, payments, licensing, service requests |
 | User stories | Yes | Story ID, role, action, outcome, acceptance criteria |
 | Target Appian version | Yes | Appian 26.4 |
-| Existing record types | Yes, if modifying or reviewing an existing app | `APN_REC_Claim` |
-| Existing tables | Yes, if modifying or reviewing an existing app | `apn_claim` |
-| Existing groups | Yes | `APN_GRP_Admins`, `APN_GRP_CaseManagers` |
+| Existing record types | Yes, if modifying or reviewing an existing app | `UMS_REC_User` |
+| Existing tables | Yes, if modifying or reviewing an existing app | `ums_user` |
+| Existing groups | Yes | `UMS_GRP_Admins`, `UMS_GRP_UserManagers` |
 | Integration contracts | Required if integrations exist | Request and response sample |
 | Changed files or code diff | Required for code review | SAIL, expression rules, DDL, process spec, integration spec |
 | Deployment environments | Recommended | DEV, TEST, UAT, PROD |
 | Out-of-scope items | Recommended | No payment gateway in phase 1 |
 | UI constraints | Recommended | Mobile-friendly, portal-safe, accessibility AA |
 
-If required context is missing, the LLM should ask targeted questions or mark assumptions clearly. It must not silently invent missing fields, groups, record types, tables or integrations.
+If the application short name is missing, the LLM should ask for it or use `<PREFIX>` placeholders. It must not silently default to `APN` unless the prompt explicitly says `Application Short Name / Prefix: APN`.
+
+## Application prefix resolution rule
+
+The supplied application short name controls object naming.
+
+Resolution order:
+
+```text
+1. Use the explicit Application Short Name / Prefix from the prompt.
+2. If the project kit provides a different prefix, use the project kit value.
+3. If reviewing an existing app, infer the existing prefix only from the existing object set and flag inconsistencies.
+4. If no prefix is provided, ask for it before producing build-ready names.
+5. Use <PREFIX> placeholders for draft examples when no prefix is available.
+6. Do not blindly use APN. APN is only a reference-library example.
+```
+
+Standard input block:
+
+```text
+Application Name: User Management Solution
+Application Short Name / Prefix: UMS
+Database Prefix: ums
+Target Appian Version: 26.4
+```
+
+LLM validation examples:
+
+| Supplied prefix | Correct object example | Incorrect object example |
+|---|---|---|
+| `UMS` | `UMS_UI_UserSummary` | `APN_UI_UserSummary` |
+| `LSC` | `LSC_QRY_GetClaimById` | `APN_QRY_GetClaimById` |
+| `PAY` | `PAY_PM_ApprovePayment` | `APN_PM_ApprovePayment` |
 
 ## How an LLM should generate Appian documentation
 
@@ -152,20 +191,21 @@ An LLM should work in this sequence.
 
 ```text
 1. Read the project goal and user stories.
-2. Identify the business entities and lifecycle.
-3. Confirm the application prefix and naming standard.
-4. Draft the object inventory.
-5. Design the database model first.
-6. Map tables to Appian record types and relationships.
-7. Define constants and reference data.
-8. Define expression rules and query rules.
-9. Define process models using Appian process model components.
-10. Define SAIL interfaces using Appian-supported SAIL components only.
-11. Define integrations and Web APIs where required.
-12. Define security model.
-13. Define deployment approach.
-14. Define unit tests and end-to-end test scripts.
-15. Run AI guardrail review before returning output.
+2. Identify the application name, application short name and database prefix.
+3. Identify the business entities and lifecycle.
+4. Confirm the naming standard using the supplied prefix.
+5. Draft the object inventory.
+6. Design the database model first.
+7. Map tables to Appian record types and relationships.
+8. Define constants and reference data.
+9. Define expression rules and query rules.
+10. Define process models using Appian process model components.
+11. Define SAIL interfaces using Appian-supported SAIL components only.
+12. Define integrations and Web APIs where required.
+13. Define security model.
+14. Define deployment approach.
+15. Define unit tests and end-to-end test scripts.
+16. Run AI guardrail review before returning output.
 ```
 
 ## How an LLM should review Appian code
@@ -176,26 +216,19 @@ The review sequence is:
 
 ```text
 1. Identify the artefact type: SAIL, expression rule, process model design, DDL, integration, Web API, deployment file or documentation.
-2. Confirm the expected Appian version and project prefix.
-3. Check whether the code uses only Appian-native syntax for Appian artefacts.
-4. Check functions, components, parameters and allowed values against the local APN library and official Appian documentation where needed.
-5. Check data model, record type and query safety.
-6. Check saveInto, refresh and null handling.
-7. Check process design, PVs, gateways, Write Records and exception paths where relevant.
-8. Check security beyond UI hiding.
-9. Check performance, mobile usability, accessibility and testing impact.
-10. Return findings as a prioritised review table with corrected Appian patterns.
+2. Confirm the expected Appian version and supplied project prefix.
+3. Check whether object names use the supplied prefix, not APN unless APN is the project prefix.
+4. Check whether the code uses only Appian-native syntax for Appian artefacts.
+5. Check functions, components, parameters and allowed values against the local library and official Appian documentation where needed.
+6. Check data model, record type and query safety.
+7. Check saveInto, refresh and null handling.
+8. Check process design, PVs, gateways, Write Records and exception paths where relevant.
+9. Check security beyond UI hiding.
+10. Check performance, mobile usability, accessibility and testing impact.
+11. Return findings as a prioritised review table with corrected Appian patterns.
 ```
 
-The LLM must not rewrite the entire solution unless asked. A code review should clearly separate:
-
-- critical defects
-- build-breaking Appian syntax issues
-- security issues
-- performance issues
-- maintainability issues
-- recommendations
-- items requiring official Appian verification
+The LLM must not rewrite the entire solution unless asked. A code review should clearly separate critical defects, build-breaking Appian syntax issues, naming-prefix issues, security issues, performance issues, maintainability issues, recommendations and items requiring official Appian verification.
 
 ## Expected documentation outputs
 
@@ -228,9 +261,10 @@ The LLM must follow these rules for all generated Appian output.
 5. Do not invent component parameters.
 6. Do not invent allowed values such as bold, primary or onClick.
 7. Do not invent record fields, tables, groups or process variables.
-8. Use APN naming standards unless the project kit provides another prefix.
-9. Use Appian process model components for workflow design.
-10. Include tests and review checklists.
+8. Use the application short name / prefix supplied in the prompt or project kit.
+9. Do not default to APN unless APN is explicitly supplied as the project prefix.
+10. Use Appian process model components for workflow design.
+11. Include tests and review checklists.
 ```
 
 ## Mandatory Appian-native code review rules
@@ -248,6 +282,7 @@ When reviewing code, the LLM must check for Appian-native correctness first.
 8. Reject unsafe null handling that can break when inputs are blank.
 9. Reject query-in-loop patterns unless explicitly justified and reviewed.
 10. Reject security patterns that rely only on hiding a button or section.
+11. Reject object names that use APN when a different project prefix was supplied.
 ```
 
 ## Standard prompt for generating Appian application documentation
@@ -255,8 +290,14 @@ When reviewing code, the LLM must check for Appian-native correctness first.
 Use this prompt when asking an LLM to generate complete Appian application documentation.
 
 ```text
-You are generating Appian application documentation using the APN Appian
-engineering library from this Git repository.
+You are generating Appian application documentation using this Appian
+engineering library from the Git repository.
+
+Project input:
+Application Name: <APPLICATION_NAME>
+Application Short Name / Prefix: <PREFIX>
+Database Prefix: <database_prefix>
+Target Appian Version: 26.4
 
 Read and apply the local Markdown files in this order:
 1. LLM_USAGE_GUIDE_FOR_APPIAN_DOCUMENTATION.md
@@ -271,6 +312,8 @@ Read and apply the local Markdown files in this order:
 10. Appian_Functions/sail-components.md
 11. Appian_Functions/sail-recipes-ux-best-practices.md
 
+Use the supplied prefix for all Appian objects and database names.
+Do not use APN unless the supplied prefix is APN.
 Use the project kit, user stories and existing Appian context provided below.
 Do not invent Appian functions, SAIL components, SAIL parameters, process
 model capabilities, record fields, groups, database columns or integrations.
@@ -299,9 +342,17 @@ Use this prompt for one feature or story group.
 
 ```text
 Create a build-ready Appian technical specification for the feature below.
-Use the APN Appian engineering library as the design standard.
+Use this Appian engineering library as the design standard.
+
+Project input:
+Application Name: <APPLICATION_NAME>
+Application Short Name / Prefix: <PREFIX>
+Database Prefix: <database_prefix>
+Target Appian Version: 26.4
 
 Rules:
+- Use the supplied prefix for all Appian object names.
+- Do not use APN unless the supplied prefix is APN.
 - Use Appian Expression Language, SAIL and Appian process model concepts only.
 - Do not use Java, JavaScript, React, HTML, CSS or pseudo-code inside SAIL.
 - Do not invent Appian functions, SAIL components, parameters or allowed values.
@@ -335,22 +386,25 @@ The specification must include:
 Use this prompt to check another AI output before build.
 
 ```text
-Review this Appian output against the APN Appian engineering library.
+Review this Appian output against this Appian engineering library.
+Use the supplied Application Short Name / Prefix as the naming standard.
+Do not treat APN as valid unless APN is the supplied prefix.
 Return a severity table with issue, location, reason and corrected Appian pattern.
 
 Check for:
-1. Invented Appian functions.
-2. Invented SAIL components or parameters.
-3. Non-Appian syntax, including Java, JavaScript, React, HTML, CSS or Python.
-4. Wrong allowed values, such as bold instead of Appian-supported rich text values.
-5. Unsafe saveInto patterns.
-6. Missing null safety.
-7. Query-in-loop patterns.
-8. Missing fields in a!queryRecordType calls.
-9. Non-Appian process design terminology.
-10. Missing process variables, gateways, Write Records or exception paths.
-11. Missing security beyond UI hiding.
-12. Missing tests, deployment notes or rollback guidance.
+1. Incorrect application prefix usage.
+2. Invented Appian functions.
+3. Invented SAIL components or parameters.
+4. Non-Appian syntax, including Java, JavaScript, React, HTML, CSS or Python.
+5. Wrong allowed values, such as bold instead of Appian-supported rich text values.
+6. Unsafe saveInto patterns.
+7. Missing null safety.
+8. Query-in-loop patterns.
+9. Missing fields in a!queryRecordType calls.
+10. Non-Appian process design terminology.
+11. Missing process variables, gateways, Write Records or exception paths.
+12. Missing security beyond UI hiding.
+13. Missing tests, deployment notes or rollback guidance.
 ```
 
 ## Standard prompt for Appian code review
@@ -358,9 +412,15 @@ Check for:
 Use this prompt for reviewing actual Appian code, pull requests or changed files.
 
 ```text
-Perform an Appian 26.4 code review using the APN Appian engineering library.
+Perform an Appian 26.4 code review using this Appian engineering library.
 Review only the supplied code and project context. Do not invent missing
 objects or assume undocumented fields exist.
+
+Project input:
+Application Name: <APPLICATION_NAME>
+Application Short Name / Prefix: <PREFIX>
+Database Prefix: <database_prefix>
+Target Appian Version: 26.4
 
 Classify each finding as Critical, High, Medium, Low or Recommendation.
 For every issue, provide:
@@ -368,22 +428,23 @@ For every issue, provide:
 - location or code snippet
 - issue description
 - why it matters in Appian
-- corrected Appian pattern
+- corrected Appian pattern using the supplied prefix
 - whether official Appian documentation verification is required
 
 Review these areas:
-1. SAIL syntax and component validity.
-2. Appian function validity.
-3. Named parameter validity.
-4. Allowed value correctness, including values such as STRONG and SOLID.
-5. Non-Appian syntax contamination from Java, JavaScript, React, HTML, CSS or Python.
-6. saveInto, local variable and refresh behaviour.
-7. Query safety, including fields, paging, filters and null guards.
-8. Process model design, including PVs, RIs, gateways, Write Records and exception paths.
-9. Database design, DDL safety, audit fields, keys and migration risk.
-10. Integration request and response handling.
-11. Security controls beyond UI visibility.
-12. Performance, accessibility, mobile compatibility and testing impact.
+1. Naming prefix consistency.
+2. SAIL syntax and component validity.
+3. Appian function validity.
+4. Named parameter validity.
+5. Allowed value correctness, including values such as STRONG and SOLID.
+6. Non-Appian syntax contamination from Java, JavaScript, React, HTML, CSS or Python.
+7. saveInto, local variable and refresh behaviour.
+8. Query safety, including fields, paging, filters and null guards.
+9. Process model design, including PVs, RIs, gateways, Write Records and exception paths.
+10. Database design, DDL safety, audit fields, keys and migration risk.
+11. Integration request and response handling.
+12. Security controls beyond UI visibility.
+13. Performance, accessibility, mobile compatibility and testing impact.
 ```
 
 ## Code review output format
@@ -392,14 +453,15 @@ Return code review findings in this table format.
 
 | Severity | Artefact | Location | Issue | Why it matters | Correct Appian pattern | Verification needed |
 |---|---|---|---|---|---|---|
-| Critical | `APN_UI_CreateClaim` | Submit button | Uses unsupported `onClick` pattern | Appian SAIL does not use JavaScript event handlers | Use `saveInto` and `submit` on `a!buttonWidget()` | Check component docs |
+| Critical | `<PREFIX>_UI_CreateClaim` | Submit button | Uses unsupported `onClick` pattern | Appian SAIL does not use JavaScript event handlers | Use `saveInto` and `submit` on `a!buttonWidget()` | Check component docs |
+| High | `APN_QRY_GetUserById` | Object name | Uses `APN` but project prefix is `UMS` | Naming mismatch creates inconsistent application object ownership | Rename to `UMS_QRY_GetUserById` | No |
 
 Severity definitions:
 
 | Severity | Meaning |
 |---|---|
 | Critical | Will break Appian evaluation, cause data corruption or create a serious security issue. |
-| High | Likely runtime failure, incorrect data write, broken security or major performance issue. |
+| High | Likely runtime failure, incorrect data write, broken security, prefix inconsistency or major performance issue. |
 | Medium | Maintainability, incomplete validation, weak UX, missing tests or avoidable risk. |
 | Low | Minor consistency, readability or documentation issue. |
 | Recommendation | Improvement that is not required for correctness. |
@@ -408,6 +470,7 @@ Severity definitions:
 
 | Check | Pass or fail |
 |---|---|
+| Object names use the supplied application prefix. |  |
 | Uses Appian SAIL components only. |  |
 | No React, HTML, CSS, JavaScript, Java or Python syntax inside SAIL. |  |
 | Every component exists in Appian 26.4 or is marked for verification. |  |
@@ -430,7 +493,7 @@ Severity definitions:
 
 | Check | Pass or fail |
 |---|---|
-| Rule name follows project naming convention. |  |
+| Rule name follows supplied prefix and project naming convention. |  |
 | Rule inputs are minimal and correctly typed. |  |
 | Null inputs are handled safely. |  |
 | Return type is clear. |  |
@@ -458,6 +521,7 @@ Severity definitions:
 
 | Check | Pass or fail |
 |---|---|
+| Process model name uses the supplied prefix. |  |
 | Process uses Appian-native process components only. |  |
 | Trigger is clearly defined. |  |
 | Process variables are listed with type, parameter flag and purpose. |  |
@@ -476,7 +540,7 @@ Severity definitions:
 
 | Check | Pass or fail |
 |---|---|
-| Table names follow project prefix and naming convention. |  |
+| Table names follow supplied database prefix and naming convention. |  |
 | Primary keys are meaningful and not generic `id`. |  |
 | Foreign keys are documented and named clearly. |  |
 | Reference data is separated from free-text workflow values. |  |
@@ -491,7 +555,7 @@ Severity definitions:
 
 | Check | Pass or fail |
 |---|---|
-| Connected system and integration object are identified. |  |
+| Connected system and integration object use the supplied prefix. |  |
 | Authentication and credential handling are documented. |  |
 | Request payload is documented. |  |
 | Response payload is based on real or representative sample. |  |
@@ -505,6 +569,7 @@ Severity definitions:
 
 | Check | Pass or fail |
 |---|---|
+| Group names use the supplied prefix where project naming requires it. |  |
 | Security is not enforced only by hiding UI components. |  |
 | Record type security is documented. |  |
 | Record action visibility is documented. |  |
@@ -583,6 +648,7 @@ Use these rules when the LLM needs to make design choices.
 
 | Situation | Required behaviour |
 |---|---|
+| Application short name is missing | Ask for it or use `<PREFIX>` placeholders. Do not silently use `APN`. |
 | Data model is missing | Ask for it or propose options clearly marked as assumptions. |
 | Existing SAIL must be modified | Ask for the current SAIL before generating exact insertion code. |
 | Integration response is missing | Ask for a sample response before writing `index()` logic. |
@@ -598,6 +664,7 @@ An LLM output is not ready for build unless it passes these gates.
 
 | Gate | Requirement |
 |---|---|
+| Prefix gate | Object names use the supplied application short name / prefix. |
 | Appian syntax gate | No non-Appian code appears inside SAIL or expressions. |
 | Function gate | Every function exists in Appian 26.4 or is marked for verification. |
 | Component gate | Every component and parameter is Appian-supported or marked for verification. |
@@ -615,6 +682,7 @@ Appian code is not ready for merge or build until it passes these code review ga
 
 | Gate | Requirement |
 |---|---|
+| Prefix gate | New and changed Appian objects use the supplied application prefix. |
 | Build syntax gate | Code is Appian-native and does not contain unsupported language contamination. |
 | Component gate | SAIL components and parameters are verified or marked for verification. |
 | Function gate | Functions are valid and used in supported contexts. |
@@ -630,6 +698,7 @@ Appian code is not ready for merge or build until it passes these code review ga
 
 | Failure mode | Why it matters | Correction |
 |---|---|---|
+| LLM uses `APN` when project prefix is `UMS` | Object ownership and naming validation become inconsistent. | Use the supplied prefix from the prompt or project kit. |
 | LLM writes React-style UI | Appian Designer will reject it. | Use SAIL components only. |
 | LLM writes `bold` for rich text style | Appian allowed values are specific. | Verify and use Appian-supported value such as `STRONG` where applicable. |
 | LLM invents a component parameter | Appian evaluation fails. | Verify exact parameter from official docs. |
@@ -646,7 +715,9 @@ Appian code is not ready for merge or build until it passes these code review ga
 |---|---|
 | Local Git library files were used as context. |  |
 | Project kit was provided. |  |
-| Application prefix is correct. |  |
+| Application name is provided. |  |
+| Application short name / prefix is provided and used. |  |
+| Database prefix is provided or derived correctly. |  |
 | No unsupported Appian syntax is present. |  |
 | No non-Appian code is mixed into SAIL. |  |
 | No invented components, parameters or functions are present. |  |
