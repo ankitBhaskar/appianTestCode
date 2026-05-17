@@ -8,31 +8,32 @@
 4. [Required input from the prompt](#required-input-from-the-prompt)
 5. [Mandatory LLM behaviour](#mandatory-llm-behaviour)
 6. [Expected output structure](#expected-output-structure)
-7. [Blueprint section 1: Application definition](#blueprint-section-1-application-definition)
-8. [Blueprint section 2: Scope and assumptions](#blueprint-section-2-scope-and-assumptions)
-9. [Blueprint section 3: User roles and security groups](#blueprint-section-3-user-roles-and-security-groups)
-10. [Blueprint section 4: Business capability map](#blueprint-section-4-business-capability-map)
-11. [Blueprint section 5: Data model design](#blueprint-section-5-data-model-design)
-12. [Blueprint section 6: Database DDL execution plan](#blueprint-section-6-database-ddl-execution-plan)
-13. [Blueprint section 7: Record type design](#blueprint-section-7-record-type-design)
-14. [Blueprint section 8: Constants and reference data](#blueprint-section-8-constants-and-reference-data)
-15. [Blueprint section 9: Expression rules and query rules](#blueprint-section-9-expression-rules-and-query-rules)
-16. [Blueprint section 10: SAIL interface design](#blueprint-section-10-sail-interface-design)
-17. [Blueprint section 11: Process model design](#blueprint-section-11-process-model-design)
-18. [Blueprint section 12: Record actions and related actions](#blueprint-section-12-record-actions-and-related-actions)
-19. [Blueprint section 13: Integrations and Web APIs](#blueprint-section-13-integrations-and-web-apis)
-20. [Blueprint section 14: Reporting and dashboards](#blueprint-section-14-reporting-and-dashboards)
-21. [Blueprint section 15: Error handling and audit design](#blueprint-section-15-error-handling-and-audit-design)
-22. [Blueprint section 16: Appian application structure](#blueprint-section-16-appian-application-structure)
-23. [Blueprint section 17: Build execution sequence](#blueprint-section-17-build-execution-sequence)
-24. [Blueprint section 18: Unit test plan](#blueprint-section-18-unit-test-plan)
-25. [Blueprint section 19: End-to-end test script](#blueprint-section-19-end-to-end-test-script)
-26. [Blueprint section 20: Deployment and release plan](#blueprint-section-20-deployment-and-release-plan)
-27. [Example command](#example-command)
-28. [LLM prompt template](#llm-prompt-template)
-29. [Quality gate before accepting the generated plan](#quality-gate-before-accepting-the-generated-plan)
-30. [Common failure modes](#common-failure-modes)
-31. [References](#references)
+7. [Blueprint section 1: Detailed architecture document](#blueprint-section-1-detailed-architecture-document)
+8. [Blueprint section 2: Application definition](#blueprint-section-2-application-definition)
+9. [Blueprint section 3: Scope and assumptions](#blueprint-section-3-scope-and-assumptions)
+10. [Blueprint section 4: User roles and security groups](#blueprint-section-4-user-roles-and-security-groups)
+11. [Blueprint section 5: Business capability map](#blueprint-section-5-business-capability-map)
+12. [Blueprint section 6: Data model design](#blueprint-section-6-data-model-design)
+13. [Blueprint section 7: Database DDL execution plan](#blueprint-section-7-database-ddl-execution-plan)
+14. [Blueprint section 8: Record type design](#blueprint-section-8-record-type-design)
+15. [Blueprint section 9: Constants and reference data](#blueprint-section-9-constants-and-reference-data)
+16. [Blueprint section 10: Expression rules and query rules](#blueprint-section-10-expression-rules-and-query-rules)
+17. [Blueprint section 11: SAIL interface design](#blueprint-section-11-sail-interface-design)
+18. [Blueprint section 12: Process model design](#blueprint-section-12-process-model-design)
+19. [Blueprint section 13: Record actions and related actions](#blueprint-section-13-record-actions-and-related-actions)
+20. [Blueprint section 14: Integrations and Web APIs](#blueprint-section-14-integrations-and-web-apis)
+21. [Blueprint section 15: Reporting and dashboards](#blueprint-section-15-reporting-and-dashboards)
+22. [Blueprint section 16: Error handling and audit design](#blueprint-section-16-error-handling-and-audit-design)
+23. [Blueprint section 17: Appian application structure](#blueprint-section-17-appian-application-structure)
+24. [Blueprint section 18: Build execution sequence](#blueprint-section-18-build-execution-sequence)
+25. [Blueprint section 19: Unit test plan](#blueprint-section-19-unit-test-plan)
+26. [Blueprint section 20: End-to-end test script](#blueprint-section-20-end-to-end-test-script)
+27. [Blueprint section 21: Deployment and release plan](#blueprint-section-21-deployment-and-release-plan)
+28. [Example command](#example-command)
+29. [LLM prompt template](#llm-prompt-template)
+30. [Quality gate before accepting the generated plan](#quality-gate-before-accepting-the-generated-plan)
+31. [Common failure modes](#common-failure-modes)
+32. [References](#references)
 
 ## Purpose
 
@@ -44,7 +45,7 @@ When the user asks something like:
 Create a leave tracking and management system in Appian.
 ```
 
-The LLM must not respond with a high-level summary only. It must produce a detailed, build-oriented plan that explains what to create, in what order, and how each Appian object fits together.
+The LLM must not respond with a high-level summary only. It must produce a detailed, build-oriented architecture and execution plan that explains how the application works, what to build, in what order, and how each Appian object fits together.
 
 The output should be detailed enough that a developer can follow it step by step and build the application in Appian Designer.
 
@@ -52,7 +53,7 @@ The output should be detailed enough that a developer can follow it step by step
 
 This file is intended to be used as local LLM context. Do not assume the LLM can open external links.
 
-Official Appian documentation remains the source of truth, but this file defines the required output shape for APN-style Appian application planning.
+Official Appian documentation remains the source of truth, but this file defines the required output shape for Appian application planning.
 
 `APN` is only an example prefix. The LLM must use the application short name supplied in the prompt, such as `LMS` for Leave Management System or `UMS` for User Management Solution.
 
@@ -68,21 +69,9 @@ Use this blueprint when the user asks for:
 - an application architecture and implementation plan
 - a “go and create this app” style instruction
 
-Example requests:
-
-```text
-Create a leave tracking and management system.
-Create an Appian app for employee onboarding.
-Design a claims management system in Appian.
-Build a supplier registration and approval app.
-Create a development execution plan for payment exception management.
-```
-
 ## Required input from the prompt
 
 The LLM should ask for missing critical inputs or use placeholders where the user wants a first draft.
-
-Minimum input:
 
 | Input | Required | Example |
 |---|---:|---|
@@ -104,16 +93,18 @@ If the prefix is missing, the LLM must not default to `APN`. It must ask for the
 The LLM must:
 
 ```text
-1. Use the supplied application prefix for all Appian object names.
-2. Use the supplied database prefix for physical table names.
-3. Produce a complete execution plan, not only architecture notes.
-4. Start with data model and record types before UI.
-5. Use Appian-native process model components.
-6. Use Appian SAIL components only.
-7. List constants, rules, interfaces, process models, integrations and actions.
-8. Provide build order.
-9. Provide unit tests and end-to-end tests.
-10. Mark assumptions and verification items clearly.
+1. Start with a detailed architecture document.
+2. Include Mermaid diagrams that explain how the application works.
+3. Use the supplied application prefix for all Appian object names.
+4. Use the supplied database prefix for physical table names.
+5. Produce a complete development execution plan, not only architecture notes.
+6. Start the build design with data model and record types before UI.
+7. Use Appian-native process model components.
+8. Use Appian SAIL components only.
+9. List constants, rules, interfaces, process models, integrations and actions.
+10. Provide a dependency-based build order.
+11. Provide unit tests and end-to-end tests.
+12. Mark assumptions and verification items clearly.
 ```
 
 The LLM must not:
@@ -122,11 +113,12 @@ The LLM must not:
 1. Invent Appian functions, components or parameters.
 2. Use Java, JavaScript, React, HTML or CSS inside SAIL.
 3. Use APN unless APN is the supplied prefix.
-4. Skip database and record type design.
-5. Skip process model design.
-6. Skip security.
-7. Skip test planning.
-8. Produce only a generic high-level plan.
+4. Skip the architecture document.
+5. Skip database and record type design.
+6. Skip process model design.
+7. Skip security.
+8. Skip test planning.
+9. Produce only a generic high-level plan.
 ```
 
 ## Expected output structure
@@ -134,33 +126,253 @@ The LLM must not:
 For a complete Appian application request, the LLM must return the following structure.
 
 ```text
-1. Application definition
-2. Scope and assumptions
-3. User roles and security groups
-4. Business capability map
-5. Data model design
-6. Database DDL execution plan
-7. Record type design
-8. Constants and reference data
-9. Expression rules and query rules
-10. SAIL interface design
-11. Process model design
-12. Record actions and related actions
-13. Integrations and Web APIs
-14. Reporting and dashboards
-15. Error handling and audit design
-16. Appian application structure
-17. Build execution sequence
-18. Unit test plan
-19. End-to-end test script
-20. Deployment and release plan
+1. Detailed architecture document
+2. Application definition
+3. Scope and assumptions
+4. User roles and security groups
+5. Business capability map
+6. Data model design
+7. Database DDL execution plan
+8. Record type design
+9. Constants and reference data
+10. Expression rules and query rules
+11. SAIL interface design
+12. Process model design
+13. Record actions and related actions
+14. Integrations and Web APIs
+15. Reporting and dashboards
+16. Error handling and audit design
+17. Appian application structure
+18. Build execution sequence
+19. Unit test plan
+20. End-to-end test script
+21. Deployment and release plan
 ```
 
 Each section must be specific to the requested application.
 
-## Blueprint section 1: Application definition
+## Blueprint section 1: Detailed architecture document
 
-The LLM must start by restating the application details.
+The blueprint must start with a detailed architecture document before the execution plan.
+
+The architecture document must explain:
+
+- what the application does
+- who uses it
+- how a user moves through the application
+- how Appian records, interfaces, process models, integrations and data tables work together
+- how data flows through the solution
+- how security is enforced
+- how errors and exceptions are handled
+- how reporting is produced
+- how the application can be extended in later releases
+
+### Required architecture document structure
+
+```text
+1. Architecture overview
+2. Solution context
+3. User journey and operating model
+4. Logical application architecture
+5. Appian object architecture
+6. Data architecture
+7. Process architecture
+8. Integration architecture
+9. Security architecture
+10. Reporting and analytics architecture
+11. Error handling, audit and support architecture
+12. Deployment and environment architecture
+13. Extension points and future phases
+14. Architecture decisions and rationale
+15. Architecture risks and mitigations
+```
+
+### Architecture overview
+
+The LLM must write a clear narrative explaining how the application will work end to end.
+
+Example for a leave application:
+
+```text
+The Leave Management System is built as an Appian record-centric application.
+Employees use a site page to create and track leave requests. Appian record
+types provide the core business objects, including Employee, Leave Request,
+Leave Type, Leave Balance and Leave Request Status History. SAIL interfaces
+provide the employee dashboard, manager approval queue, HR administration pages
+and read-only record summaries. Process models orchestrate create, submit,
+approve, reject, cancel and leave-balance adjustment flows. Query rules power
+record lists, dashboards and validation checks. Optional integrations connect
+to HR, payroll or calendar systems through connected systems and integration
+objects.
+```
+
+### Required architecture diagrams
+
+The LLM must include the following Mermaid diagrams where applicable.
+
+#### Solution context diagram
+
+```mermaid
+flowchart LR
+  Employee[Employee] --> AppianSite[Appian Site]
+  Manager[Manager] --> AppianSite
+  HRAdmin[HR Admin] --> AppianSite
+  AppianSite --> Interfaces[SAIL Interfaces]
+  Interfaces --> Records[Appian Record Types]
+  Interfaces --> Processes[Process Models]
+  Processes --> Records
+  Records --> Database[(Application Database)]
+  Processes --> Integrations[Connected Systems and Integrations]
+  Integrations --> HRSystem[External HR System]
+  Integrations --> Payroll[Payroll System]
+```
+
+#### Logical architecture diagram
+
+```mermaid
+flowchart TB
+  subgraph Experience[Experience Layer]
+    Site[Appian Site]
+    EmployeeDashboard[Employee Dashboard]
+    ManagerQueue[Manager Approval Queue]
+    HRAdminPage[HR Admin Page]
+  end
+
+  subgraph Appian[Appian Application Layer]
+    Interfaces[SAIL Interfaces]
+    Rules[Expression and Query Rules]
+    Processes[Process Models]
+    Actions[Record Actions and Related Actions]
+  end
+
+  subgraph Data[Data Layer]
+    Records[Record Types]
+    Tables[(Database Tables)]
+    ReferenceData[Reference Data]
+  end
+
+  subgraph External[External Systems]
+    HR[HR System]
+    Payroll[Payroll System]
+    Calendar[Calendar System]
+  end
+
+  Site --> EmployeeDashboard
+  Site --> ManagerQueue
+  Site --> HRAdminPage
+  EmployeeDashboard --> Interfaces
+  ManagerQueue --> Interfaces
+  HRAdminPage --> Interfaces
+  Interfaces --> Rules
+  Interfaces --> Actions
+  Actions --> Processes
+  Processes --> Records
+  Rules --> Records
+  Records --> Tables
+  Processes --> HR
+  Processes --> Payroll
+  Processes --> Calendar
+```
+
+#### User journey diagram
+
+```mermaid
+flowchart TD
+  A[Employee opens Appian site] --> B[Views leave balance and requests]
+  B --> C[Creates leave request]
+  C --> D[System validates dates and balance]
+  D --> E{Valid?}
+  E -- No --> F[Show validation message]
+  E -- Yes --> G[Submit request]
+  G --> H[Manager reviews request]
+  H --> I{Decision}
+  I -- Approve --> J[Update status to Approved]
+  I -- Reject --> K[Update status to Rejected]
+  I -- Return --> L[Return to employee]
+  J --> M[Update history and reporting]
+  K --> M
+  L --> M
+```
+
+#### Process architecture diagram
+
+```mermaid
+flowchart LR
+  CreatePM[Create Request Process] --> SubmitPM[Submit Request Process]
+  SubmitPM --> ApprovalPM[Manager Approval Process]
+  ApprovalPM --> StatusPM[Status Update Process]
+  StatusPM --> History[Status History Write]
+  ApprovalPM --> BalancePM[Balance Adjustment Process]
+  ApprovalPM --> NotifyPM[Notification or Integration Process]
+  ApprovalPM --> ExceptionPM[Exception Handling Subprocess]
+```
+
+#### Data relationship diagram
+
+```mermaid
+erDiagram
+  LMS_EMPLOYEE ||--o{ LMS_LEAVE_REQUEST : submits
+  LMS_EMPLOYEE ||--o{ LMS_LEAVE_BALANCE : owns
+  LMS_LEAVE_TYPE ||--o{ LMS_LEAVE_REQUEST : categorises
+  LMS_LEAVE_TYPE ||--o{ LMS_LEAVE_BALANCE : tracks
+  LMS_LEAVE_REQUEST ||--o{ LMS_LEAVE_REQUEST_STATUS_HISTORY : records
+  LMS_LEAVE_REQUEST ||--o{ LMS_LEAVE_REQUEST_COMMENT : contains
+  LMS_LEAVE_REQUEST ||--o{ LMS_LEAVE_REQUEST_DOCUMENT : attaches
+```
+
+#### Integration architecture diagram
+
+```mermaid
+flowchart LR
+  AppianProcess[Appian Process Model] --> ConnectedSystem[Connected System]
+  ConnectedSystem --> IntegrationObject[Integration Object]
+  IntegrationObject --> ExternalAPI[External REST API]
+  ExternalAPI --> IntegrationObject
+  IntegrationObject --> ResponseMapper[Response Mapping Rule]
+  ResponseMapper --> Records[Appian Record Types]
+  IntegrationObject --> ErrorLog[Integration Error Log]
+```
+
+#### Security architecture diagram
+
+```mermaid
+flowchart TB
+  Users[Users] --> Groups[Appian Groups]
+  Groups --> SiteAccess[Site Access]
+  Groups --> ObjectSecurity[Object Security]
+  Groups --> RecordSecurity[Record Type Security]
+  Groups --> ActionVisibility[Record Action Visibility]
+  Groups --> ProcessSecurity[Process Start Security]
+  RecordSecurity --> DataRows[Visible Records]
+  ProcessSecurity --> ProcessModels[Process Models]
+  ActionVisibility --> UserActions[Allowed Actions]
+```
+
+### Architecture decisions and rationale
+
+The LLM must include a table of major decisions.
+
+| Decision | Rationale | Alternatives considered |
+|---|---|---|
+| Use record-centric design | Aligns with Appian record views, related actions and reporting. | Process-only task design. |
+| Store status history separately | Preserves auditability and supports reporting. | Overwrite current status only. |
+| Use reference tables for business statuses | Enables governance and reporting. | Hardcoded values in interfaces. |
+| Use process models for approvals | Provides workflow, audit and controlled writes. | Direct record write from interface only. |
+
+### Architecture risks and mitigations
+
+The LLM must include risk and mitigation guidance.
+
+| Risk | Impact | Mitigation |
+|---|---|---|
+| Missing HR integration contract | Integration mapping may be wrong. | Mark integration payloads as verification items. |
+| Broad manager visibility | Managers may see records outside their team. | Define record-level security and manager-to-employee mapping. |
+| Leave balance concurrency | Two requests may use the same balance. | Consider locking, approval-time validation or transaction rules. |
+| Large dashboards | Slow page loads. | Use indexed queries, paging and dashboard-specific query rules. |
+
+## Blueprint section 2: Application definition
+
+The LLM must restate the application details.
 
 Required format:
 
@@ -174,19 +386,7 @@ Primary User Groups:
 High-Level Modules:
 ```
 
-Example:
-
-```text
-Application Name: Leave Management System
-Application Short Name / Prefix: LMS
-Database Prefix: lms
-Target Appian Version: 26.4
-Primary Business Purpose: Manage employee leave requests, approvals, balances and reporting.
-Primary User Groups: Employees, Managers, HR Administrators, System Administrators.
-High-Level Modules: Leave request, approval workflow, leave balance, calendar view, reporting, administration.
-```
-
-## Blueprint section 2: Scope and assumptions
+## Blueprint section 3: Scope and assumptions
 
 The LLM must clearly separate scope from assumptions.
 
@@ -199,7 +399,7 @@ Required format:
 | Payroll integration | Assumption | Mark as optional unless specified. |
 | Calendar integration | Assumption | Optional future phase unless specified. |
 
-## Blueprint section 3: User roles and security groups
+## Blueprint section 4: User roles and security groups
 
 The LLM must define Appian groups using the supplied prefix.
 
@@ -214,31 +414,21 @@ Example for `LMS`:
 | `LMS_GRP_AppAdmins` | Application support and admin users. | Admin and support access. |
 | `LMS_GRP_IntegrationUsers` | Service accounts for integrations. | Web API and connected system access. |
 
-The LLM must specify security at:
+The LLM must specify security at application, folder, object, record type, record action, process model and Web API layers.
 
-- application level
-- folder level
-- object level
-- record type level
-- record action visibility
-- process model start security
-- Web API security where applicable
-
-## Blueprint section 4: Business capability map
+## Blueprint section 5: Business capability map
 
 The LLM must break the app into capabilities.
 
-Example:
-
 | Capability | Description | Key Appian objects |
 |---|---|---|
-| Leave request creation | Employee submits a new leave request. | Record type, create form, create process model. |
-| Leave approval | Manager approves, returns or rejects a request. | Approval form, approval process model, status history. |
-| Leave balance management | HR maintains employee balance. | Balance record, admin interface, update process. |
-| Reporting | Users view leave status and trends. | Dashboards, query rules, charts. |
-| Administration | Maintain leave types and reference data. | Reference tables and admin screens. |
+| Request creation | User submits a new request. | Record type, create form, create process model. |
+| Approval workflow | Approver approves, returns or rejects. | Approval form, approval process model, status history. |
+| Administration | Admin maintains reference data. | Admin interfaces, reference tables. |
+| Reporting | Users view operational status and trends. | Dashboards, query rules, charts. |
+| Support | Support reviews exceptions and failed integrations. | Error log, support dashboard, retry action. |
 
-## Blueprint section 5: Data model design
+## Blueprint section 6: Data model design
 
 The LLM must provide a full data model, not just object names.
 
@@ -270,93 +460,53 @@ Example leave management tables:
 | `lms_public_holiday` | Public holiday calendar for leave calculations. |
 | `lms_int_error_log` | Integration error and support log. |
 
-Relationship diagram:
-
-```mermaid
-erDiagram
-  LMS_EMPLOYEE ||--o{ LMS_LEAVE_REQUEST : submits
-  LMS_EMPLOYEE ||--o{ LMS_LEAVE_BALANCE : owns
-  LMS_LEAVE_TYPE ||--o{ LMS_LEAVE_REQUEST : categorises
-  LMS_LEAVE_TYPE ||--o{ LMS_LEAVE_BALANCE : tracks
-  LMS_LEAVE_REQUEST ||--o{ LMS_LEAVE_REQUEST_STATUS_HISTORY : records
-  LMS_LEAVE_REQUEST ||--o{ LMS_LEAVE_REQUEST_COMMENT : contains
-  LMS_LEAVE_REQUEST ||--o{ LMS_LEAVE_REQUEST_DOCUMENT : attaches
-```
-
-## Blueprint section 6: Database DDL execution plan
+## Blueprint section 7: Database DDL execution plan
 
 The LLM must list DDL objects in dependency order.
 
-Required format:
-
 | Step | Script/object | Purpose | Depends on |
 |---:|---|---|---|
-| 1 | `lms_employee` | Employee profile table. | None |
-| 2 | `lms_leave_type` | Leave type reference table. | None |
-| 3 | `lms_leave_request` | Core request table. | Employee, leave type |
-| 4 | `lms_leave_request_status_history` | Request lifecycle history. | Leave request |
+| 1 | Reference tables | Leave status, approval decision and leave type. | None |
+| 2 | Parent entity tables | Employee or applicant profile. | Reference tables where applicable |
+| 3 | Core transaction table | Leave request, claim, case or application. | Parent and reference tables |
+| 4 | Child tables | Status history, comments, documents and audit. | Core transaction table |
+| 5 | Integration/support tables | Error log, sync log and manual review queue. | Core tables where applicable |
 
 For each table, the LLM should provide copy-ready SQL where the user asks for a technical specification. SQL must be clearly marked as database-specific and reviewed before execution.
 
-## Blueprint section 7: Record type design
+## Blueprint section 8: Record type design
 
 The LLM must map every core table to an Appian record type.
 
-Required format:
-
 | Record type | Source table | Primary key | Display field | Relationships | Record actions |
 |---|---|---|---|---|---|
-| `LMS_REC_LeaveRequest` | `lms_leave_request` | `leave_request_id` | `leave_request_reference` | Employee, leave type, status history | Create, edit, submit, approve |
+| `<PREFIX>_REC_LeaveRequest` | `<dbprefix>_leave_request` | `leave_request_id` | `leave_request_reference` | Employee, leave type, status history | Create, edit, submit, approve |
 
-Each record type must include:
+Each record type must include purpose, source, fields, relationships, record list behaviour, record views, actions, security and sync considerations where applicable.
 
-- purpose
-- source
-- fields
-- relationships
-- record list behaviour
-- record views
-- actions
-- security
-- sync considerations where applicable
-
-## Blueprint section 8: Constants and reference data
+## Blueprint section 9: Constants and reference data
 
 The LLM must define constants and reference data separately.
 
-Use reference tables when values need governance, reporting, effective dating or admin maintenance.
-
-Use constants for technical values or stable configuration.
-
-Example constants:
+Use reference tables when values need governance, reporting, effective dating or admin maintenance. Use constants for technical values or stable configuration.
 
 | Constant | Type | Purpose | Example value |
 |---|---|---|---|
-| `LMS_CONS_DefaultPageSize` | Integer | Default grid page size. | `25` |
-| `LMS_CONS_MaxAttachmentCount` | Integer | Maximum uploaded documents. | `10` |
-| `LMS_CONS_AppAdminGroup` | Group | Application admin group. | `LMS_GRP_AppAdmins` |
+| `<PREFIX>_CONS_DefaultPageSize` | Integer | Default grid page size. | `25` |
+| `<PREFIX>_CONS_MaxAttachmentCount` | Integer | Maximum uploaded documents. | `10` |
+| `<PREFIX>_CONS_AppAdminGroup` | Group | Application admin group. | `<PREFIX>_GRP_AppAdmins` |
 
-Example reference data:
-
-| Reference table | Example values |
-|---|---|
-| `lms_leave_type` | Annual Leave, Sick Leave, Carer Leave, Unpaid Leave |
-| `lms_ref_leave_status` | Draft, Submitted, Approved, Rejected, Cancelled |
-| `lms_ref_approval_decision` | Approve, Return, Reject |
-
-## Blueprint section 9: Expression rules and query rules
+## Blueprint section 10: Expression rules and query rules
 
 The LLM must list every required rule with purpose, inputs, output and consumers.
 
-Recommended groups:
-
 | Rule type | Naming pattern | Example |
 |---|---|---|
-| Query rule | `<PREFIX>_QRY_<Verb><Entity>` | `LMS_QRY_GetLeaveRequestsForEmployee` |
-| Validation rule | `<PREFIX>_VAL_<Purpose>` | `LMS_VAL_IsLeaveRequestEditable` |
-| Formatting rule | `<PREFIX>_FMT_<Purpose>` | `LMS_FMT_DisplayLeaveStatus` |
-| Mapping rule | `<PREFIX>_MAP_<Source>To<Target>` | `LMS_MAP_LeaveRequestToCalendarEvent` |
-| Utility rule | `<PREFIX>_UTIL_<Purpose>` | `LMS_UTIL_CalculateBusinessDays` |
+| Query rule | `<PREFIX>_QRY_<Verb><Entity>` | `<PREFIX>_QRY_GetLeaveRequestsForEmployee` |
+| Validation rule | `<PREFIX>_VAL_<Purpose>` | `<PREFIX>_VAL_IsLeaveRequestEditable` |
+| Formatting rule | `<PREFIX>_FMT_<Purpose>` | `<PREFIX>_FMT_DisplayLeaveStatus` |
+| Mapping rule | `<PREFIX>_MAP_<Source>To<Target>` | `<PREFIX>_MAP_LeaveRequestToCalendarEvent` |
+| Utility rule | `<PREFIX>_UTIL_<Purpose>` | `<PREFIX>_UTIL_CalculateBusinessDays` |
 
 Required rule specification:
 
@@ -372,158 +522,70 @@ Performance Notes:
 Unit Tests:
 ```
 
-Example:
-
-| Rule | Purpose | Inputs | Output | Consumers |
-|---|---|---|---|---|
-| `LMS_QRY_GetLeaveRequestsForEmployee` | Return active leave requests for an employee. | `employeeId`, `pagingInfo` | Record list | Employee dashboard, manager view |
-| `LMS_QRY_GetPendingApprovalsForManager` | Return leave requests awaiting manager approval. | `managerUsername`, `pagingInfo` | Record list | Manager dashboard |
-| `LMS_VAL_IsLeaveBalanceSufficient` | Check whether requested leave fits available balance. | `employeeId`, `leaveTypeId`, `daysRequested` | Boolean | Create leave request form |
-| `LMS_UTIL_CalculateLeaveDays` | Calculate leave days excluding weekends/public holidays. | `startDate`, `endDate`, `publicHolidays` | Decimal | Leave request form/process |
-
-## Blueprint section 10: SAIL interface design
+## Blueprint section 11: SAIL interface design
 
 The LLM must list every interface needed, its purpose, inputs and main components.
 
-Required format:
-
 | Interface | Purpose | Type | Main components | Consumers |
 |---|---|---|---|---|
-| `LMS_UI_CreateLeaveRequest` | Create leave request form. | Start form | formLayout, date fields, dropdown, validation, buttons | Create process |
-| `LMS_UI_LeaveRequestSummary` | Read-only request summary. | Record view | sections, cards, rich text, grid | Record view |
-| `LMS_UI_ManagerApprovalForm` | Approval decision form. | User task/start form | radio button, paragraph, buttons | Approval process |
-| `LMS_UI_MyLeaveDashboard` | Employee dashboard. | Site page | KPI cards, grid, record actions | Site |
-| `LMS_UI_LeaveAdminPage` | HR admin reference page. | Site page | grids, forms, actions | HR admin site |
+| `<PREFIX>_UI_CreateLeaveRequest` | Create leave request form. | Start form | formLayout, date fields, dropdown, validation, buttons | Create process |
+| `<PREFIX>_UI_LeaveRequestSummary` | Read-only request summary. | Record view | sections, cards, rich text, grid | Record view |
+| `<PREFIX>_UI_ManagerApprovalForm` | Approval decision form. | User task/start form | radio button, paragraph, buttons | Approval process |
+| `<PREFIX>_UI_MyLeaveDashboard` | Employee dashboard. | Site page | KPI cards, grid, record actions | Site |
+| `<PREFIX>_UI_AdminPage` | Admin reference page. | Site page | grids, forms, actions | Admin site |
 
-For each interface, include:
+For each interface, include rule inputs, local variables, components, save behaviour, refresh behaviour, validation, security visibility, mobile notes, accessibility notes and unit tests.
 
-```text
-Interface Name:
-Purpose:
-Rule Inputs:
-Local Variables:
-Components:
-Save Behaviour:
-Refresh Behaviour:
-Validation:
-Security Visibility:
-Mobile Notes:
-Accessibility Notes:
-Unit Tests:
-```
-
-The LLM must use SAIL components only and must not use HTML, React or CSS patterns.
-
-## Blueprint section 11: Process model design
+## Blueprint section 12: Process model design
 
 The LLM must list every process model required and describe Appian nodes.
 
-Required process model table:
-
 | Process model | Trigger | Purpose | Main nodes |
 |---|---|---|---|
-| `LMS_PM_CreateLeaveRequest` | Record action or site action | Create draft or submitted leave request. | Start form, XOR cancel, Write Records |
-| `LMS_PM_SubmitLeaveRequest` | Related action | Submit request for manager approval. | Status update, Write status history, approval task |
-| `LMS_PM_ApproveLeaveRequest` | User task or related action | Manager decision. | Approval form, XOR decision, Write Records |
-| `LMS_PM_CancelLeaveRequest` | Related action | Cancel draft or submitted request. | Cancel form, Write Records |
-| `LMS_PM_AdjustLeaveBalance` | Related action/admin action | HR adjusts leave balance. | Start form, Write Records, audit |
-| `LMS_PM_SyncEmployeeData` | Scheduled/integration | Sync employees from HR source. | Integration, mapping, Write Records, error handling |
+| `<PREFIX>_PM_CreateLeaveRequest` | Record action or site action | Create draft or submitted leave request. | Start form, XOR cancel, Write Records |
+| `<PREFIX>_PM_SubmitLeaveRequest` | Related action | Submit request for approval. | Status update, write status history, approval task |
+| `<PREFIX>_PM_ApproveLeaveRequest` | User task or related action | Manager decision. | Approval form, XOR decision, Write Records |
+| `<PREFIX>_PM_CancelLeaveRequest` | Related action | Cancel draft or submitted request. | Cancel form, Write Records |
+| `<PREFIX>_PM_AdjustLeaveBalance` | Related action/admin action | HR adjusts leave balance. | Start form, Write Records, audit |
+| `<PREFIX>_PM_SyncEmployeeData` | Scheduled/integration | Sync employees from HR source. | Integration, mapping, Write Records, error handling |
 
-For each process model, include:
+For each process model, include process display name, process variables, start form/user task mapping, gateway logic, Write Records nodes, subprocesses, integration nodes, exception handling, alerts, data management, security and unit tests.
 
-```text
-Process Model Name:
-Description:
-Trigger:
-Process Display Name:
-Process Variables:
-Start Form or User Task Mapping:
-Step-by-Step Flow:
-Gateway Logic:
-Write Records Nodes:
-Subprocesses:
-Integration Nodes:
-Exception Handling:
-Alerts:
-Data Management:
-Security:
-Unit Tests:
-```
-
-Example flow:
-
-```mermaid
-flowchart TD
-  A[Start Form: LMS_UI_CreateLeaveRequest] --> B{pv!isCancelled?}
-  B -- Yes --> C[End: Cancelled]
-  B -- No --> D[Write Records: LMS_REC_LeaveRequest]
-  D --> E[Write Records: LMS_REC_LeaveRequestStatusHistory]
-  E --> F[End: Complete]
-```
-
-## Blueprint section 12: Record actions and related actions
+## Blueprint section 13: Record actions and related actions
 
 The LLM must define how users start process models from record types.
 
-Required format:
-
 | Action | Type | Configured on | Process model | Visibility | Input mapping |
 |---|---|---|---|---|---|
-| Create Leave Request | Record action | `LMS_REC_LeaveRequest` | `LMS_PM_CreateLeaveRequest` | Employees | New record |
-| Submit Leave Request | Related action | `LMS_REC_LeaveRequest` | `LMS_PM_SubmitLeaveRequest` | Request owner | `pv!leaveRequest = rv!record` |
-| Approve Leave Request | Related action | `LMS_REC_LeaveRequest` | `LMS_PM_ApproveLeaveRequest` | Managers | `pv!leaveRequest = rv!record` |
-| Cancel Leave Request | Related action | `LMS_REC_LeaveRequest` | `LMS_PM_CancelLeaveRequest` | Owner/HR | `pv!leaveRequest = rv!record` |
+| Create Leave Request | Record action | `<PREFIX>_REC_LeaveRequest` | `<PREFIX>_PM_CreateLeaveRequest` | Employees | New record |
+| Submit Leave Request | Related action | `<PREFIX>_REC_LeaveRequest` | `<PREFIX>_PM_SubmitLeaveRequest` | Request owner | `pv!leaveRequest = rv!record` |
+| Approve Leave Request | Related action | `<PREFIX>_REC_LeaveRequest` | `<PREFIX>_PM_ApproveLeaveRequest` | Managers | `pv!leaveRequest = rv!record` |
+| Cancel Leave Request | Related action | `<PREFIX>_REC_LeaveRequest` | `<PREFIX>_PM_CancelLeaveRequest` | Owner or admin | `pv!leaveRequest = rv!record` |
 
-## Blueprint section 13: Integrations and Web APIs
+## Blueprint section 14: Integrations and Web APIs
 
-The LLM must state whether integrations are required.
-
-If no integrations are required, it must say:
-
-```text
-No external integrations are required for the first release. Integration-ready extension points are listed below.
-```
-
-If integrations are required, define:
+The LLM must state whether integrations are required. If no integrations are required, it must say that no external integrations are required for the first release and list integration-ready extension points.
 
 | Integration | Type | Purpose | Request | Response | Error handling |
 |---|---|---|---|---|---|
-| `LMS_INT_GetEmployeeDetails` | Outbound REST | Retrieve employee profile from HR system. | Employee ID | Employee profile dictionary | Log error and manual review |
-| `LMS_INT_SendApprovedLeaveToPayroll` | Outbound REST | Send approved leave to payroll. | Leave request payload | Confirmation ID | Retry and error queue |
-| `LMS_API_CreateLeaveRequest` | Inbound Web API | Allow external systems to create requests. | Leave request JSON | Appian request ID | Validation error response |
+| `<PREFIX>_INT_GetEmployeeDetails` | Outbound REST | Retrieve employee profile from HR system. | Employee ID | Employee profile dictionary | Log error and manual review |
+| `<PREFIX>_INT_SendApprovedLeaveToPayroll` | Outbound REST | Send approved leave to payroll. | Leave request payload | Confirmation ID | Retry and error queue |
+| `<PREFIX>_API_CreateLeaveRequest` | Inbound Web API | Allow external systems to create requests. | Leave request JSON | Appian request ID | Validation error response |
 
-Required integration specification:
-
-```text
-Connected System:
-Integration Object:
-Request Contract:
-Response Contract:
-Authentication:
-Timeout Behaviour:
-Retry Behaviour:
-Idempotency:
-Error Logging:
-Security:
-Tests:
-```
-
-## Blueprint section 14: Reporting and dashboards
+## Blueprint section 15: Reporting and dashboards
 
 The LLM must define reporting needs.
 
-Example:
-
 | Dashboard/report | Audience | Data source | Components |
 |---|---|---|---|
-| My Leave Dashboard | Employee | Leave request, leave balance | KPI cards, grid |
-| Pending Approval Dashboard | Manager | Leave request | Grid, filters |
-| Leave Utilisation Dashboard | HR | Leave request, leave balance | Charts, summary cards |
+| My Dashboard | Employee or requester | Core records and status history | KPI cards, grid |
+| Pending Approval Dashboard | Manager or approver | Core records | Grid, filters |
+| Utilisation Dashboard | Admin | Core records, balances, reference data | Charts, summary cards |
 | Exception Dashboard | Support | Error log | Grid, filters, retry actions |
 
 Each dashboard must include query rules, filters, empty states and performance notes.
 
-## Blueprint section 15: Error handling and audit design
+## Blueprint section 16: Error handling and audit design
 
 The LLM must define audit and error handling.
 
@@ -544,44 +606,27 @@ Required error handling:
 - safe logging that avoids exposing sensitive data unnecessarily
 - retry rules for retryable errors
 
-## Blueprint section 16: Appian application structure
+## Blueprint section 17: Appian application structure
 
 The LLM must recommend an Appian application structure.
 
-Example:
-
 ```text
-LMS - Leave Management
+<PREFIX> - <Application Name>
   Folders:
-    LMS Records
-    LMS Interfaces
-    LMS Expression Rules
-    LMS Process Models
-    LMS Constants
-    LMS Integrations
-    LMS Groups
-    LMS Admin
-    LMS Deployment Packages
+    <PREFIX> Records
+    <PREFIX> Interfaces
+    <PREFIX> Expression Rules
+    <PREFIX> Process Models
+    <PREFIX> Constants
+    <PREFIX> Integrations
+    <PREFIX> Groups
+    <PREFIX> Admin
+    <PREFIX> Deployment Packages
 ```
 
-Recommended object grouping:
-
-| Folder | Contains |
-|---|---|
-| `<PREFIX> Records` | Record types and related record views. |
-| `<PREFIX> Interfaces` | Forms, dashboards, reusable components. |
-| `<PREFIX> Expression Rules` | Query, validation, mapping, utility and formatting rules. |
-| `<PREFIX> Process Models` | Workflow models and subprocesses. |
-| `<PREFIX> Constants` | Constants and configuration. |
-| `<PREFIX> Integrations` | Connected systems, integrations and Web APIs. |
-| `<PREFIX> Security` | Groups and security documentation. |
-| `<PREFIX> Deployment` | Packages and release artefacts. |
-
-## Blueprint section 17: Build execution sequence
+## Blueprint section 18: Build execution sequence
 
 The LLM must provide a step-by-step build plan in dependency order.
-
-Required format:
 
 | Step | Build item | Object type | Depends on | Completion check |
 |---:|---|---|---|---|
@@ -602,7 +647,7 @@ Required format:
 | 15 | End-to-end test | Test | Full build | Business scenario passes. |
 | 16 | Deployment package | Release | Build complete | Package imports cleanly. |
 
-## Blueprint section 18: Unit test plan
+## Blueprint section 19: Unit test plan
 
 The LLM must provide unit tests by Appian layer.
 
@@ -618,44 +663,27 @@ The LLM must provide unit tests by Appian layer.
 | Integrations | Success, timeout, error response and malformed response. |
 | Security | Authorised and unauthorised users. |
 
-## Blueprint section 19: End-to-end test script
+## Blueprint section 20: End-to-end test script
 
-The LLM must provide scenario-based tests.
-
-Example leave management scenarios:
+The LLM must provide scenario-based tests with actor, steps and expected results.
 
 ```text
-Scenario 1: Employee submits annual leave request
-Actor: Employee
+Scenario 1: User submits a request
+Actor: Requester
 Steps:
-1. Open LMS site.
-2. Open My Leave Dashboard.
-3. Click Create Leave Request.
-4. Select Annual Leave.
-5. Enter start and end dates.
-6. Submit request.
+1. Open the Appian site.
+2. Open the dashboard.
+3. Click the create action.
+4. Complete required fields.
+5. Submit.
 Expected:
-- Leave request record created.
-- Status is Submitted.
-- Status history row created.
-- Manager can see pending approval.
-
-Scenario 2: Manager approves leave request
-Actor: Manager
-Steps:
-1. Open Pending Approvals.
-2. Open the request.
-3. Click Approve.
-4. Enter approval comment.
-5. Submit decision.
-Expected:
-- Status changes to Approved.
-- Status history row created.
-- Employee dashboard shows approved request.
-- Balance is adjusted if in scope.
+- Core record is created.
+- Status history row is created.
+- Request appears in the correct dashboard.
+- The next responsible user can see the work item.
 ```
 
-## Blueprint section 20: Deployment and release plan
+## Blueprint section 21: Deployment and release plan
 
 The LLM must include release planning.
 
@@ -675,8 +703,6 @@ Known risks:
 
 ## Example command
 
-A good user command:
-
 ```text
 Create a development execution plan for a Leave Management System in Appian.
 Application Name: Leave Management System
@@ -689,17 +715,7 @@ Integrations: optional HR employee sync and payroll notification
 Mobile: employees should be able to submit leave from mobile
 ```
 
-Expected LLM behaviour:
-
-```text
-Return a complete build blueprint with database tables, record types, constants,
-query rules, validation rules, SAIL interfaces, process models, record actions,
-integrations, dashboards, security, build order, tests and deployment plan.
-```
-
 ## LLM prompt template
-
-Use this prompt to force the LLM to produce the desired execution plan.
 
 ```text
 You are an Appian solution architect and technical lead.
@@ -707,7 +723,8 @@ Use the local Appian engineering library as your reference.
 Do not rely on external URLs being available.
 
 Create a full Appian development execution plan for the application below.
-The plan must be detailed enough for a developer to build in Appian Designer.
+The plan must start with a detailed architecture document and must be detailed
+enough for a developer to build in Appian Designer.
 
 Application Name: <APPLICATION_NAME>
 Application Short Name / Prefix: <PREFIX>
@@ -722,42 +739,26 @@ Reporting Requirements: <REPORTING_REQUIREMENTS>
 Rules:
 - Use the supplied prefix for all Appian object names.
 - Use the supplied database prefix for table names.
-- Start with data model and record types before UI.
+- Start with the detailed architecture document.
+- Include Mermaid diagrams explaining the solution context, logical architecture,
+  user journey, process architecture, data model, integration architecture and security architecture.
+- Start the build plan with data model and record types before UI.
 - Use Appian Expression Language, SAIL and Appian process model concepts only.
 - Do not invent Appian functions, SAIL components, parameters, allowed values,
   record fields, groups or process capabilities.
 - Do not use Java, JavaScript, React, HTML or CSS inside SAIL.
 - Mark assumptions and verification items clearly.
 
-Return the plan using these sections:
-1. Application definition
-2. Scope and assumptions
-3. User roles and security groups
-4. Business capability map
-5. Data model design
-6. Database DDL execution plan
-7. Record type design
-8. Constants and reference data
-9. Expression rules and query rules
-10. SAIL interface design
-11. Process model design
-12. Record actions and related actions
-13. Integrations and Web APIs
-14. Reporting and dashboards
-15. Error handling and audit design
-16. Appian application structure
-17. Build execution sequence
-18. Unit test plan
-19. End-to-end test script
-20. Deployment and release plan
+Return the 21-section blueprint defined in APPIAN_APPLICATION_BUILD_BLUEPRINT.md.
 ```
 
 ## Quality gate before accepting the generated plan
 
 | Gate | Requirement |
 |---|---|
+| Architecture gate | Detailed architecture document is first and includes diagrams. |
 | Prefix gate | All objects use the supplied prefix. |
-| Completeness gate | All 20 blueprint sections are present. |
+| Completeness gate | All 21 blueprint sections are present. |
 | Data-first gate | Tables and record types are defined before interfaces. |
 | Appian-native gate | Process models use Appian nodes and SAIL uses Appian components. |
 | Object inventory gate | Constants, rules, interfaces, process models, actions and integrations are listed. |
@@ -771,12 +772,13 @@ Return the plan using these sections:
 
 | Failure mode | Correction |
 |---|---|
-| LLM gives only high-level architecture | Require the 20-section build blueprint. |
-| LLM starts with UI | Force data model, DDL and record types first. |
+| LLM gives only high-level architecture | Require the 21-section build blueprint. |
+| LLM skips architecture diagrams | Require the architecture gate. |
+| LLM starts with UI | Force architecture, data model, DDL and record types first. |
 | LLM skips process models | Require process model table and Appian node flows. |
-| LLM skips constants and reference data | Require section 8. |
-| LLM skips query rules | Require section 9 with inputs, outputs and consumers. |
-| LLM skips build order | Require section 17. |
+| LLM skips constants and reference data | Require section 9. |
+| LLM skips query rules | Require section 10 with inputs, outputs and consumers. |
+| LLM skips build order | Require section 18. |
 | LLM uses APN when prefix is LMS | Apply prefix gate. |
 | LLM invents Appian parameters | Mark for verification or remove. |
 | LLM uses React or HTML | Reject and rewrite using SAIL. |
